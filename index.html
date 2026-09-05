@@ -848,10 +848,10 @@
 <body class="h-full flex overflow-hidden">
 
     <!-- Mobile & Desktop Backdrop Blur Overlay -->
-    <div id="sidebar-backdrop" onclick="closeSidebarDrawer()" class="fixed inset-0 bg-black/60 z-30 hidden backdrop-blur-md transition-opacity pointer-events-none"></div>
+    <div id="sidebar-backdrop" onclick="closeSidebarDrawer()" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden backdrop-blur-md transition-opacity pointer-events-none"></div>
 
-    <!-- Collapsible & Responsive Sliding Navigation Drawer -->
-    <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-80 max-w-[88vw] themed-bg-sidebar/95 border-r themed-border flex flex-col justify-between p-6 select-none overflow-y-auto transform -translate-x-full transition-all duration-300 ease-in-out shrink-0 shadow-2xl backdrop-blur-xl">
+    <!-- Collapsible & Responsive Sliding Navigation Drawer (Permanently Docked on Desktop Left) -->
+    <aside id="app-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 lg:z-10 w-80 max-w-[88vw] lg:max-w-none themed-bg-sidebar/95 border-r themed-border flex flex-col justify-between p-5 lg:p-6 select-none overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out shrink-0 shadow-2xl lg:shadow-none backdrop-blur-xl">
         <div class="space-y-5">
             <!-- Brand & Close Button -->
             <div class="flex items-center justify-between pb-3 border-b themed-border">
@@ -1082,10 +1082,10 @@
                     
                     <div class="max-w-2xl z-10 space-y-3">
                         <div class="flex items-center space-x-2">
-                            <span class="text-[10px] font-extrabold tracking-widest themed-primary-badge px-3 py-1 rounded-full uppercase">Professional ELT Studio</span>
+                            <span class="text-[10px] font-extrabold tracking-widest themed-primary-badge px-3 py-1 rounded-full uppercase">Executive ELT Studio</span>
                             <span id="dashboard-live-clock" class="text-[11px] font-mono text-emerald-400 font-semibold flex items-center space-x-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span>Engine Active</span>
+                                <span>Engine Active • Gemini 1.5 Flash</span>
                             </span>
                         </div>
                         <h2 id="dashboard-hero-greeting" class="text-2xl md:text-3xl font-extrabold themed-text-header tracking-tight">Welcome to LessonForge Pro</h2>
@@ -1179,6 +1179,40 @@
                         <div>
                             <p class="text-xs font-bold themed-text-header">AI Speech Tutor</p>
                             <p class="text-[10px] themed-text-muted mt-0.5">Real-Time Voice & Drills</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instant 1-Click Studio Launcher Widget -->
+                <div class="themed-bg-card rounded-2xl p-5 md:p-6 border themed-border shadow-md">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="material-symbols-outlined text-indigo-400">bolt</span>
+                            <h3 class="text-sm font-bold themed-text-header uppercase tracking-wider">Instant Lesson Generator Widget</h3>
+                        </div>
+                        <span class="text-[10px] font-mono themed-primary-text font-bold">Fast Generation Studio</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold themed-text-muted">Topic / Core Theme</label>
+                            <input type="text" id="dash-quick-topic" placeholder="e.g., Climate Action & Environmental Vocabulary" class="w-full themed-bg-input border themed-border rounded-xl px-3 py-2 text-xs themed-text-header focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold themed-text-muted">CEFR Target Level</label>
+                            <select id="dash-quick-level" class="w-full themed-bg-input border themed-border rounded-xl px-3 py-2 text-xs themed-text-header focus:outline-none focus:border-indigo-500">
+                                <option value="A1 Beginner">A1 Beginner</option>
+                                <option value="A2 Elementary">A2 Elementary</option>
+                                <option value="B1 Intermediate" selected>B1 Intermediate</option>
+                                <option value="B2 Upper-Intermediate">B2 Upper-Intermediate</option>
+                                <option value="C1 Advanced">C1 Advanced</option>
+                                <option value="C2 Proficiency">C2 Proficiency</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end space-x-2">
+                            <button onclick="triggerDashboardInstantBuild()" class="btn-animated w-full themed-primary-bg themed-primary-hover text-white py-2 px-4 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center space-x-2">
+                                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                <span>Generate Material</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2692,6 +2726,15 @@
 
             switchTab('worksheet');
             generateWorksheet();
+        }
+
+        function triggerDashboardInstantBuild() {
+            const topicInput = document.getElementById('dash-quick-topic');
+            const levelSelect = document.getElementById('dash-quick-level');
+            const topic = (topicInput && topicInput.value.trim()) ? topicInput.value.trim() : 'Global Business Communication & Ethics';
+            const level = levelSelect ? levelSelect.value : 'B1 Intermediate';
+
+            quickLaunchStarter(topic, topic, level);
         }
 
         function loadMasterclassBlueprint(type) {
