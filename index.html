@@ -393,6 +393,233 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
+
+        /* =========================================================================
+           ANIMATED CSS BUTTONS & MICRO-INTERACTIONS SUITE
+           ========================================================================= */
+
+        /* 1. Universal Animated Button Base with Tactile Spring Press */
+        .btn-animated,
+        button:not(.no-btn-anim),
+        .btn-press {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+
+        .btn-animated:hover,
+        button:not(.no-btn-anim):hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+        }
+
+        .btn-animated:active,
+        button:not(.no-btn-anim):active {
+            transform: translateY(1px) scale(0.96) !important;
+            filter: brightness(0.94);
+        }
+
+        /* 2. Shimmer Light-Beam Animation Sweep */
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .btn-shimmer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.35),
+                transparent
+            );
+            transform: skewX(-22deg);
+            transition: none;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .btn-shimmer:hover::before {
+            animation: btnShimmerSweep 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes btnShimmerSweep {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 200%;
+            }
+        }
+
+        /* Auto-periodic shimmer for hero/primary action buttons */
+        .btn-shimmer-loop::before {
+            animation: btnShimmerLoop 3.5s infinite ease-in-out;
+        }
+
+        @keyframes btnShimmerLoop {
+            0%, 70% {
+                left: -100%;
+            }
+            85%, 100% {
+                left: 200%;
+            }
+        }
+
+        /* 3. Glowing Pulse Animation (Neon Breathing Aura) */
+        @keyframes btnGlowPulseIndigo {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6), 0 4px 14px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0), 0 8px 24px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        @keyframes btnGlowPulseEmerald {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6), 0 4px 14px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0), 0 8px 24px rgba(16, 185, 129, 0.4);
+            }
+        }
+
+        @keyframes btnGlowPulsePurple {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6), 0 4px 14px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 8px 24px rgba(168, 85, 247, 0.4);
+            }
+        }
+
+        .btn-glow-pulse-indigo {
+            animation: btnGlowPulseIndigo 2.4s infinite ease-in-out;
+        }
+
+        .btn-glow-pulse-emerald {
+            animation: btnGlowPulseEmerald 2.4s infinite ease-in-out;
+        }
+
+        .btn-glow-pulse-purple {
+            animation: btnGlowPulsePurple 2.4s infinite ease-in-out;
+        }
+
+        /* 4. Multi-Stop Gradient Flow Animation */
+        .btn-gradient-flow {
+            background-size: 200% 200%;
+            animation: btnGradientMove 4s ease infinite;
+        }
+
+        @keyframes btnGradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 5. Animated Icon Bounce & Slide on Hover */
+        .btn-icon-slide .material-symbols-outlined {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-icon-slide:hover .material-symbols-outlined {
+            transform: translateX(3px) scale(1.1);
+        }
+
+        .btn-icon-spin:hover .material-symbols-outlined {
+            transform: rotate(180deg);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-icon-bounce:hover .material-symbols-outlined {
+            animation: iconMicroBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate;
+        }
+
+        @keyframes iconMicroBounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-3px) scale(1.15);
+            }
+        }
+
+        /* 6. 3D Tactile Layered Button */
+        .btn-3d {
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25), 0 10px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px) !important;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* 7. Neon Border Flow for Glass Buttons */
+        .btn-neon-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-neon-glass:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow), inset 0 0 10px var(--primary-glow);
+        }
+
+        /* 8. Ripple Wave Effect Animation */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-ripple::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn-ripple:active::after {
+            width: 250%;
+            height: 250%;
+            opacity: 1;
+            transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.6s ease-out;
+        }
     </style>
 </head>
 <body class="h-full flex overflow-hidden">
@@ -573,11 +800,11 @@
                         <h2 class="text-3xl font-extrabold themed-text-header mt-2">Generate Pixel-Perfect A4 Worksheets & Presentation Decks</h2>
                         <p class="themed-text-muted mt-3 text-sm leading-relaxed">Instantly draft grammar drills, vocabulary quizzes, and structured 6-slide lesson decks with multiple accessible color themes.</p>
                         <div class="mt-6 flex items-center space-x-4">
-                            <button onclick="switchTab('wizard')" class="themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
+                            <button onclick="switchTab('wizard')" class="btn-animated btn-shimmer btn-shimmer-loop btn-glow-pulse-indigo btn-icon-slide themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
                                 <span class="material-symbols-outlined">auto_awesome</span>
                                 <span>Launch AI Wizard</span>
                             </button>
-                            <button onclick="switchTab('worksheet')" class="themed-bg-input themed-border border hover:opacity-90 themed-text-header px-6 py-3 rounded-xl font-bold text-sm transition-all">
+                            <button onclick="switchTab('worksheet')" class="btn-animated btn-ripple themed-bg-input themed-border border hover:opacity-90 themed-text-header px-6 py-3 rounded-xl font-bold text-sm transition-all">
                                 Open A4 Builder
                             </button>
                         </div>
@@ -596,7 +823,7 @@
 
                 <!-- Quick Action Cards Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div onclick="switchTab('worksheet')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm">
+                    <div onclick="switchTab('worksheet')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl themed-primary-badge flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-xl">description</span>
@@ -606,7 +833,7 @@
                         <h3 class="text-base font-bold themed-text-header">A4 Worksheet</h3>
                         <p class="text-xs themed-text-muted mt-1">Grammar drills, reading & answer keys.</p>
                     </div>
-                    <div onclick="switchTab('presentation')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm">
+                    <div onclick="switchTab('presentation')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl bg-orange-500/15 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-xl">slideshow</span>
@@ -616,7 +843,7 @@
                         <h3 class="text-base font-bold themed-text-header">PowerPoint Deck</h3>
                         <p class="text-xs themed-text-muted mt-1">Warmups, vocab, and quizzes.</p>
                     </div>
-                    <div onclick="switchTab('plan')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-purple-500/30">
+                    <div onclick="switchTab('plan')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-purple-500/30 flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-xl">assignment</span>
@@ -626,7 +853,7 @@
                         <h3 class="text-base font-bold themed-text-header">Lesson Plan Guide</h3>
                         <p class="text-xs themed-text-muted mt-1">Pedagogical roadmap & timing.</p>
                     </div>
-                    <div onclick="switchTab('tutor')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-indigo-500/30 relative overflow-hidden">
+                    <div onclick="switchTab('tutor')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-indigo-500/30 relative overflow-hidden flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-xl">psychology</span>
@@ -636,7 +863,7 @@
                         <h3 class="text-base font-bold themed-text-header">AI Tutor Chat</h3>
                         <p class="text-xs themed-text-muted mt-1">Interactive drills matching lessons.</p>
                     </div>
-                    <div onclick="switchTab('library')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm">
+                    <div onclick="switchTab('library')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-xl">folder_open</span>
@@ -699,15 +926,15 @@
                     </div>
                 </div>
                 <div class="flex justify-end space-x-3">
-                    <button onclick="showQRCodeForCurrent('worksheet')" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-5 py-3 rounded-xl font-bold text-sm transition-all shadow-sm flex items-center space-x-2">
+                    <button onclick="showQRCodeForCurrent('worksheet')" class="btn-animated btn-ripple themed-bg-input border themed-border hover:opacity-90 themed-text-header px-5 py-3 rounded-xl font-bold text-sm transition-all shadow-sm flex items-center space-x-2">
                         <span class="material-symbols-outlined text-lg themed-primary-text">qr_code_2</span>
                         <span>Classroom QR</span>
                     </button>
-                    <button onclick="generateWorksheet()" class="themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
+                    <button onclick="generateWorksheet()" class="btn-animated btn-shimmer btn-icon-spin themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
                         <span class="material-symbols-outlined text-lg">refresh</span>
                         <span>Regenerate Layout</span>
                     </button>
-                    <button onclick="saveCurrentMaterial('WORKSHEET')" class="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
+                    <button onclick="saveCurrentMaterial('WORKSHEET')" class="btn-animated btn-shimmer btn-glow-pulse-emerald btn-icon-bounce bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
                         <span class="material-symbols-outlined text-lg">save</span>
                         <span>Save to Vocab Bank</span>
                     </button>
@@ -771,11 +998,11 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="exportToPptxFile()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-2">
+                        <button onclick="exportToPptxFile()" class="btn-animated btn-shimmer btn-shimmer-loop btn-glow-pulse-indigo btn-icon-bounce bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-2">
                             <span class="material-symbols-outlined text-base">download_for_offline</span>
                             <span>Export PPTX (.pptx)</span>
                         </button>
-                        <button onclick="saveCurrentMaterial('PRESENTATION')" class="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
+                        <button onclick="saveCurrentMaterial('PRESENTATION')" class="btn-animated btn-shimmer btn-glow-pulse-emerald bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
                             <span class="material-symbols-outlined text-base">save</span>
                             <span>Save Deck</span>
                         </button>
@@ -817,26 +1044,26 @@
                     <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t themed-border">
                         <!-- Switcher: Visual Carousel vs Raw Script -->
                         <div class="flex items-center space-x-1.5 bg-black/20 p-1 rounded-xl border themed-border">
-                            <button onclick="setPresentationViewMode('visual')" id="ppt-mode-visual-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all themed-primary-bg text-white shadow-sm flex items-center space-x-1.5">
+                            <button onclick="setPresentationViewMode('visual')" id="ppt-mode-visual-btn" class="btn-animated btn-ripple px-3 py-1.5 rounded-lg text-xs font-bold transition-all themed-primary-bg text-white shadow-sm flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm">view_carousel</span>
                                 <span>Visual Slide Deck</span>
                             </button>
-                            <button onclick="setPresentationViewMode('script')" id="ppt-mode-script-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center space-x-1.5">
+                            <button onclick="setPresentationViewMode('script')" id="ppt-mode-script-btn" class="btn-animated btn-ripple px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm">code</span>
                                 <span>Raw Script & Notes</span>
                             </button>
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
-                            <button onclick="openVideoPlayerModal()" class="bg-red-500/15 hover:bg-red-500/25 text-red-500 border border-red-500/30 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                            <button onclick="openVideoPlayerModal()" class="btn-animated btn-ripple bg-red-500/15 hover:bg-red-500/25 text-red-500 border border-red-500/30 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-base">play_circle</span>
                                 <span>Video Companion</span>
                             </button>
-                            <button onclick="showQRCodeForCurrent('presentation')" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                            <button onclick="showQRCodeForCurrent('presentation')" class="btn-animated btn-ripple themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-base text-orange-500">qr_code_2</span>
                                 <span>Classroom QR</span>
                             </button>
-                            <button onclick="generatePresentation()" class="themed-primary-bg themed-primary-hover text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-md flex items-center space-x-1.5">
+                            <button onclick="generatePresentation()" class="btn-animated btn-shimmer btn-icon-spin themed-primary-bg themed-primary-hover text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-md flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-base">refresh</span>
                                 <span>Re-generate</span>
                             </button>
@@ -872,7 +1099,7 @@
                                 <h4 class="text-sm md:text-base font-bold tracking-tight text-white/90" id="slide-badge-title">Slide 1: Title & Warm-up</h4>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="openFullscreenSlidePresenter()" class="slide-card-box hover:opacity-90 px-3 py-1.5 rounded-xl text-xs font-bold border flex items-center space-x-1.5 transition-all" title="Present full screen on Smartboard">
+                                <button onclick="openFullscreenSlidePresenter()" class="btn-animated btn-shimmer slide-card-box hover:opacity-90 px-3 py-1.5 rounded-xl text-xs font-bold border flex items-center space-x-1.5 transition-all" title="Present full screen on Smartboard">
                                     <span class="material-symbols-outlined text-sm">slideshow</span>
                                     <span class="hidden sm:inline">Present Fullscreen</span>
                                 </button>
@@ -895,11 +1122,11 @@
                     <!-- Slide Navigation Controls & Flip Helpers -->
                     <div class="flex flex-wrap items-center justify-between gap-3 px-2 py-2">
                         <div class="flex items-center space-x-2">
-                            <button onclick="prevSlide()" class="themed-bg-card border themed-border hover:opacity-90 themed-text-header px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                            <button onclick="prevSlide()" class="btn-animated btn-icon-slide themed-bg-card border themed-border hover:opacity-90 themed-text-header px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                                 <span>Previous</span>
                             </button>
-                            <button onclick="nextSlide()" class="themed-primary-bg themed-primary-hover text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
+                            <button onclick="nextSlide()" class="btn-animated btn-icon-slide themed-primary-bg themed-primary-hover text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
                                 <span>Next Slide</span>
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </button>
@@ -999,7 +1226,7 @@
                             <input type="text" id="wiz-cefr" value="B2 Upper-Intermediate" class="w-full themed-bg-input border themed-border rounded-xl px-4 py-3 text-sm themed-text-header focus:outline-none">
                         </div>
                         <div class="flex justify-end pt-4">
-                            <button onclick="setWizardStep(2)" class="themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2 shadow-md">
+                            <button onclick="setWizardStep(2)" class="btn-animated btn-icon-slide themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center space-x-2 shadow-md">
                                 <span>Next Step</span>
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </button>
@@ -1022,8 +1249,8 @@
                             </select>
                         </div>
                         <div class="flex justify-between pt-4">
-                            <button onclick="setWizardStep(1)" class="themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Back</button>
-                            <button onclick="setWizardStep(3)" class="themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold">Next Step</button>
+                            <button onclick="setWizardStep(1)" class="btn-animated themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Back</button>
+                            <button onclick="setWizardStep(3)" class="btn-animated btn-icon-slide themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold">Next Step</button>
                         </div>
                     </div>
 
@@ -1035,8 +1262,8 @@
                             <textarea id="wiz-objectives" rows="4" class="w-full themed-bg-input border themed-border rounded-xl p-4 text-sm themed-text-header focus:outline-none">Students will debate AI ethics, master advanced vocabulary (e.g. autonomy, algorithm, paradigm), and practice modal verbs for speculation.</textarea>
                         </div>
                         <div class="flex justify-between pt-4">
-                            <button onclick="setWizardStep(2)" class="themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Back</button>
-                            <button onclick="runGeminiWizard()" class="themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 shadow-md">
+                            <button onclick="setWizardStep(2)" class="btn-animated themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Back</button>
+                            <button onclick="runGeminiWizard()" class="btn-animated btn-shimmer btn-shimmer-loop btn-glow-pulse-indigo btn-icon-bounce themed-primary-bg themed-primary-hover text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 shadow-md">
                                 <span class="material-symbols-outlined text-sm">auto_awesome</span>
                                 <span>Generate via Gemini AI</span>
                             </button>
@@ -1056,8 +1283,8 @@
                         </div>
                         <pre id="wiz-output" class="hidden themed-bg-input border themed-border p-4 rounded-xl text-xs font-mono themed-text-header max-h-96 overflow-y-auto whitespace-pre-wrap"></pre>
                         <div class="flex justify-between pt-4">
-                            <button onclick="setWizardStep(3)" class="themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Edit Criteria</button>
-                            <button onclick="saveWizardResult()" class="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 shadow-md">
+                            <button onclick="setWizardStep(3)" class="btn-animated themed-bg-input border themed-border themed-text-muted px-6 py-2.5 rounded-xl text-sm font-bold">Edit Criteria</button>
+                            <button onclick="saveWizardResult()" class="btn-animated btn-shimmer btn-glow-pulse-emerald bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 shadow-md">
                                 <span class="material-symbols-outlined text-sm">save</span>
                                 <span>Save to Vocab Bank</span>
                             </button>
@@ -1097,7 +1324,7 @@
                         <p class="text-xs themed-text-muted mt-1 max-w-xl">Ask any question in real time, get instant grammar explanations, live sentence corrections, speech practice, or communicative roleplays tailored to your A4 Worksheet and PowerPoint slides.</p>
                     </div>
                     <div class="mt-4 md:mt-0 flex items-center space-x-2">
-                        <button onclick="clearTutorChat()" class="px-3 py-2 rounded-xl text-xs font-bold themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 transition-all flex items-center space-x-1 border themed-border">
+                        <button onclick="clearTutorChat()" class="btn-animated btn-icon-spin px-3 py-2 rounded-xl text-xs font-bold themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 transition-all flex items-center space-x-1 border themed-border">
                             <span class="material-symbols-outlined text-sm">refresh</span>
                             <span>Clear Chat</span>
                         </button>
@@ -1133,7 +1360,7 @@
                         <span class="text-[10px] themed-text-muted">Instant response • 0 wait time</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-                        <button onclick="sendQuickPrompt('Explain Section 1 vocabulary with real-world examples and sample dialogue.')" class="glass-pill-btn p-2.5 rounded-xl text-left transition-all">
+                        <button onclick="sendQuickPrompt('Explain Section 1 vocabulary with real-world examples and sample dialogue.')" class="btn-animated glass-pill-btn p-2.5 rounded-xl text-left transition-all">
                             <div class="flex items-center space-x-1.5 text-xs font-bold themed-primary-text">
                                 <span class="material-symbols-outlined text-sm">description</span>
                                 <span>Vocab Deep-Dive</span>
@@ -1141,7 +1368,7 @@
                             <p class="text-[10px] themed-text-muted mt-1 leading-tight">Explain A4 Worksheet terms & dialogues</p>
                         </button>
 
-                        <button onclick="sendQuickPrompt('Give me a 5-question practice quiz matching our current topic grammar rules.')" class="glass-pill-btn p-2.5 rounded-xl text-left transition-all">
+                        <button onclick="sendQuickPrompt('Give me a 5-question practice quiz matching our current topic grammar rules.')" class="btn-animated glass-pill-btn p-2.5 rounded-xl text-left transition-all">
                             <div class="flex items-center space-x-1.5 text-xs font-bold text-emerald-400">
                                 <span class="material-symbols-outlined text-sm">quiz</span>
                                 <span>Interactive Quiz</span>
@@ -1149,7 +1376,7 @@
                             <p class="text-[10px] themed-text-muted mt-1 leading-tight">5 drills from Section 3 grammar</p>
                         </button>
 
-                        <button onclick="sendQuickPrompt('Walk me through Slide 5 Communicative Task as my roleplay conversation partner.')" class="glass-pill-btn p-2.5 rounded-xl text-left transition-all">
+                        <button onclick="sendQuickPrompt('Walk me through Slide 5 Communicative Task as my roleplay conversation partner.')" class="btn-animated glass-pill-btn p-2.5 rounded-xl text-left transition-all">
                             <div class="flex items-center space-x-1.5 text-xs font-bold text-orange-400">
                                 <span class="material-symbols-outlined text-sm">slideshow</span>
                                 <span>Slide 5 Roleplay</span>
@@ -1157,7 +1384,7 @@
                             <p class="text-[10px] themed-text-muted mt-1 leading-tight">Interactive simulation & prompt partner</p>
                         </button>
 
-                        <button onclick="sendQuickPrompt('Check my grammar and give feedback on: \'Although he was tired, but he finished the report.\'')" class="glass-pill-btn p-2.5 rounded-xl text-left transition-all">
+                        <button onclick="sendQuickPrompt('Check my grammar and give feedback on: \'Although he was tired, but he finished the report.\'')" class="btn-animated glass-pill-btn p-2.5 rounded-xl text-left transition-all">
                             <div class="flex items-center space-x-1.5 text-xs font-bold text-purple-400">
                                 <span class="material-symbols-outlined text-sm">spellcheck</span>
                                 <span>Grammar Check</span>
@@ -1190,9 +1417,9 @@
                                 <p>Hello! I am your AI English Tutor. I respond <b>instantly in real time</b> and stay synchronized with your active <b>A4 Worksheet</b> and <b>PowerPoint Slide Deck</b>.</p>
                                 <p class="text-slate-400 text-[11px]">Ask me anything: check your grammar, define words, ask about tenses, practice pronunciation, or roleplay a dialogue! Type below or use the <b>Microphone</b> button.</p>
                                 <div class="pt-1 flex flex-wrap gap-1.5">
-                                    <button onclick="sendQuickPrompt('What is the difference between \'affect\' and \'effect\'?')" class="text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">"affect" vs "effect"</button>
-                                    <button onclick="sendQuickPrompt('Explain Past Perfect vs Past Simple with examples.')" class="text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">Past Perfect vs Simple</button>
-                                    <button onclick="sendQuickPrompt('How do I pronounce \'thoroughly\' and \'colleague\'?')" class="text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">Pronunciation Tips</button>
+                                    <button onclick="sendQuickPrompt('What is the difference between \'affect\' and \'effect\'?')" class="btn-animated text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">"affect" vs "effect"</button>
+                                    <button onclick="sendQuickPrompt('Explain Past Perfect vs Past Simple with examples.')" class="btn-animated text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">Past Perfect vs Simple</button>
+                                    <button onclick="sendQuickPrompt('How do I pronounce \'thoroughly\' and \'colleague\'?')" class="btn-animated text-[10px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all border border-white/10">Pronunciation Tips</button>
                                 </div>
                             </div>
                         </div>
@@ -1216,11 +1443,11 @@
                         <div class="flex-1 relative flex items-center">
                             <input type="text" id="tutor-input" placeholder="Ask a question, paste a sentence to correct, or type to chat..." class="w-full themed-bg-input border themed-border rounded-2xl pl-4 pr-12 py-3 text-xs themed-text-header focus:outline-none focus:border-indigo-500 transition-colors">
                             <!-- Voice Input Button -->
-                            <button type="button" id="tutor-mic-btn" onclick="toggleTutorVoiceInput()" title="Speak to AI Tutor (Speech Recognition)" class="absolute right-2.5 p-1.5 rounded-xl text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all flex items-center justify-center">
+                            <button type="button" id="tutor-mic-btn" onclick="toggleTutorVoiceInput()" title="Speak to AI Tutor (Speech Recognition)" class="btn-animated btn-icon-bounce absolute right-2.5 p-1.5 rounded-xl text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all flex items-center justify-center">
                                 <span class="material-symbols-outlined text-lg" id="tutor-mic-icon">mic</span>
                             </button>
                         </div>
-                        <button type="submit" id="tutor-send-btn" class="themed-primary-bg themed-primary-hover text-white px-5 py-3 rounded-2xl text-xs font-bold transition-all shadow-lg flex items-center space-x-1.5 flex-shrink-0">
+                        <button type="submit" id="tutor-send-btn" class="btn-animated btn-shimmer btn-glow-pulse-indigo btn-icon-slide themed-primary-bg themed-primary-hover text-white px-5 py-3 rounded-2xl text-xs font-bold transition-all shadow-lg flex items-center space-x-1.5 flex-shrink-0">
                             <span>Send</span>
                             <span class="material-symbols-outlined text-sm">send</span>
                         </button>
@@ -1246,26 +1473,26 @@
                         <div class="flex flex-wrap items-center gap-2">
                             <!-- Duration Pills -->
                             <div class="flex items-center bg-black/20 dark:bg-white/5 p-1 rounded-2xl border themed-border">
-                                <button onclick="setPlanDuration(45)" id="plan-btn-45" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+                                <button onclick="setPlanDuration(45)" id="plan-btn-45" class="btn-animated btn-ripple px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
                                     45 Min
                                 </button>
-                                <button onclick="setPlanDuration(60)" id="plan-btn-60" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md">
+                                <button onclick="setPlanDuration(60)" id="plan-btn-60" class="btn-animated btn-ripple px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md">
                                     60 Min
                                 </button>
-                                <button onclick="setPlanDuration(90)" id="plan-btn-90" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+                                <button onclick="setPlanDuration(90)" id="plan-btn-90" class="btn-animated btn-ripple px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
                                     90 Min Block
                                 </button>
                             </div>
 
-                            <button onclick="generatePlanFromCurrentWorksheet()" class="themed-primary-bg themed-primary-hover text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md flex items-center space-x-1.5">
+                            <button onclick="generatePlanFromCurrentWorksheet()" class="btn-animated btn-shimmer btn-icon-spin themed-primary-bg themed-primary-hover text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm">sync</span>
                                 <span>Sync from Worksheet</span>
                             </button>
-                            <button onclick="copyLessonPlanMarkdown()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
+                            <button onclick="copyLessonPlanMarkdown()" class="btn-animated btn-ripple themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm" id="plan-copy-icon">content_copy</span>
                                 <span id="plan-copy-text">Copy Markdown</span>
                             </button>
-                            <button onclick="printLessonPlan()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
+                            <button onclick="printLessonPlan()" class="btn-animated btn-icon-slide themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-sm">print</span>
                                 <span>Print Guide</span>
                             </button>
@@ -1278,16 +1505,16 @@
                             <span class="text-[11px] font-bold themed-text-muted uppercase">Curated Masterclass Blueprints:</span>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <button onclick="loadPlanTemplate('business')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                            <button onclick="loadPlanTemplate('business')" class="btn-animated btn-ripple px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
                                 💼 Business Idioms & Negotiations
                             </button>
-                            <button onclick="loadPlanTemplate('narrative')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                            <button onclick="loadPlanTemplate('narrative')" class="btn-animated btn-ripple px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
                                 🕵️ Narrative Tenses & Crime Mystery
                             </button>
-                            <button onclick="loadPlanTemplate('interview')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                            <button onclick="loadPlanTemplate('interview')" class="btn-animated btn-ripple px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
                                 🎯 Job Interview & STAR Technique
                             </button>
-                            <button onclick="loadPlanTemplate('debate')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                            <button onclick="loadPlanTemplate('debate')" class="btn-animated btn-ripple px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
                                 ⚖️ Oxford Debate & Persuasive Skills
                             </button>
                         </div>
@@ -1316,15 +1543,15 @@
 
                     <!-- Timer Controls -->
                     <div class="flex items-center space-x-2">
-                        <button onclick="togglePlanTimer()" id="btn-timer-toggle" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-md">
+                        <button onclick="togglePlanTimer()" id="btn-timer-toggle" class="btn-animated btn-shimmer btn-glow-pulse-purple btn-icon-bounce bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-md">
                             <span class="material-symbols-outlined text-sm" id="btn-timer-icon">play_arrow</span>
                             <span id="btn-timer-label">Start Lesson</span>
                         </button>
-                        <button onclick="nextPlanStage()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1">
+                        <button onclick="nextPlanStage()" class="btn-animated btn-icon-slide themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1">
                             <span class="material-symbols-outlined text-sm">skip_next</span>
                             <span>Next Stage</span>
                         </button>
-                        <button onclick="resetPlanTimer()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-muted hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all" title="Reset Timer">
+                        <button onclick="resetPlanTimer()" class="btn-animated btn-icon-spin themed-bg-input border themed-border hover:opacity-90 themed-text-muted hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all" title="Reset Timer">
                             <span class="material-symbols-outlined text-sm">restart_alt</span>
                         </button>
                     </div>
