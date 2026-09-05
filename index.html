@@ -620,105 +620,241 @@
             opacity: 1;
             transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.6s ease-out;
         }
+
+        /* 9. Premium Morphing Animated Hamburger Button */
+        .hamburger-toggle-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hamburger-toggle-btn:hover {
+            box-shadow: 0 0 16px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        .hamburger-line {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+            border-radius: 999px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, width 0.2s ease;
+            transform-origin: center;
+        }
+
+        .hamburger-toggle-btn.is-active .hamburger-line-1 {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-toggle-btn.is-active .hamburger-line-2 {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger-toggle-btn.is-active .hamburger-line-3 {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* 10. Premium Slide Drawer & Glassmorphism */
+        #app-sidebar {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.35s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        #sidebar-backdrop {
+            transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        .menu-nav-item {
+            position: relative;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .menu-nav-item:hover {
+            transform: translateX(4px);
+        }
+
+        .menu-nav-item.active {
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        /* 11. Dashboard Ambient Glow & Metric Cards */
+        .dashboard-hero-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -100px;
+            right: -100px;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        .stat-card-glass {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stat-card-glass:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px -5px var(--primary-glow);
+        }
     </style>
 </head>
 <body class="h-full flex overflow-hidden">
 
-    <!-- Mobile Sidebar Backdrop Overlay -->
-    <div id="sidebar-backdrop" onclick="closeSidebarDrawer()" class="fixed inset-0 bg-black/60 z-30 hidden backdrop-blur-sm transition-opacity"></div>
+    <!-- Mobile & Desktop Backdrop Blur Overlay -->
+    <div id="sidebar-backdrop" onclick="closeSidebarDrawer()" class="fixed inset-0 bg-black/60 z-30 hidden backdrop-blur-md transition-opacity pointer-events-none"></div>
 
-    <!-- Collapsible & Responsive Navigation Sidebar -->
-    <aside id="app-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72 themed-bg-sidebar border-r themed-border flex flex-col justify-between p-6 select-none overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out shrink-0 shadow-2xl lg:shadow-none">
-        <div>
-            <!-- Brand & Mobile Close Button -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <span class="text-xs font-bold tracking-widest themed-primary-text">PREMIUM STUDIO</span>
-                    <h1 class="text-xl font-bold themed-text-header mt-0.5">LessonForge</h1>
+    <!-- Collapsible & Responsive Sliding Navigation Drawer -->
+    <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-80 max-w-[88vw] themed-bg-sidebar/95 border-r themed-border flex flex-col justify-between p-6 select-none overflow-y-auto transform -translate-x-full transition-all duration-300 ease-in-out shrink-0 shadow-2xl backdrop-blur-xl">
+        <div class="space-y-5">
+            <!-- Brand & Close Button -->
+            <div class="flex items-center justify-between pb-3 border-b themed-border">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl themed-primary-bg text-white flex items-center justify-center shadow-lg">
+                        <span class="material-symbols-outlined text-2xl">school</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="text-lg font-extrabold themed-text-header tracking-tight">LessonForge</h1>
+                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full themed-primary-badge">PRO v2.6</span>
+                        </div>
+                        <p class="text-[11px] text-emerald-400 font-semibold flex items-center space-x-1 mt-0.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>Online • Offline Ready</span>
+                        </p>
+                    </div>
                 </div>
-                <button onclick="closeSidebarDrawer()" class="lg:hidden p-1.5 rounded-xl themed-bg-card border themed-border themed-text-muted hover:opacity-100 transition-all" title="Close Sidebar">
-                    <span class="material-symbols-outlined text-lg">close</span>
+                <button onclick="closeSidebarDrawer()" class="p-2 rounded-xl themed-bg-input border themed-border themed-text-muted hover:opacity-100 hover:rotate-90 transition-all" title="Close Menu (Esc)">
+                    <span class="material-symbols-outlined text-base">close</span>
                 </button>
             </div>
 
-            <!-- Offline Ready Badge -->
-            <div class="mb-6 bg-[#10B981]/15 border border-[#10B981]/30 rounded-full px-3 py-1.5 flex items-center space-x-2">
-                <div class="w-2 h-2 rounded-full bg-[#10B981]"></div>
-                <span class="text-xs font-bold text-[#10B981] tracking-wide">READY OFFLINE • A4 & PPT</span>
+            <!-- In-Menu Quick Search / Filter Bar -->
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm themed-text-muted">search</span>
+                <input type="text" id="menu-search-input" oninput="filterMenuNav(this.value)" placeholder="Search tools, decks, guides..." class="w-full themed-bg-input border themed-border rounded-xl pl-9 pr-3 py-2 text-xs themed-text-header focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-500">
             </div>
 
             <!-- Navigation Links -->
-            <nav class="space-y-1.5 mb-6">
-                <p class="text-xs font-bold tracking-wider themed-text-muted mb-2 px-3">NAVIGATION</p>
-                <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-primary-badge font-bold">
-                    <span class="material-symbols-outlined text-xl">home</span>
-                    <span>Dashboard Home</span>
-                </button>
-                <button onclick="switchTab('worksheet')" id="nav-worksheet" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">description</span>
-                    <span>A4 Worksheet Generator</span>
-                </button>
-                <button onclick="switchTab('presentation')" id="nav-presentation" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">slideshow</span>
-                    <span>PowerPoint Deck</span>
-                </button>
-                <button onclick="switchTab('wizard')" id="nav-wizard" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">auto_awesome</span>
-                    <span>AI Lesson Wizard</span>
-                </button>
-                <button onclick="switchTab('tutor')" id="nav-tutor" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">psychology</span>
-                    <span>AI English Tutor</span>
-                </button>
-                <button onclick="switchTab('plan')" id="nav-plan" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">assignment</span>
-                    <span>Lesson Plan Guide</span>
-                </button>
-                <button onclick="switchTab('library')" id="nav-library" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
-                    <span class="material-symbols-outlined text-xl">folder_open</span>
-                    <span>Vocab Bank (<span id="library-count">0</span>)</span>
-                </button>
+            <nav id="menu-nav-links" class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-bold tracking-wider themed-text-muted mb-2 px-2 uppercase flex items-center justify-between">
+                        <span>Core Creation Studios</span>
+                        <span class="text-[9px] text-slate-500 font-mono">Alt + [1-4]</span>
+                    </p>
+                    <div class="space-y-1">
+                        <button onclick="switchTab('home')" id="nav-home" data-nav-name="dashboard overview home" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-primary-badge font-bold">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg">home</span>
+                                <span>Dashboard Overview</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+1</span>
+                        </button>
+                        <button onclick="switchTab('worksheet')" id="nav-worksheet" data-nav-name="a4 worksheet generator grammar drill" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-indigo-400">description</span>
+                                <span>A4 Worksheet Studio</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+2</span>
+                        </button>
+                        <button onclick="switchTab('presentation')" id="nav-presentation" data-nav-name="powerpoint presentation slide deck 6 slides" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-orange-400">slideshow</span>
+                                <span>PowerPoint Slide Deck</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+3</span>
+                        </button>
+                        <button onclick="switchTab('wizard')" id="nav-wizard" data-nav-name="ai lesson wizard gemini generative" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-pink-400">auto_awesome</span>
+                                <span>AI Lesson Wizard</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+4</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-[10px] font-bold tracking-wider themed-text-muted mb-2 px-2 uppercase flex items-center justify-between">
+                        <span>Interactive & Pedagogical</span>
+                        <span class="text-[9px] text-slate-500 font-mono">Alt + [5-7]</span>
+                    </p>
+                    <div class="space-y-1">
+                        <button onclick="switchTab('tutor')" id="nav-tutor" data-nav-name="ai tutor english speech voice dialogue drills" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-purple-400">psychology</span>
+                                <span>AI English Speech Tutor</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+5</span>
+                        </button>
+                        <button onclick="switchTab('plan')" id="nav-plan" data-nav-name="lesson plan guide 45 60 90 min timing roadmap whiteboard" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-blue-400">assignment</span>
+                                <span>Lesson Plan Guide (45/60m)</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+6</span>
+                        </button>
+                        <button onclick="switchTab('library')" id="nav-library" data-nav-name="vocab bank saved materials export" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="material-symbols-outlined text-lg text-emerald-400">folder_open</span>
+                                <span>Vocab Bank (<span id="library-count">0</span>)</span>
+                            </div>
+                            <span class="text-[9px] font-mono opacity-60">Alt+7</span>
+                        </button>
+                    </div>
+                </div>
             </nav>
 
-            <!-- ACCESSIBILITY THEME TOGGLE SELECTOR -->
-            <div class="mb-6 pt-4 border-t themed-border">
-                <div class="flex items-center justify-between mb-3 px-1">
-                    <span class="text-[11px] font-bold tracking-wider themed-text-muted uppercase">Accessibility Theme</span>
+            <!-- ACCESSIBILITY THEME SELECTOR -->
+            <div class="pt-3 border-t themed-border">
+                <div class="flex items-center justify-between mb-2 px-1">
+                    <span class="text-[10px] font-bold tracking-wider themed-text-muted uppercase">Color Themes</span>
                     <span class="material-symbols-outlined text-sm themed-text-muted">palette</span>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setTheme('dark')" id="theme-dark-btn" class="theme-btn active flex items-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold bg-[#1A1C21] text-white">
-                        <span class="text-sm">🌙</span>
-                        <span>Dark</span>
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="setTheme('dark')" id="theme-dark-btn" class="theme-btn active flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#1A1C21] text-white">
+                        <span>🌙</span><span>Dark</span>
                     </button>
-                    <button onclick="setTheme('light')" id="theme-light-btn" class="theme-btn flex items-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-800">
-                        <span class="text-sm">☀️</span>
-                        <span>Light</span>
+                    <button onclick="setTheme('light')" id="theme-light-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-white text-slate-800">
+                        <span>☀️</span><span>Light</span>
                     </button>
-                    <button onclick="setTheme('sapphire')" id="theme-sapphire-btn" class="theme-btn flex items-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold bg-[#0B132B] text-sky-300">
-                        <span class="text-sm">💎</span>
-                        <span>Sapphire</span>
+                    <button onclick="setTheme('sapphire')" id="theme-sapphire-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#0B132B] text-sky-300">
+                        <span>💎</span><span>Sapphire</span>
                     </button>
-                    <button onclick="setTheme('icewhite')" id="theme-icewhite-btn" class="theme-btn flex items-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold bg-[#F0F4F8] text-sky-800">
-                        <span class="text-sm">❄️</span>
-                        <span>Ice White</span>
+                    <button onclick="setTheme('icewhite')" id="theme-icewhite-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#F0F4F8] text-sky-800">
+                        <span>❄️</span><span>Ice White</span>
                     </button>
-                    <button onclick="setTheme('emerald')" id="theme-emerald-btn" class="theme-btn col-span-2 flex items-center justify-center space-x-2 px-2.5 py-2 rounded-xl text-xs font-semibold bg-[#062419] text-emerald-300">
-                        <span class="text-sm">🍃</span>
-                        <span>Emerald Green</span>
+                    <button onclick="setTheme('emerald')" id="theme-emerald-btn" class="theme-btn col-span-2 flex items-center justify-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#062419] text-emerald-300">
+                        <span>🍃</span><span>Emerald Green</span>
                     </button>
                 </div>
             </div>
 
-            <!-- ACCESSIBILITY FONT STYLE SELECTOR -->
-            <div class="mb-6 pt-4 border-t themed-border">
-                <div class="flex items-center justify-between mb-2 px-1">
-                    <span class="text-[11px] font-bold tracking-wider themed-text-muted uppercase">Preview Typography</span>
+            <!-- ACCESSIBILITY FONT SELECTOR -->
+            <div class="pt-3 border-t themed-border">
+                <div class="flex items-center justify-between mb-1.5 px-1">
+                    <span class="text-[10px] font-bold tracking-wider themed-text-muted uppercase">Accessible Fonts</span>
                     <span class="material-symbols-outlined text-sm themed-primary-text">font_download</span>
                 </div>
                 <div class="relative">
-                    <select id="global-font-style-select" onchange="setFontStyle(this.value)" class="w-full themed-bg-input border themed-border rounded-xl px-3 py-2.5 text-xs font-semibold themed-text-header focus:outline-none focus:border-indigo-500 cursor-pointer appearance-none transition-all pr-8">
+                    <select id="global-font-style-select" onchange="setFontStyle(this.value)" class="w-full themed-bg-input border themed-border rounded-xl px-2.5 py-2 text-[11px] font-semibold themed-text-header focus:outline-none focus:border-indigo-500 cursor-pointer appearance-none transition-all pr-7">
                         <option value="sans">Sans-Serif (Inter Clean)</option>
                         <option value="serif">Serif (Merriweather Formal)</option>
                         <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
@@ -726,35 +862,37 @@
                         <option value="comic">Comic Neue (Accessible Rounded)</option>
                         <option value="mono">Monospace (Structured Drills)</option>
                     </select>
-                    <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-sm themed-text-muted pointer-events-none">unfold_more</span>
+                    <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-xs themed-text-muted pointer-events-none">unfold_more</span>
                 </div>
-                <p class="text-[10px] themed-text-muted mt-1.5 px-1 leading-tight">Tailors reading comfort for neurodiverse and low-vision learners.</p>
             </div>
         </div>
 
         <!-- User Profile Footer & Copyright -->
-        <div class="themed-bg-card rounded-xl p-3.5 border themed-border">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-lg themed-primary-bg flex items-center justify-center font-bold text-white text-sm">ZA</div>
+        <div class="themed-bg-card rounded-2xl p-3 border themed-border mt-4">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-xl themed-primary-bg flex items-center justify-center font-bold text-white text-xs shadow-md">ZA</div>
                 <div class="truncate">
-                    <p class="text-sm font-bold themed-text-header truncate">Zaafouri Abdelmalek</p>
-                    <p class="text-xs themed-text-muted">Author & Lead Educator</p>
+                    <p class="text-xs font-bold themed-text-header truncate">Zaafouri Abdelmalek</p>
+                    <p class="text-[10px] themed-text-muted">Author & Lead Educator</p>
                 </div>
             </div>
-            <p class="text-[10px] themed-text-muted mt-2.5 pt-2 border-t themed-border">© 2026 Zaafouri Abdelmalek.<br>All rights reserved.</p>
+            <p class="text-[9px] themed-text-muted mt-2 pt-1.5 border-t themed-border">© 2026 Zaafouri Abdelmalek. All rights reserved.</p>
         </div>
     </aside>
 
-    <!-- Main Content Area (Full Screen & Responsive) -->
+    <!-- Main Content Area (Full Screen & Responsive Edge-to-Edge) -->
     <main class="flex-1 flex flex-col h-full overflow-y-auto themed-bg-main w-full">
         
-        <!-- Top Bar with Sidebar and Fullscreen Toggles -->
+        <!-- Top Navigation Bar with Animated Hamburger & Clean Fullscreen Canvas -->
         <header class="min-h-16 border-b themed-border px-4 md:px-8 py-3 flex flex-wrap items-center justify-between gap-3 themed-bg-sidebar/90 backdrop-blur sticky top-0 z-20">
             <div class="flex items-center space-x-2 md:space-x-3">
-                <button onclick="toggleSidebar()" class="p-2 rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm" title="Toggle Navigation Sidebar">
-                    <span class="material-symbols-outlined text-xl">menu</span>
+                <!-- Premium Animated Hamburger Trigger -->
+                <button id="hamburger-menu-btn" onclick="toggleSidebar()" class="hamburger-toggle-btn rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm group" title="Toggle Navigation Menu (Alt+M)">
+                    <span class="hamburger-line hamburger-line-1"></span>
+                    <span class="hamburger-line hamburger-line-2"></span>
+                    <span class="hamburger-line hamburger-line-3"></span>
                 </button>
-                <button onclick="toggleAppFullScreen()" class="p-2 rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm" title="Toggle Fullscreen Canvas">
+                <button onclick="toggleAppFullScreen()" class="p-2.5 rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm" title="Toggle Fullscreen Mode">
                     <span id="fs-icon" class="material-symbols-outlined text-xl">fullscreen</span>
                 </button>
                 <div class="flex items-center space-x-2 pl-1 truncate">
@@ -781,7 +919,7 @@
                     <span class="material-symbols-outlined text-sm themed-primary-text">key</span>
                     <input type="password" id="gemini-api-key" placeholder="Gemini API Key" onchange="saveApiKey(this.value)" class="bg-transparent text-xs themed-text-header focus:outline-none w-28">
                 </div>
-                <button onclick="switchTab('wizard')" class="themed-primary-bg themed-primary-hover text-white px-3.5 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center space-x-1.5 shadow-lg flex-shrink-0">
+                <button onclick="switchTab('wizard')" class="btn-animated btn-shimmer btn-shimmer-loop themed-primary-bg themed-primary-hover text-white px-3.5 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center space-x-1.5 shadow-lg flex-shrink-0">
                     <span class="material-symbols-outlined text-base md:text-lg">auto_awesome</span>
                     <span class="hidden xs:inline">New AI Lesson</span>
                 </button>
@@ -793,95 +931,258 @@
 
             <!-- VIEW 1: HOME DASHBOARD -->
             <div id="view-home" class="space-y-8 view-slide-in">
-                <!-- Hero Banner with Illustration -->
-                <div class="themed-bg-card rounded-3xl p-8 border themed-border shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
-                    <div class="max-w-xl z-10">
-                        <span class="text-xs font-bold tracking-widest themed-primary-text uppercase">Professional Suite</span>
-                        <h2 class="text-3xl font-extrabold themed-text-header mt-2">Generate Pixel-Perfect A4 Worksheets & Presentation Decks</h2>
-                        <p class="themed-text-muted mt-3 text-sm leading-relaxed">Instantly draft grammar drills, vocabulary quizzes, and structured 6-slide lesson decks with multiple accessible color themes.</p>
-                        <div class="mt-6 flex items-center space-x-4">
-                            <button onclick="switchTab('wizard')" class="btn-animated btn-shimmer btn-shimmer-loop btn-glow-pulse-indigo btn-icon-slide themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
-                                <span class="material-symbols-outlined">auto_awesome</span>
+                <!-- Hero Banner with Ambient Glow & Dynamic Greeting -->
+                <div class="themed-bg-card rounded-3xl p-6 md:p-8 border themed-border shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                    <div class="dashboard-hero-glow"></div>
+                    
+                    <div class="max-w-2xl z-10 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] font-extrabold tracking-widest themed-primary-badge px-3 py-1 rounded-full uppercase">Professional ELT Studio</span>
+                            <span id="dashboard-live-clock" class="text-[11px] font-mono text-emerald-400 font-semibold flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Engine Active</span>
+                            </span>
+                        </div>
+                        <h2 id="dashboard-hero-greeting" class="text-2xl md:text-3xl font-extrabold themed-text-header tracking-tight">Welcome to LessonForge Pro</h2>
+                        <p class="themed-text-muted text-xs md:text-sm leading-relaxed">Instantly draft grammar drills, vocabulary quizzes, A4 printable worksheets, and structured 6-slide lesson decks tailored for all CEFR levels.</p>
+                        
+                        <!-- Quick Topic Launcher Chips -->
+                        <div class="pt-1">
+                            <p class="text-[10px] font-bold uppercase tracking-wider themed-text-muted mb-2">1-Click Topic Starters:</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="quickLaunchStarter('Business Idioms & Negotiations', 'Business English', 'B2 Upper-Intermediate')" class="btn-animated px-2.5 py-1 rounded-lg text-xs themed-bg-input border themed-border themed-text-header hover:border-indigo-500 transition-all flex items-center space-x-1">
+                                    <span>💼</span><span>Business Idioms</span>
+                                </button>
+                                <button onclick="quickLaunchStarter('Job Interview Mastery & STAR Method', 'Professional Development', 'C1 Advanced')" class="btn-animated px-2.5 py-1 rounded-lg text-xs themed-bg-input border themed-border themed-text-header hover:border-indigo-500 transition-all flex items-center space-x-1">
+                                    <span>🚀</span><span>Interview Prep</span>
+                                </button>
+                                <button onclick="quickLaunchStarter('Past Narrative Tenses & Mystery Story', 'Grammar Drills', 'B1 Intermediate')" class="btn-animated px-2.5 py-1 rounded-lg text-xs themed-bg-input border themed-border themed-text-header hover:border-indigo-500 transition-all flex items-center space-x-1">
+                                    <span>🔍</span><span>Narrative Mystery</span>
+                                </button>
+                                <button onclick="quickLaunchStarter('Oxford-Style Debate & Argumentation', 'Speaking & Fluency', 'C1 Advanced')" class="btn-animated px-2.5 py-1 rounded-lg text-xs themed-bg-input border themed-border themed-text-header hover:border-indigo-500 transition-all flex items-center space-x-1">
+                                    <span>🗣️</span><span>Oxford Debate</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-2 flex flex-wrap items-center gap-3">
+                            <button onclick="switchTab('wizard')" class="btn-animated btn-shimmer btn-shimmer-loop btn-glow-pulse-indigo btn-icon-slide themed-primary-bg themed-primary-hover text-white px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all shadow-lg flex items-center space-x-2">
+                                <span class="material-symbols-outlined text-base md:text-lg">auto_awesome</span>
                                 <span>Launch AI Wizard</span>
                             </button>
-                            <button onclick="switchTab('worksheet')" class="btn-animated btn-ripple themed-bg-input themed-border border hover:opacity-90 themed-text-header px-6 py-3 rounded-xl font-bold text-sm transition-all">
-                                Open A4 Builder
+                            <button onclick="switchTab('worksheet')" class="btn-animated btn-ripple themed-bg-input themed-border border hover:opacity-90 themed-text-header px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all flex items-center space-x-2">
+                                <span class="material-symbols-outlined text-base">description</span>
+                                <span>Open A4 Builder</span>
+                            </button>
+                            <button onclick="switchTab('tutor')" class="btn-animated btn-ripple themed-bg-input themed-border border hover:opacity-90 text-purple-400 px-4 py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-base">psychology</span>
+                                <span>AI Speech Tutor</span>
                             </button>
                         </div>
                     </div>
-                    <!-- Illustrated Hero Graphic -->
-                    <div class="mt-6 md:mt-0 z-10 themed-bg-input border themed-border p-6 rounded-2xl shadow-xl flex flex-col items-center space-y-3">
-                        <div class="w-20 h-20 rounded-2xl themed-primary-bg flex items-center justify-center text-white shadow-lg">
-                            <span class="material-symbols-outlined text-4xl">school</span>
+
+                    <!-- Visual Accent Card -->
+                    <div class="w-full lg:w-auto z-10 themed-bg-input border themed-border p-5 rounded-2xl shadow-xl flex flex-row lg:flex-col items-center justify-between lg:justify-center gap-4 shrink-0">
+                        <div class="w-16 h-16 rounded-2xl themed-primary-bg flex items-center justify-center text-white shadow-lg">
+                            <span class="material-symbols-outlined text-3xl">school</span>
                         </div>
-                        <div class="text-center">
-                            <p class="text-xs font-bold themed-text-header">LessonForge Studio</p>
-                            <p class="text-[10px] text-emerald-400 mt-0.5">● Accessibility Engine Ready</p>
+                        <div class="text-left lg:text-center">
+                            <p class="text-xs font-bold themed-text-header">LessonForge Suite</p>
+                            <p class="text-[10px] text-emerald-400 mt-0.5 font-medium">● 100% WCAG AAA Compliant</p>
+                            <p class="text-[10px] themed-text-muted mt-0.5">Offline PDF & PPTX Engine</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Action Cards Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div onclick="switchTab('worksheet')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl themed-primary-badge flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-xl">description</span>
-                            </div>
-                            <span class="text-[10px] font-bold themed-primary-badge px-2.5 py-0.5 rounded-full">A4 PDF</span>
+                <!-- Live Metrics & Capabilities Strip -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    <div class="stat-card-glass rounded-2xl p-4 flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-2xl">description</span>
                         </div>
-                        <h3 class="text-base font-bold themed-text-header">A4 Worksheet</h3>
-                        <p class="text-xs themed-text-muted mt-1">Grammar drills, reading & answer keys.</p>
+                        <div>
+                            <p class="text-xs font-bold themed-text-header">A4 Printable Worksheets</p>
+                            <p class="text-[10px] themed-text-muted mt-0.5">With Answer Key & QR Codes</p>
+                        </div>
                     </div>
-                    <div onclick="switchTab('presentation')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-orange-500/15 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-xl">slideshow</span>
-                            </div>
-                            <span class="text-[10px] font-bold bg-orange-500/20 text-orange-500 px-2.5 py-0.5 rounded-full">6 Slides</span>
+
+                    <div class="stat-card-glass rounded-2xl p-4 flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-2xl">slideshow</span>
                         </div>
-                        <h3 class="text-base font-bold themed-text-header">PowerPoint Deck</h3>
-                        <p class="text-xs themed-text-muted mt-1">Warmups, vocab, and quizzes.</p>
+                        <div>
+                            <p class="text-xs font-bold themed-text-header">6-Slide Presentation Decks</p>
+                            <p class="text-[10px] themed-text-muted mt-0.5">Interactive Flashcards & PPTX</p>
+                        </div>
                     </div>
-                    <div onclick="switchTab('plan')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-purple-500/30 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-xl">assignment</span>
-                            </div>
-                            <span class="text-[10px] font-bold bg-purple-500/20 text-purple-400 px-2.5 py-0.5 rounded-full">45/60 Min</span>
+
+                    <div class="stat-card-glass rounded-2xl p-4 flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-2xl">assignment</span>
                         </div>
-                        <h3 class="text-base font-bold themed-text-header">Lesson Plan Guide</h3>
-                        <p class="text-xs themed-text-muted mt-1">Pedagogical roadmap & timing.</p>
+                        <div>
+                            <p class="text-xs font-bold themed-text-header">Pedagogical Timelines</p>
+                            <p class="text-[10px] themed-text-muted mt-0.5">45, 60 & 90-Min Lesson Plans</p>
+                        </div>
                     </div>
-                    <div onclick="switchTab('tutor')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-indigo-500/30 relative overflow-hidden flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-xl">psychology</span>
-                            </div>
-                            <span class="text-[10px] font-bold bg-indigo-500/25 text-indigo-400 px-2.5 py-0.5 rounded-full">Glass AI</span>
+
+                    <div class="stat-card-glass rounded-2xl p-4 flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-2xl">psychology</span>
                         </div>
-                        <h3 class="text-base font-bold themed-text-header">AI Tutor Chat</h3>
-                        <p class="text-xs themed-text-muted mt-1">Interactive drills matching lessons.</p>
-                    </div>
-                    <div onclick="switchTab('library')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <span class="material-symbols-outlined text-xl">folder_open</span>
-                            </div>
-                            <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-500 px-2.5 py-0.5 rounded-full">Offline</span>
+                        <div>
+                            <p class="text-xs font-bold themed-text-header">AI Speech Tutor</p>
+                            <p class="text-[10px] themed-text-muted mt-0.5">Real-Time Voice & Drills</p>
                         </div>
-                        <h3 class="text-base font-bold themed-text-header">Vocab Bank</h3>
-                        <p class="text-xs themed-text-muted mt-1">Saved lessons & exports.</p>
                     </div>
                 </div>
 
-                <!-- Recent Materials -->
+                <!-- Quick Action Studio Tiles -->
                 <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-bold tracking-widest themed-text-muted uppercase">Recent Saved Materials</h3>
-                        <button onclick="switchTab('library')" class="text-xs themed-primary-text font-bold hover:underline">View All</button>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold tracking-wider themed-text-muted uppercase">Core Studio Modules</h3>
+                        <span class="text-[10px] themed-text-muted font-mono">Select any module to start</span>
                     </div>
-                    <div id="recent-materials-list" class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                        <div onclick="switchTab('worksheet')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl themed-primary-badge flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-xl">description</span>
+                                </div>
+                                <span class="text-[10px] font-bold themed-primary-badge px-2.5 py-0.5 rounded-full">A4 PDF</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold themed-text-header">A4 Worksheet</h3>
+                                <p class="text-xs themed-text-muted mt-1">Grammar drills, readings & answer keys.</p>
+                            </div>
+                        </div>
+
+                        <div onclick="switchTab('presentation')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-xl">slideshow</span>
+                                </div>
+                                <span class="text-[10px] font-bold bg-orange-500/20 text-orange-400 px-2.5 py-0.5 rounded-full">6 Slides</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold themed-text-header">PowerPoint Deck</h3>
+                                <p class="text-xs themed-text-muted mt-1">Warmups, vocab, 3D flipcards & quizzes.</p>
+                            </div>
+                        </div>
+
+                        <div onclick="switchTab('plan')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-blue-500/30 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-xl">assignment</span>
+                                </div>
+                                <span class="text-[10px] font-bold bg-blue-500/20 text-blue-400 px-2.5 py-0.5 rounded-full">45/60/90m</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold themed-text-header">Lesson Plan Guide</h3>
+                                <p class="text-xs themed-text-muted mt-1">Stage timelines & whiteboard plans.</p>
+                            </div>
+                        </div>
+
+                        <div onclick="switchTab('tutor')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-purple-500/30 relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-xl">psychology</span>
+                                </div>
+                                <span class="text-[10px] font-bold bg-purple-500/25 text-purple-400 px-2.5 py-0.5 rounded-full">Speech AI</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold themed-text-header">AI Tutor Chat</h3>
+                                <p class="text-xs themed-text-muted mt-1">Interactive drills matching lessons.</p>
+                            </div>
+                        </div>
+
+                        <div onclick="switchTab('library')" class="btn-animated themed-bg-card hover:scale-[1.02] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-xl">folder_open</span>
+                                </div>
+                                <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded-full">Vault</span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold themed-text-header">Vocab Bank</h3>
+                                <p class="text-xs themed-text-muted mt-1">Saved materials & fast exports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Masterclass Blueprints & Quick Starters -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold tracking-wider themed-text-muted uppercase">Curated Masterclass Blueprints</h3>
+                        <span class="text-[10px] themed-primary-text font-bold">1-Click Full Package</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                        <div onclick="loadMasterclassBlueprint('business')" class="btn-animated themed-bg-card hover:border-indigo-500 border themed-border p-4 rounded-2xl cursor-pointer transition-all flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg">💼</span>
+                                <span class="text-[9px] font-bold bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full">B2-C1</span>
+                            </div>
+                            <h4 class="text-xs font-bold themed-text-header">Executive Negotiations</h4>
+                            <p class="text-[11px] themed-text-muted mt-1">Tactful phrasing, idioms & compromise drills.</p>
+                            <div class="mt-3 pt-2 border-t themed-border flex items-center justify-between text-[10px] themed-primary-text font-semibold">
+                                <span>Load Blueprint</span>
+                                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </div>
+                        </div>
+
+                        <div onclick="loadMasterclassBlueprint('debate')" class="btn-animated themed-bg-card hover:border-orange-500 border themed-border p-4 rounded-2xl cursor-pointer transition-all flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg">🗣️</span>
+                                <span class="text-[9px] font-bold bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full">C1-C2</span>
+                            </div>
+                            <h4 class="text-xs font-bold themed-text-header">Oxford-Style Debate</h4>
+                            <p class="text-[11px] themed-text-muted mt-1">Formal rhetoric, rebuttals & floor discourse.</p>
+                            <div class="mt-3 pt-2 border-t themed-border flex items-center justify-between text-[10px] text-orange-400 font-semibold">
+                                <span>Load Blueprint</span>
+                                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </div>
+                        </div>
+
+                        <div onclick="loadMasterclassBlueprint('mystery')" class="btn-animated themed-bg-card hover:border-purple-500 border themed-border p-4 rounded-2xl cursor-pointer transition-all flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg">🔍</span>
+                                <span class="text-[9px] font-bold bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">B1-B2</span>
+                            </div>
+                            <h4 class="text-xs font-bold themed-text-header">The Manor House Mystery</h4>
+                            <p class="text-[11px] themed-text-muted mt-1">Past narrative tenses, clues & whodunit deduction.</p>
+                            <div class="mt-3 pt-2 border-t themed-border flex items-center justify-between text-[10px] text-purple-400 font-semibold">
+                                <span>Load Blueprint</span>
+                                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </div>
+                        </div>
+
+                        <div onclick="loadMasterclassBlueprint('interview')" class="btn-animated themed-bg-card hover:border-emerald-500 border themed-border p-4 rounded-2xl cursor-pointer transition-all flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg">🚀</span>
+                                <span class="text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">B2-C1</span>
+                            </div>
+                            <h4 class="text-xs font-bold themed-text-header">Tech Career & STAR Method</h4>
+                            <p class="text-[11px] themed-text-muted mt-1">Behavioral interview answers & impactful verbs.</p>
+                            <div class="mt-3 pt-2 border-t themed-border flex items-center justify-between text-[10px] text-emerald-400 font-semibold">
+                                <span>Load Blueprint</span>
+                                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Saved Materials -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold tracking-wider themed-text-muted uppercase">Recent Saved Materials</h3>
+                        <button onclick="switchTab('library')" class="text-xs themed-primary-text font-bold hover:underline flex items-center space-x-1">
+                            <span>View All</span>
+                            <span class="material-symbols-outlined text-xs">chevron_right</span>
+                        </button>
+                    </div>
+                    <div id="recent-materials-list" class="space-y-2.5">
                         <!-- Populated by JS -->
                     </div>
                 </div>
@@ -2036,41 +2337,171 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('app-sidebar');
             const backdrop = document.getElementById('sidebar-backdrop');
+            const hamburger = document.getElementById('hamburger-menu-btn');
             if (!sidebar) return;
 
-            if (window.innerWidth < 1024) {
-                // Mobile slide drawer
-                if (sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.remove('-translate-x-full');
-                    if (backdrop) backdrop.classList.remove('hidden');
-                    sidebarOpen = true;
-                } else {
-                    sidebar.classList.add('-translate-x-full');
-                    if (backdrop) backdrop.classList.add('hidden');
-                    sidebarOpen = false;
-                }
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openSidebarDrawer();
             } else {
-                // Desktop toggle / collapse
-                if (sidebar.classList.contains('lg:hidden')) {
-                    sidebar.classList.remove('lg:hidden');
-                    sidebar.classList.add('lg:flex');
-                    sidebarOpen = true;
-                } else {
-                    sidebar.classList.remove('lg:flex');
-                    sidebar.classList.add('lg:hidden');
-                    sidebarOpen = false;
-                }
+                closeSidebarDrawer();
+            }
+        }
+
+        function openSidebarDrawer() {
+            const sidebar = document.getElementById('app-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const hamburger = document.getElementById('hamburger-menu-btn');
+            if (!sidebar) return;
+
+            sidebar.classList.remove('-translate-x-full');
+            if (backdrop) {
+                backdrop.classList.remove('hidden');
+                backdrop.classList.remove('pointer-events-none');
+                requestAnimationFrame(() => {
+                    backdrop.classList.remove('opacity-0');
+                    backdrop.classList.add('opacity-100');
+                });
+            }
+            if (hamburger) hamburger.classList.add('is-active');
+            sidebarOpen = true;
+
+            const searchInput = document.getElementById('menu-search-input');
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 150);
             }
         }
 
         function closeSidebarDrawer() {
             const sidebar = document.getElementById('app-sidebar');
             const backdrop = document.getElementById('sidebar-backdrop');
-            if (sidebar && window.innerWidth < 1024) {
-                sidebar.classList.add('-translate-x-full');
-                if (backdrop) backdrop.classList.add('hidden');
-                sidebarOpen = false;
+            const hamburger = document.getElementById('hamburger-menu-btn');
+            if (!sidebar) return;
+
+            sidebar.classList.add('-translate-x-full');
+            if (backdrop) {
+                backdrop.classList.add('opacity-0');
+                backdrop.classList.remove('opacity-100');
+                backdrop.classList.add('pointer-events-none');
+                setTimeout(() => {
+                    if (sidebar.classList.contains('-translate-x-full')) {
+                        backdrop.classList.add('hidden');
+                    }
+                }, 300);
             }
+            if (hamburger) hamburger.classList.remove('is-active');
+            sidebarOpen = false;
+        }
+
+        function filterMenuNav(query) {
+            const q = (query || '').toLowerCase().trim();
+            const items = document.querySelectorAll('#menu-nav-links .menu-nav-item');
+            items.forEach(item => {
+                const name = (item.getAttribute('data-nav-name') || item.innerText || '').toLowerCase();
+                if (!q || name.includes(q)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function updateDashboardGreeting() {
+            const greetingEl = document.getElementById('dashboard-hero-greeting');
+            if (!greetingEl) return;
+            const hour = new Date().getHours();
+            let period = "Welcome back, Educator";
+            if (hour < 12) period = "Good morning, Educator";
+            else if (hour < 18) period = "Good afternoon, Educator";
+            else period = "Good evening, Educator";
+            greetingEl.innerText = `${period} ✨`;
+        }
+
+        function quickLaunchStarter(title, topic, level) {
+            const wsTitle = document.getElementById('ws-title');
+            const wsTopic = document.getElementById('ws-topic');
+            const wsLevel = document.getElementById('ws-level');
+            if (wsTitle) wsTitle.value = title;
+            if (wsTopic) wsTopic.value = topic;
+            if (wsLevel) wsLevel.value = level;
+
+            const wizTopic = document.getElementById('wiz-topic');
+            const wizLevel = document.getElementById('wiz-level');
+            if (wizTopic) wizTopic.value = `${title} (${topic})`;
+            if (wizLevel) wizLevel.value = level;
+
+            switchTab('worksheet');
+            generateWorksheet();
+        }
+
+        function loadMasterclassBlueprint(type) {
+            const blueprints = {
+                business: {
+                    title: 'Executive Business Negotiations & Tactful Phrasing',
+                    topic: 'Business English & Dealmaking',
+                    level: 'B2 Upper-Intermediate',
+                    slides: [
+                        { title: 'Executive Negotiations & Tactful Phrasing', subtitle: 'Mastering high-stakes corporate communication', points: ['Establishing mutual common ground', 'Hedging techniques with modal verbs', 'Active listening & reciprocal concessions'], notes: 'Open with a warm welcome and gauge participants negotiation experiences.' },
+                        { title: 'Target Lexicon: Diplomatic Idioms', subtitle: 'Essential executive phrasing', points: ['Touch base • Brief progress alignment', 'Meet halfway • Mutual compromise', 'Ball is in your court • Shifting ownership'], notes: 'Drill pronunciation and check connotation of each phrase.' },
+                        { title: 'Grammar Focus: Softening Assertions', subtitle: 'Conditional & modal diplomacy', points: ['Direct: "We reject this." ➔ Diplomatic: "We might struggle with that timeline."', '"Perhaps we could explore alternative structures?"', '"I hear your concern, however from our standpoint..."'], notes: 'Contrast blunt statements with diplomatic hedges.' },
+                        { title: 'Interactive Drill: Stakeholder Crisis', subtitle: 'Guided paired analysis', points: ['Scenario: Scope creep vs. fixed quarterly budget', 'Task: Formulate 3 conditional proposals', 'Debrief: Score diplomatic tone vs clarity'], notes: 'Allow 4 minutes for paired discussion before sharing.' },
+                        { title: 'Live Negotiation Simulation', subtitle: 'Roleplay exercise', points: ['Party A: Software Vendor with premium tier', 'Party B: Enterprise Buyer needing discount', 'Goal: Reach agreement without price slashes'], notes: 'Observe and note down lexical accuracy during roleplays.' },
+                        { title: 'Debrief & Executive Action Items', subtitle: 'Key takeaways & next steps', points: ['Summary of effective diplomatic stems', 'Take-home memo drafting assignment', 'Next module: Multi-party boardrooms'], notes: 'Summarize winning negotiation strategies.' }
+                    ]
+                },
+                debate: {
+                    title: 'Oxford-Style Debate & Rhetorical Fluency',
+                    topic: 'Speaking, Logic & Argumentation',
+                    level: 'C1 Advanced',
+                    slides: [
+                        { title: 'Motion: AI Should Replace Standardized Testing', subtitle: 'Oxford-Style Collegiate Debate', points: ['Resolution introduction & protocol', 'House division: Proposition vs Opposition', 'Rules of order & timed interventions'], notes: 'Frame the debate rules clearly for all speakers.' },
+                        { title: 'Target Rhetoric: Signposting Arguments', subtitle: 'Signposts for verbal impact', points: ['"The crux of our contention rests on..."', '"Our learned colleagues fail to address..."', '"This assertion collapses under scrutiny because..."'], notes: 'Emphasize verbal cadence and authoritative pacing.' },
+                        { title: 'Logical Fallacies & Rebuttals', subtitle: 'Dismantling weak arguments', points: ['Straw Man: Misrepresenting the counterargument', 'Ad Hominem: Discrediting the proponent', 'Slippery Slope: Unsubstantiated extrapolation'], notes: 'Highlight how to spot and counter fallacious claims.' },
+                        { title: 'Constructive Speeches (4-Minute Drills)', subtitle: 'Delivering prime arguments', points: ['1st Prop: Problem, causation, framework', '1st Opp: Rebuttal & preservation thesis', 'Points of Information (POIs) accepted'], notes: 'Keep strict timekeeping on student speeches.' },
+                        { title: 'Floor Cross-Examination', subtitle: 'Dynamic sparring & rebuttals', points: ['Rapid questioning from floor observers', 'Direct 30-second refutations', 'Synthesis of empirical evidence'], notes: 'Encourage audience engagement with targeted questions.' },
+                        { title: 'Division & Adjudication', subtitle: 'Voting and pedagogical feedback', points: ['Individual speaker scoring & feedback', 'Ballot voting on persuasiveness', 'Homework: Write a 400-word rebuttal op-ed'], notes: 'Provide constructive feedback on tone and evidence.' }
+                    ]
+                },
+                mystery: {
+                    title: 'The Manor House Mystery: Past Narrative Tenses',
+                    topic: 'Grammar in Context & Deductive Storytelling',
+                    level: 'B1 Intermediate',
+                    slides: [
+                        { title: 'The Crime at Blackwood Manor', subtitle: 'A stormy night, a stolen diamond...', points: ['Lord Blackwood discovered the safe empty at 9:00 PM', 'Rain was pouring, and the mansion gates were locked', 'Who was in the study when the lights went out?'], notes: 'Set the suspenseful mood with vivid narrative imagery.' },
+                        { title: 'Target Grammar: Past Narrative Trio', subtitle: 'Past Simple, Continuous & Perfect', points: ['Past Simple: Completed action ("He entered the room.")', 'Past Cont: Background action ("The chef was preparing dinner.")', 'Past Perfect: Earlier action ("Someone had cut the wires.")'], notes: 'Illustrate timeline relationships with diagrams on the board.' },
+                        { title: 'The Suspects & Alibis', subtitle: 'Scrutinizing witness statements', points: ['The Butler: "I was polishing silver in the pantry."', 'The Heiress: "I had just received a telegram."', 'The Chauffeur: "I was repairing the engine outside."'], notes: 'Have students search for grammatical contradictions.' },
+                        { title: 'Detective Team Challenge', subtitle: 'Piecing together the timeline', points: ['Analyze the timeline clues on worksheet', 'Formulate 4 deductions using past modals', '"The thief must have known the combination because..."'], notes: 'Encourage students to use modal verbs of deduction.' },
+                        { title: 'The Grand Reveal & Solution', subtitle: 'Solving the whodunit', points: ['Cross-examination of the key witness', 'The definitive physical evidence', 'Final confession & narrative recap'], notes: 'Reveal the true culprit after group voting.' },
+                        { title: 'Story Wrap-Up & Writing Prompt', subtitle: 'Apply your narrative skills', points: ['Review: Simple vs Continuous vs Perfect', 'Assignment: Write the detective’s final report (150 words)', 'Preview: Reported speech in courtrooms'], notes: 'Assign the creative writing homework.' }
+                    ]
+                },
+                interview: {
+                    title: 'Tech Career & STAR Method Interview Prep',
+                    topic: 'Professional Development & Behavioral Interviews',
+                    level: 'B2-C1',
+                    slides: [
+                        { title: 'Cracking the Modern Tech Interview', subtitle: 'From Behavioral Prompts to Offer Letter', points: ['Why tech firms test cultural alignment', 'The anatomy of a behavioral question', 'First impressions & confidence in English'], notes: 'Inspire confidence and review common interview anxiety.' },
+                        { title: 'The STAR Framework Matrix', subtitle: 'Structuring impactful narratives', points: ['Situation • Concise context (15%)', 'Task • Your specific responsibility (15%)', 'Action • Tactical steps you executed (50%)', 'Result • Measurable outcome & metrics (20%)'], notes: 'Stress spending the majority of time on Actions and Results.' },
+                        { title: 'High-Impact Action Verbs', subtitle: 'Power words for technical leaders', points: ['Architected • Spearheaded • Refactored', 'Optimized • Negotiated • Mitigated', '"I spearheaded the migration, reducing latency by 40%."'], notes: 'Help students replace passive phrasing with active power verbs.' },
+                        { title: 'Live Mock Question Drills', subtitle: 'Paired practice with timed prompts', points: ['"Tell me about a time you handled a deadline crisis."', '"Describe a conflict with a product manager."', '"How do you prioritize technical debt?"'], notes: 'Pair up students and time responses strictly to 2 minutes.' },
+                        { title: 'Handling Curveball Technical Questions', subtitle: 'Thinking aloud gracefully', points: ['"That is an insightful question. Let me structure my approach."', 'Clarifying ambiguities before answering', 'Demonstrating systematic problem solving'], notes: 'Coach students on verbalizing their problem-solving steps.' },
+                        { title: 'Asking The Interviewer Strategic Questions', subtitle: 'Turning the tables effectively', points: ['"How does the team balance speed vs code quality?"', '"What does success look like in the first 90 days?"', 'Homework: Record a 2-minute STAR response video'], notes: 'Encourage insightful questions that demonstrate strategic thinking.' }
+                    ]
+                }
+            };
+
+            const bp = blueprints[type];
+            if (!bp) return;
+
+            // Populate Worksheet & Wizard
+            quickLaunchStarter(bp.title, bp.topic, bp.level);
+
+            // Populate Presentation Slides if deck exists
+            if (window.presentationSlides && bp.slides) {
+                window.presentationSlides = bp.slides;
+                if (typeof renderCurrentSlide === 'function') renderCurrentSlide();
+            }
+
+            switchTab('presentation');
         }
 
         function toggleAppFullScreen() {
@@ -2095,6 +2526,37 @@
             }
         });
 
+        // Global Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSidebarDrawer();
+                const videoModal = document.getElementById('video-selector-modal');
+                if (videoModal && !videoModal.classList.contains('hidden')) {
+                    videoModal.classList.add('hidden');
+                }
+            }
+            if (e.altKey) {
+                if (e.key.toLowerCase() === 'm') {
+                    e.preventDefault();
+                    toggleSidebar();
+                } else if (e.key === '1') {
+                    e.preventDefault(); switchTab('home');
+                } else if (e.key === '2') {
+                    e.preventDefault(); switchTab('worksheet');
+                } else if (e.key === '3') {
+                    e.preventDefault(); switchTab('presentation');
+                } else if (e.key === '4') {
+                    e.preventDefault(); switchTab('wizard');
+                } else if (e.key === '5') {
+                    e.preventDefault(); switchTab('tutor');
+                } else if (e.key === '6') {
+                    e.preventDefault(); switchTab('plan');
+                } else if (e.key === '7') {
+                    e.preventDefault(); switchTab('library');
+                }
+            }
+        });
+
         // Navigation Switcher
         function switchTab(tabId) {
             closeSidebarDrawer();
@@ -2106,7 +2568,7 @@
                     el.classList.add('hidden');
                     el.classList.remove('view-slide-in');
                 }
-                if (nav) nav.className = "w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5";
+                if (nav) nav.className = "menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5";
             });
 
             const targetView = document.getElementById('view-' + tabId);
@@ -2119,7 +2581,7 @@
 
             const activeNav = document.getElementById('nav-' + tabId);
             if (activeNav) {
-                activeNav.className = "w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-primary-badge font-bold";
+                activeNav.className = "menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-primary-badge font-bold active";
             }
 
             // Headers
@@ -2144,7 +2606,10 @@
                 mainEl.scrollTop = 0;
             }
 
-            if (tabId === 'home') renderHomeRecent();
+            if (tabId === 'home') {
+                updateDashboardGreeting();
+                renderHomeRecent();
+            }
             if (tabId === 'presentation') renderCurrentSlide();
             if (tabId === 'plan') renderLessonPlan();
             if (tabId === 'library') renderLibrary();
