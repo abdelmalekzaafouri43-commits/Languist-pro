@@ -1222,6 +1222,42 @@
                     <!-- Left Studio Inspector & Config Panel (4 Cols on Large) -->
                     <div class="lg:col-span-4 xl:col-span-4 space-y-4">
                         
+                        <!-- AI Generation Card (Gemini 3.5 Flash Engine) -->
+                        <div class="themed-bg-card border border-indigo-500/30 p-5 rounded-2xl shadow-lg space-y-3.5 relative overflow-hidden bg-gradient-to-b from-indigo-500/5 to-transparent">
+                            <div class="flex items-center justify-between pb-2 border-b themed-border">
+                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center space-x-1.5">
+                                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                    <span>AI Curriculum Engine</span>
+                                </span>
+                                <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 font-bold px-2 py-0.5 rounded-full border border-indigo-500/30">Gemini 3.5</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase flex items-center justify-between">
+                                    <span>Topic Preset Shortcuts</span>
+                                    <span class="text-[10px] themed-primary-text">1-Click</span>
+                                </label>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Business Negotiations', 'B2 Upper-Intermediate', 'Focus on diplomatic language & modal hedging')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">💼 Business</button>
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Job Interview Mastery', 'C1 Advanced', 'Focus on STAR method phrasal verbs & accomplishments')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">🎯 Interview</button>
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Travel & Airport Scenarios', 'A2 Elementary', 'Focus on asking directions & baggage lost claim')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">✈️ Travel</button>
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Academic IELTS Essay Prep', 'C1 Advanced', 'Focus on discourse markers & cause-effect synthesis')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">📚 IELTS</button>
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Medical & Healthcare English', 'B2 Upper-Intermediate', 'Focus on doctor-patient consultation & symptoms')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">🏥 Medical</button>
+                                    <button type="button" onclick="applyWorksheetTopicPreset('Technology & AI Discourse', 'B2 Upper-Intermediate', 'Focus on tech buzzwords, cybersecurity & future trends')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">🤖 Tech & AI</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase">Custom AI Focus / Instructions</label>
+                                <textarea id="ws-ai-prompt" rows="2" placeholder="e.g., Emphasize past conditionals, modal verbs, and 4 matching idioms with real-life context..." class="w-full themed-bg-input border themed-border rounded-xl px-3.5 py-2 text-xs themed-text-header focus:outline-none focus:border-indigo-500 resize-none transition-colors"></textarea>
+                            </div>
+
+                            <button onclick="generateAIWorksheet()" id="btn-ws-ai-generate" class="w-full btn-animated btn-shimmer btn-shimmer-loop themed-primary-bg themed-primary-hover text-white py-3 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center justify-center space-x-2">
+                                <span class="material-symbols-outlined text-base">auto_awesome</span>
+                                <span id="ws-ai-btn-text">Generate Worksheet with AI</span>
+                            </button>
+                        </div>
+                        
                         <!-- Metadata Card -->
                         <div class="themed-bg-card border themed-border p-5 rounded-2xl shadow-sm space-y-3.5">
                             <div class="flex items-center justify-between pb-2 border-b themed-border">
@@ -1269,9 +1305,9 @@
 
                         <!-- Quick Actions & Re-generate -->
                         <div class="themed-bg-card border themed-border p-4 rounded-2xl shadow-sm space-y-2.5">
-                            <button onclick="generateWorksheet()" class="w-full btn-animated btn-shimmer btn-icon-spin themed-primary-bg themed-primary-hover text-white py-3 rounded-xl font-bold text-xs transition-all shadow-md flex items-center justify-center space-x-2">
+                            <button onclick="generateWorksheet()" class="w-full btn-animated btn-shimmer btn-icon-spin themed-bg-input border themed-border hover:opacity-90 themed-text-header py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center justify-center space-x-2">
                                 <span class="material-symbols-outlined text-base">refresh</span>
-                                <span>Regenerate Exercises</span>
+                                <span>Re-render Stage</span>
                             </button>
                             <button onclick="showQRCodeForCurrent('worksheet')" class="w-full btn-animated themed-bg-input border themed-border hover:opacity-90 themed-text-header py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center space-x-2">
                                 <span class="material-symbols-outlined text-base themed-primary-text">qr_code_2</span>
@@ -1358,6 +1394,38 @@
 
                 <!-- Control Bar: Metadata, Slide Themes, Font, & Actions -->
                 <div class="themed-bg-card border themed-border p-5 rounded-2xl space-y-4">
+                    
+                    <!-- AI PowerPoint Deck Generator Bar -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-500/30 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-indigo-500/20">
+                            <div class="flex items-center space-x-2">
+                                <span class="material-symbols-outlined text-indigo-400 text-lg">auto_awesome</span>
+                                <span class="text-xs font-bold text-indigo-300 uppercase tracking-wider">AI PowerPoint Deck Architect</span>
+                                <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-200 font-bold px-2 py-0.5 rounded-full border border-indigo-500/30">Gemini 3.5</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 items-center">
+                                <span class="text-[10px] themed-text-muted font-bold mr-1">Presets:</span>
+                                <button type="button" onclick="applyPresentationTopicPreset('Mastering Idiomatic English', 'C1 Advanced', 'Focus on executive boardroom idioms and negotiation tone')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">🎯 Idioms</button>
+                                <button type="button" onclick="applyPresentationTopicPreset('Business Presentation Mastery', 'B2 Upper-Intermediate', 'Focus on chart analysis, trends and persuasive storytelling')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">📊 Business</button>
+                                <button type="button" onclick="applyPresentationTopicPreset('Job Interview Q&A Strategy', 'B2 Upper-Intermediate', 'Focus on handling difficult interview questions & STAR formula')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">💼 Interview</button>
+                                <button type="button" onclick="applyPresentationTopicPreset('Debate & Critical Arguments', 'C1 Advanced', 'Focus on logical fallacies, rebuttals and discourse markers')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">⚖️ Debate</button>
+                                <button type="button" onclick="applyPresentationTopicPreset('Travel & Cultural Etiquette', 'A2 Elementary', 'Focus on polite requests, hotel booking & customs')" class="text-[10px] font-semibold px-2.5 py-1 rounded-lg themed-bg-input border themed-border hover:border-indigo-500 transition-colors">🌍 Travel</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                            <div class="md:col-span-8">
+                                <input type="text" id="ppt-ai-prompt" placeholder="Optional custom AI focus (e.g., 'Emphasize startup pitch vocabulary, 4 active collocations, and pair negotiation drill')..." class="w-full themed-bg-input border themed-border rounded-xl px-3.5 py-2.5 text-xs themed-text-header focus:outline-none focus:border-indigo-500">
+                            </div>
+                            <div class="md:col-span-4">
+                                <button onclick="generateAIPresentation()" id="btn-ppt-ai-generate" class="w-full btn-animated btn-shimmer btn-shimmer-loop themed-primary-bg themed-primary-hover text-white py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center justify-center space-x-2">
+                                    <span class="material-symbols-outlined text-base">auto_awesome</span>
+                                    <span id="ppt-ai-btn-text">Generate 6-Slide Deck</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
                         <div class="md:col-span-5">
                             <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase">Presentation Topic / Title</label>
@@ -1366,6 +1434,8 @@
                         <div class="md:col-span-3">
                             <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase">CEFR Target Level</label>
                             <select id="ppt-level" onchange="renderCurrentSlide()" class="w-full themed-bg-input border themed-border rounded-xl px-3.5 py-2.5 text-sm themed-text-header focus:outline-none">
+                                <option value="A1 Beginner">A1 Beginner</option>
+                                <option value="A2 Elementary">A2 Elementary</option>
                                 <option value="B1 Intermediate">B1 Intermediate</option>
                                 <option value="B2 Upper-Intermediate">B2 Upper-Intermediate</option>
                                 <option value="C1 Advanced" selected>C1 Advanced</option>
@@ -1410,9 +1480,9 @@
                                 <span class="material-symbols-outlined text-base text-orange-500">qr_code_2</span>
                                 <span>Classroom QR</span>
                             </button>
-                            <button onclick="generatePresentation()" class="btn-animated btn-shimmer btn-icon-spin themed-primary-bg themed-primary-hover text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-md flex items-center space-x-1.5">
+                            <button onclick="renderCurrentSlide()" class="btn-animated btn-shimmer btn-icon-spin themed-bg-input border themed-border hover:opacity-90 themed-text-header px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
                                 <span class="material-symbols-outlined text-base">refresh</span>
-                                <span>Re-generate</span>
+                                <span>Re-render Deck</span>
                             </button>
                         </div>
                     </div>
