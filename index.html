@@ -2787,7 +2787,7 @@
             if (wizLevel) wizLevel.value = level;
 
             switchTab('worksheet');
-            generateWorksheet();
+            generateAIWorksheet();
         }
 
         function triggerDashboardInstantBuild() {
@@ -2982,9 +2982,12 @@
             if (tabId === 'tutor') updateTutorLessonContext();
         }
 
-        // Worksheet Generator Logic & Studio Stage Controls
+        // =========================================================================
+        // AI WORKSHEET AGENT & STUDIO STAGE LOGIC
+        // =========================================================================
         let currentWorksheetMode = 'student';
         let currentWorksheetZoomScale = 1.0;
+        let activeGeneratedWorksheetData = null;
 
         function setWorksheetMode(mode) {
             currentWorksheetMode = mode;
@@ -3022,6 +3025,222 @@
             window.print();
         }
 
+        function applyWorksheetTopicPreset(topicName, levelName, customFocus) {
+            const wsTitle = document.getElementById('ws-title');
+            const wsTopic = document.getElementById('ws-topic');
+            const wsLevel = document.getElementById('ws-level');
+            const wsPrompt = document.getElementById('ws-ai-prompt');
+
+            if (wsTitle) wsTitle.value = `${topicName} Master Sheet`;
+            if (wsTopic) wsTopic.value = topicName;
+            if (wsLevel) wsLevel.value = levelName;
+            if (wsPrompt) wsPrompt.value = customFocus || '';
+
+            generateAIWorksheet();
+        }
+
+        async function generateAIWorksheet() {
+            const btn = document.getElementById('btn-ws-ai-generate');
+            const btnText = document.getElementById('ws-ai-btn-text');
+            const title = (document.getElementById('ws-title')?.value || 'Advanced Grammar & Phrasal Verbs').trim();
+            const topic = (document.getElementById('ws-topic')?.value || 'Business Communication').trim();
+            const level = document.getElementById('ws-level')?.value || 'B2 Upper-Intermediate';
+            const promptInstruction = (document.getElementById('ws-ai-prompt')?.value || '').trim();
+
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-80', 'cursor-not-allowed');
+            }
+            if (btnText) {
+                btnText.innerHTML = `<span class="inline-block animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent mr-1.5 align-middle"></span> AI Agent Generating Worksheet...`;
+            }
+
+            const apiKey = localStorage.getItem('gemini_api_key') || '';
+
+            if (apiKey && apiKey !== 'MY_GEMINI_API_KEY') {
+                try {
+                    const promptText = `You are an expert ELT English curriculum writer and AI Agent. Generate a complete, highly structured A4 printable English worksheet in strict JSON format.
+Topic: "${topic}"
+CEFR Level: "${level}"
+Title: "${title}"
+Custom Focus / Instructions: "${promptInstruction}"
+
+Respond ONLY with a valid JSON object (no markdown surrounding code block quotes if possible, or standard json code block) with the following exact keys:
+{
+  "title": "${title}",
+  "topic": "${topic}",
+  "level": "${level}",
+  "vocabItems": [
+    {"term": "Term 1 (pos)", "def": "Clear definition", "example": "Example sentence"},
+    {"term": "Term 2 (pos)", "def": "Clear definition", "example": "Example sentence"},
+    {"term": "Term 3 (pos)", "def": "Clear definition", "example": "Example sentence"},
+    {"term": "Term 4 (pos)", "def": "Clear definition", "example": "Example sentence"}
+  ],
+  "readingPassage": "A 3-4 sentence authentic reading passage about ${topic} suitable for ${level}.",
+  "comprehensionQuestions": [
+    {"question": "First analytical question based on passage?", "answer": "Detailed answer for teacher key."},
+    {"question": "Second critical thinking question?", "answer": "Detailed answer for teacher key."}
+  ],
+  "grammarDrills": [
+    {"sentence": "Sentence with _______ (verb) for student fill-in.", "answer": "correct verb form"},
+    {"sentence": "Second sentence with _______ for drill.", "answer": "correct form"}
+  ],
+  "teacherRubric": [
+    "Section 1: 1 point per accurate match",
+    "Section 2: Award up to 3 points per item for complete sentence phrasing",
+    "Section 3: 1 point per correct grammatical form"
+  ]
+}`;
+
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                        rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                        const parsed = JSON.parse(rawText);
+
+                        if (parsed && parsed.vocabItems && parsed.readingPassage) {
+                            activeGeneratedWorksheetData = parsed;
+                        } else {
+                            activeGeneratedWorksheetData = buildDynamicCurriculumWorksheet(title, topic, level, promptInstruction);
+                        }
+                    } else {
+                        activeGeneratedWorksheetData = buildDynamicCurriculumWorksheet(title, topic, level, promptInstruction);
+                    }
+                } catch (e) {
+                    console.warn("Gemini AI API Call failed, invoking fallback AI engine:", e);
+                    activeGeneratedWorksheetData = buildDynamicCurriculumWorksheet(title, topic, level, promptInstruction);
+                }
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                activeGeneratedWorksheetData = buildDynamicCurriculumWorksheet(title, topic, level, promptInstruction);
+            }
+
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+            }
+            if (btnText) {
+                btnText.innerHTML = `Generate Worksheet with AI`;
+            }
+
+            generateWorksheet();
+        }
+
+        // Smart Curriculum Worksheet Generator Engine for rich topic-tailored content
+        function buildDynamicCurriculumWorksheet(title, topic, level, focusPrompt) {
+            const topicLower = topic.toLowerCase();
+            
+            let vocab = [
+                { term: "Consensus (n.)", def: "General agreement reached by a group.", example: "The executive committee reached a consensus on the new strategy." },
+                { term: "Mitigate (v.)", def: "To make something less severe, harmful, or painful.", example: "Diplomatic phrasing helps mitigate potential friction during negotiations." },
+                { term: "Benchmark (n.)", def: "A standard or point of reference against which things may be evaluated.", example: "This quarter's results serve as a benchmark for future performance." },
+                { term: "Leverage (v.)", def: "To use something to maximum advantage.", example: "We can leverage market research to strengthen our position." }
+            ];
+
+            let passage = `Mastering ${topic} requires a structured synthesis of domain-specific lexicon, pragmatic awareness, and communicative agility. At the ${level} level, learners move beyond simple rote vocabulary to analyze contextual subtleties and diplomatic hedging. Research in ELT pedagogy confirms that task-based simulation combined with immediate formative feedback dramatically enhances long-term retention and oral fluency.`;
+
+            let comp = [
+                { question: `What primary factors drive communicative mastery in ${topic}?`, answer: `Domain-specific lexicon, pragmatic awareness, and communicative agility combined with contextual subtlety.` },
+                { question: `Why is task-based simulation emphasized for ${level} learners?`, answer: `Because it combines authentic context with immediate feedback to enhance long-term retention and oral fluency.` }
+            ];
+
+            let grammar = [
+                { sentence: `By the time the project launches, the team _____________ (finalize) all core deliverables for ${topic}.`, answer: "will have finalized" },
+                { sentence: `If negotiators _____________ (adopt) diplomatic modal stems, disputes are resolved significantly faster.`, answer: "adopt / were to adopt" }
+            ];
+
+            if (topicLower.includes('business') || topicLower.includes('negotiat') || topicLower.includes('career')) {
+                vocab = [
+                    { term: "Touch base (phr. v.)", def: "Briefly make contact or renew communication for an update.", example: "Let's touch base tomorrow morning regarding the contract details." },
+                    { term: "Hedge (v.)", def: "To limit or qualify a statement to avoid direct confrontation or commitment.", example: "Diplomats often hedge their claims using modal verbs like 'might' or 'could'." },
+                    { term: "Reciprocal (adj.)", def: "Given, felt, or done in return by each of two parties.", example: "A successful negotiation depends on reciprocal concessions." },
+                    { term: "Pivot (v.)", def: "To shift strategy or direction flexibly in response to new data.", example: "The leadership team decided to pivot toward digital expansion." }
+                ];
+                passage = `In high-stakes ${topic}, tactical communication relies heavily on polite hedging and diplomatic register. Executives at the ${level} tier must express disagreement without causing offense, using modal auxiliaries and conditional structures to maintain rapport while protecting corporate interests.`;
+                comp = [
+                    { question: "How do executive negotiators soften assertions during high-stakes dialogues?", answer: "By utilizing polite hedging, modal auxiliaries, and conditional structures." },
+                    { question: "What is the strategic purpose of maintaining rapport during negotiations?", answer: "To preserve professional relationships while working toward reciprocal concessions." }
+                ];
+                grammar = [
+                    { sentence: "We _____________ (appreciate) it if you could clarify the pricing schedule before Friday.", answer: "would appreciate" },
+                    { sentence: "Had the board known about the bottleneck earlier, they _____________ (reallocate) the budget.", answer: "would have reallocated" }
+                ];
+            } else if (topicLower.includes('medical') || topicLower.includes('health')) {
+                vocab = [
+                    { term: "Diagnosis (n.)", def: "The identification of the nature of an illness by examination.", example: "The specialist confirmed the diagnosis after analyzing the blood panel." },
+                    { term: "Prognosis (n.)", def: "The likely course or outcome of a medical condition.", example: "With early treatment, the patient's prognosis is exceptionally positive." },
+                    { term: "Symptom (n.)", def: "A physical or mental feature indicating a condition or disease.", example: "Fever and fatigue are common symptoms of viral infections." },
+                    { term: "Efficacy (n.)", def: "The ability to produce a desired or intended clinical result.", example: "Clinical trials verified the high efficacy of the new therapy." }
+                ];
+                passage = `Healthcare practitioners communicating in English must demonstrate absolute precision alongside empathetic patient rapport. At the ${level} benchmark, clinical dialogue requires active listening, clear explanations of treatment protocols, and tactful delivery of diagnostic updates.`;
+                comp = [
+                    { question: "Why is precise language vital in healthcare communication?", answer: "To ensure accurate diagnostic understanding, clinical safety, and empathetic patient rapport." },
+                    { question: "What two skills must clinicians balance when delivering updates?", answer: "Technical accuracy and compassionate, empathetic patient communication." }
+                ];
+                grammar = [
+                    { sentence: "The specialist recommended that the patient _____________ (undergo) further diagnostic tests.", answer: "undergo (subjunctive mood)" },
+                    { sentence: "Patients who _____________ (adhere) strictly to the dosage schedule report faster recovery.", answer: "adhere / have adhered" }
+                ];
+            } else if (topicLower.includes('tech') || topicLower.includes('ai') || topicLower.includes('cyber')) {
+                vocab = [
+                    { term: "Algorithm (n.)", def: "A process or set of rules followed in calculations or problem-solving.", example: "The recommendation algorithm adapts to user preferences in real time." },
+                    { term: "Autonomy (n.)", def: "The capacity of a system to operate independently without direct control.", example: "Autonomous agents require rigorous ethical guardrails." },
+                    { term: "Encryption (n.)", def: "The process of converting information into a secure code to prevent unauthorized access.", example: "End-to-end encryption protects sensitive user telemetry." },
+                    { term: "Scalability (n.)", def: "The capability of a system to handle a growing amount of work gracefully.", example: "Cloud infrastructure provides seamless scalability for global traffic." }
+                ];
+                passage = `The rapid evolution of ${topic} reshapes global industry standards. Engineering leaders working at the ${level} standard must articulate complex system architectures, evaluate cybersecurity risks, and navigate the ethical implications of autonomous technologies.`;
+                comp = [
+                    { question: "What key responsibilities do technical leaders face in modern tech environments?", answer: "Articulating complex architectures, mitigating cybersecurity risks, and evaluating ethical considerations." },
+                    { question: "Why is scalability crucial for modern enterprise applications?", answer: "To enable systems to handle growing user loads without performance degradation." }
+                ];
+                grammar = [
+                    { sentence: "If security protocols _____________ (update) promptly last week, the vulnerability would not have been exploited.", answer: "had been updated" },
+                    { sentence: "Engineers are currently _____________ (refactor) the legacy codebase to improve throughput.", answer: "refactoring" }
+                ];
+            } else if (topicLower.includes('travel') || topicLower.includes('airport') || topicLower.includes('hotel')) {
+                vocab = [
+                    { term: "Itinerary (n.)", def: "A planned route or journey schedule.", example: "The travel agent provided a detailed daily itinerary for the conference." },
+                    { term: "Accommodate (v.)", def: "To provide lodging or sufficient space for someone.", example: "The hotel was able to accommodate our late arrival without surcharge." },
+                    { term: "Baggage claim (n.)", def: "The area at an airport where arriving passengers collect luggage.", example: "Please proceed to baggage claim carousel 4 upon landing." },
+                    { term: "Reservation (n.)", def: "An arrangement to have something held for one's use.", example: "I would like to confirm my dining reservation for 7:30 PM." }
+                ];
+                passage = `Navigating international travel requires polite functional phrases and clear inquiry techniques. At the ${level} tier, travelers handle unexpected flight delays, hotel reservations, and lost luggage claims with confidence and composure.`;
+                comp = [
+                    { question: "What functional language is essential when dealing with travel disruptions?", answer: "Polite inquiry stems, modal requests, and clear problem description phrases." },
+                    { question: "How does pre-confirming reservations assist travelers?", answer: "It prevents scheduling errors and ensures seamless lodging or transportation." }
+                ];
+                grammar = [
+                    { sentence: "Excuse me, could you tell me where the nearest departure gate _____________ (be)?", answer: "is" },
+                    { sentence: "If my luggage _____________ (not arrive) by tomorrow, please call my mobile number.", answer: "does not arrive" }
+                ];
+            }
+
+            if (focusPrompt) {
+                passage += `\n\n[Teacher Special Focus Note: This material specifically emphasizes "${focusPrompt}"]`;
+            }
+
+            return {
+                title: title,
+                topic: topic,
+                level: level,
+                vocabItems: vocab,
+                readingPassage: passage,
+                comprehensionQuestions: comp,
+                grammarDrills: grammar,
+                teacherRubric: [
+                    "Section 1 (Vocabulary): 1 Point per accurate match (Total 4 Points)",
+                    "Section 2 (Comprehension): Award up to 3 points per item for complete sentence phrasing and accurate synthesis.",
+                    "Section 3 (Grammar Drills): Award 1 point per grammatically correct verb form/particle."
+                ]
+            };
+        }
+
         function generateWorksheet() {
             const title = (document.getElementById('ws-title')?.value || 'Advanced Grammar & Phrasal Verbs').trim();
             const topic = (document.getElementById('ws-topic')?.value || 'Business Communication').trim();
@@ -3034,41 +3253,76 @@
 
             const isTeacher = currentWorksheetMode === 'teacher';
 
+            if (!activeGeneratedWorksheetData || activeGeneratedWorksheetData.topic !== topic || activeGeneratedWorksheetData.title !== title) {
+                const promptInstruction = (document.getElementById('ws-ai-prompt')?.value || '').trim();
+                activeGeneratedWorksheetData = buildDynamicCurriculumWorksheet(title, topic, level, promptInstruction);
+            }
+
+            const data = activeGeneratedWorksheetData;
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+
+            const vocabHtml = (data.vocabItems || []).map((v, idx) => {
+                const letter = letters[idx % letters.length];
+                return `
+                    <li>
+                        <b>${v.term}</b> ➔ 
+                        <span class="font-normal text-slate-700">
+                            ${isTeacher ? `<b class="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded mr-1">[${letter}]</b> ` : ''}
+                            ${v.def}
+                        </span>
+                        <div class="text-[11px] text-slate-500 italic mt-0.5 pl-2 border-l-2 border-slate-200">
+                            e.g. "${v.example}"
+                        </div>
+                    </li>
+                `;
+            }).join('');
+
+            const compHtml = (data.comprehensionQuestions || []).map((q, idx) => `
+                <div>
+                    <p class="font-semibold text-slate-800">${idx + 1}. ${q.question}</p>
+                    ${isTeacher ? `<p class="text-emerald-800 font-medium bg-emerald-50 p-1.5 rounded mt-1 border border-emerald-200 text-xs"><b>Answer Key:</b> ${q.answer}</p>` : '<div class="h-6 border-b border-dashed border-slate-400 mt-1"></div>'}
+                </div>
+            `).join('');
+
+            const grammarHtml = (data.grammarDrills || []).map((g, idx) => `
+                <div>
+                    <p>${idx + 1}. ${g.sentence}</p>
+                    ${isTeacher ? `<p class="text-emerald-800 font-medium bg-emerald-50 p-1 rounded mt-0.5 font-mono text-[11px]"><b>Key:</b> ${g.answer}</p>` : '<div class="h-5 border-b border-dashed border-slate-300"></div>'}
+                </div>
+            `).join('');
+
+            const rubricHtml = (data.teacherRubric || []).map(r => `<p>• ${r}</p>`).join('');
+
             const html = `
                 <div class="space-y-5">
-                    <div class="bg-indigo-50 border border-indigo-200 p-3.5 rounded-xl flex items-center space-x-3 mb-3">
-                        <span class="material-symbols-outlined text-indigo-600 text-lg">auto_awesome</span>
-                        <div>
-                            <p class="text-xs font-bold text-indigo-900">Illustrated LessonForge Studio Material</p>
-                            <p class="text-[10px] text-indigo-700">Target Level: <b>${level}</b> • Printable A4 Master Sheet</p>
+                    <div class="bg-indigo-50 border border-indigo-200 p-3.5 rounded-xl flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="material-symbols-outlined text-indigo-600 text-lg">auto_awesome</span>
+                            <div>
+                                <p class="text-xs font-bold text-indigo-900">Illustrated LessonForge AI Agent Material</p>
+                                <p class="text-[10px] text-indigo-700">Target Level: <b>${level}</b> • Printable A4 Master Sheet</p>
+                            </div>
                         </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${isTeacher ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-indigo-100 text-indigo-800 border border-indigo-300'}">
+                            ${isTeacher ? 'Teacher Answer Key' : 'Student Edition'}
+                        </span>
                     </div>
 
                     <div>
                         <h3 class="font-bold text-slate-900 border-b pb-1 text-xs tracking-wider uppercase">SECTION 1: TARGET VOCABULARY & MATCHING</h3>
-                        <p class="text-xs text-slate-600 mt-1">Match each key term related to <b>${topic}</b> with its accurate definition:</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-xs font-semibold mt-2">
-                            <li>Fluent (adj.) ➔ <span class="font-normal text-slate-500">${isTeacher ? '<b class="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded">[A]</b> ' : ''}A. Able to express oneself easily, clearly, and articulately.</span></li>
-                            <li>Context (n.) ➔ <span class="font-normal text-slate-500">${isTeacher ? '<b class="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded">[B]</b> ' : ''}B. The surrounding circumstances forming the setting for an idea.</span></li>
-                            <li>Acquire (v.) ➔ <span class="font-normal text-slate-500">${isTeacher ? '<b class="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded">[C]</b> ' : ''}C. To master or develop a communication skill over time.</span></li>
-                            <li>Nuance (n.) ➔ <span class="font-normal text-slate-500">${isTeacher ? '<b class="text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded">[D]</b> ' : ''}D. A subtle difference in shade of meaning, tone, or expression.</span></li>
+                        <p class="text-xs text-slate-600 mt-1">Study each key term related to <b>${topic}</b> and match with its accurate definition:</p>
+                        <ol class="list-decimal pl-5 space-y-2.5 text-xs font-semibold mt-2.5">
+                            ${vocabHtml}
                         </ol>
                     </div>
 
                     <div>
                         <h3 class="font-bold text-slate-900 border-b pb-1 pt-1 text-xs tracking-wider uppercase">SECTION 2: READING & ANALYTICAL COMPREHENSION</h3>
-                        <div class="text-xs italic text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 mt-2 leading-relaxed">
-                            "Effective proficiency in <b>${topic}</b> relies upon active dialogue, deliberate lexical expansion, and contextual application. Language experts emphasize that consistent exposure to authentic spoken models accelerates cognitive retention across all four skill pillars."
+                        <div class="text-xs italic text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200 mt-2 leading-relaxed">
+                            "${data.readingPassage}"
                         </div>
                         <div class="space-y-3 text-xs mt-3">
-                            <div>
-                                <p class="font-semibold text-slate-800">1. What foundational habits cultivate authentic mastery in ${topic}?</p>
-                                ${isTeacher ? '<p class="text-emerald-800 font-medium bg-emerald-50 p-1.5 rounded mt-1 border border-emerald-200">Answer: Active dialogue, deliberate lexical expansion, and contextual application.</p>' : '<div class="h-6 border-b border-dashed border-slate-400 mt-1"></div>'}
-                            </div>
-                            <div>
-                                <p class="font-semibold text-slate-800">2. Why is immersion in authentic spoken models emphasized?</p>
-                                ${isTeacher ? '<p class="text-emerald-800 font-medium bg-emerald-50 p-1.5 rounded mt-1 border border-emerald-200">Answer: It accelerates cognitive retention across all four language pillars.</p>' : '<div class="h-6 border-b border-dashed border-slate-400 mt-1"></div>'}
-                            </div>
+                            ${compHtml}
                         </div>
                     </div>
 
@@ -3076,14 +3330,7 @@
                         <h3 class="font-bold text-slate-900 border-b pb-1 pt-1 text-xs tracking-wider uppercase">SECTION 3: GRAMMAR DRILLS & ACTIVE COLLOCATIONS</h3>
                         <p class="text-xs text-slate-600 mt-1">Complete each statement using the correct grammatical form or phrase:</p>
                         <div class="space-y-2.5 text-xs mt-2">
-                            <div>
-                                <p>1. By the end of this semester, the cohort ______________ (finalize) their research in ${topic}.</p>
-                                ${isTeacher ? '<p class="text-emerald-800 font-medium bg-emerald-50 p-1 rounded mt-0.5 font-mono text-[11px]">Key: will have finalized</p>' : '<div class="h-5 border-b border-dashed border-slate-300"></div>'}
-                            </div>
-                            <div>
-                                <p>2. If negotiators ______________ (adopt) diplomatic modal stems, agreements occur faster.</p>
-                                ${isTeacher ? '<p class="text-emerald-800 font-medium bg-emerald-50 p-1 rounded mt-0.5 font-mono text-[11px]">Key: adopt / were to adopt</p>' : '<div class="h-5 border-b border-dashed border-slate-300"></div>'}
-                            </div>
+                            ${grammarHtml}
                         </div>
                     </div>
 
@@ -3093,9 +3340,7 @@
                             <span class="material-symbols-outlined text-sm">verified</span>
                             <span>TEACHER SOLUTION GUIDE & SCORING RUBRIC</span>
                         </div>
-                        <p>• Section 1 (Matching): 1-A, 2-B, 3-C, 4-D (4 Points)</p>
-                        <p>• Section 2 (Comprehension): Award up to 3 points per item for complete sentence phrasing and accurate paraphrasing.</p>
-                        <p>• Section 3 (Grammar): 1. will have finalized (Future Perfect), 2. adopt / were to adopt (Conditional Mood).</p>
+                        ${rubricHtml}
                     </div>
                     ` : ''}
 
