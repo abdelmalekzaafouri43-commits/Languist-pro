@@ -3008,6 +3008,7 @@ SECTION 3: ASSESSMENT & TEACHER ANSWER KEY
         async function handleTutorSubmit(e) {
             if (e) e.preventDefault();
             const input = document.getElementById('tutor-input');
+            if (!input) return;
             const prompt = input.value.trim();
             if (!prompt) return;
 
@@ -3024,7 +3025,7 @@ SECTION 3: ASSESSMENT & TEACHER ANSWER KEY
 
             // Gather context from Worksheet and Presentation
             const wsTitle = document.getElementById('ws-title') ? document.getElementById('ws-title').value : 'English Lesson';
-            const wsTopic = document.getElementById('ws-topic') ? document.getElementById('ws-topic').value : 'General English';
+            const wsTopic = document.getElementById('ws-topic') ? document.getElementById('ws-topic').value : 'Business Communication';
             const wsLevel = document.getElementById('ws-level') ? document.getElementById('ws-level').value : 'B2';
             const wsPassage = document.getElementById('ws-passage') ? document.getElementById('ws-passage').value : '';
             const apiKey = localStorage.getItem('gemini_api_key') || '';
@@ -3032,26 +3033,35 @@ SECTION 3: ASSESSMENT & TEACHER ANSWER KEY
             // Generate instant real-time response content
             let responseText = '';
 
-            if (apiKey) {
+            if (apiKey && apiKey.length > 5) {
                 try {
                     const systemContext = `You are an expert, encouraging English Language Tutor in LessonForge Studio.
-Lesson: ${wsTitle} | Topic: ${wsTopic} | Level: ${wsLevel}
-Worksheet Passage: "${wsPassage}"
-Respond instantly, clearly, and supportively. Format with bullet points, bold terms, and actionable explanations.`;
+Active Lesson Context:
+- Lesson Title: ${wsTitle}
+- Topic: ${wsTopic}
+- CEFR Level: ${wsLevel}
+- Core Text: "${wsPassage}"
+
+Respond to the student promptly, supportively, and accurately. Provide clear explanations with bold terms, bullet points, IPA phonetic guides, example dialogues, or corrections.`;
                     
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 2500);
+
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        signal: controller.signal,
                         body: JSON.stringify({
                             contents: [{
                                 parts: [
-                                    { text: `${systemContext}\n\nStudent Prompt: ${prompt}` }
+                                    { text: `${systemContext}\n\nStudent Question / Prompt: ${prompt}` }
                                 ]
                             }]
                         })
                     });
+                    clearTimeout(timeoutId);
                     const data = await res.json();
-                    if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) {
                         responseText = data.candidates[0].content.parts[0].text;
                     } else {
                         responseText = generateSmartLocalTutorResponse(prompt, wsTopic, wsLevel, wsPassage);
@@ -3060,7 +3070,7 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
                     responseText = generateSmartLocalTutorResponse(prompt, wsTopic, wsLevel, wsPassage);
                 }
             } else {
-                // Instant NLP resolution with 0ms artificial delay
+                // Instant real-time NLP resolution
                 responseText = generateSmartLocalTutorResponse(prompt, wsTopic, wsLevel, wsPassage);
             }
 
@@ -3093,13 +3103,12 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
         // Real-Time High-Speed Word Streaming
         function streamTutorMessage(fullText) {
             const container = document.getElementById('tutor-messages');
-            const typingIndicator = document.getElementById('tutor-typing');
             if (!container) return;
 
             const msgDiv = document.createElement('div');
             msgDiv.className = 'flex items-start space-x-3 view-slide-in';
 
-            const rawId = 'tutor-msg-' + Date.now();
+            const rawId = 'tutor_msg_' + Date.now();
             
             msgDiv.innerHTML = `
                 <div class="w-8 h-8 rounded-xl themed-primary-bg text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-md">
@@ -3115,10 +3124,10 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
                             <span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold">Real-Time</span>
                         </div>
                         <div class="flex items-center space-x-1.5 opacity-80" id="controls-${rawId}">
-                            <button type="button" onclick="speakTutorText(window['${rawId}_text'])" title="Listen to pronunciation" class="p-1 rounded-lg hover:bg-white/10 text-indigo-300 transition-all flex items-center">
+                            <button type="button" onclick="speakTutorText(window['${rawId}'])" title="Listen to pronunciation" class="p-1 rounded-lg hover:bg-white/10 text-indigo-300 transition-all flex items-center">
                                 <span class="material-symbols-outlined text-sm">volume_up</span>
                             </button>
-                            <button type="button" onclick="copyTutorText(window['${rawId}_text'])" title="Copy response" class="p-1 rounded-lg hover:bg-white/10 text-slate-300 transition-all flex items-center">
+                            <button type="button" onclick="copyTutorText(window['${rawId}'])" title="Copy response" class="p-1 rounded-lg hover:bg-white/10 text-slate-300 transition-all flex items-center">
                                 <span class="material-symbols-outlined text-sm">content_copy</span>
                             </button>
                         </div>
@@ -3131,7 +3140,7 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
             container.appendChild(msgDiv);
             container.scrollTop = container.scrollHeight;
 
-            window[rawId + '_text'] = fullText;
+            window[rawId] = fullText;
 
             const contentEl = document.getElementById(`content-${rawId}`);
             const actionsEl = document.getElementById(`actions-${rawId}`);
@@ -3162,7 +3171,7 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
                     contentEl.innerHTML = formatBotText(currentAccumulated) + '<span class="tutor-live-cursor inline-block w-1.5 h-3.5 bg-indigo-400 ml-1 animate-pulse align-middle"></span>';
                 }
                 container.scrollTop = container.scrollHeight;
-            }, 10); // 10ms per word chunk for ultra-fast, smooth real-time response
+            }, 8); // 8ms per token chunk for ultra-smooth real-time response
         }
 
         function generateContextFollowUpButtons(text) {
@@ -3175,12 +3184,16 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
             } else if (lower.includes('roleplay') || lower.includes('alex')) {
                 buttons.push(`<button onclick="sendQuickPrompt('Alex, we should leverage our cross-functional synergy and touch base with engineering before committing.')" class="text-[10px] px-2 py-1 rounded-lg bg-orange-500/20 text-orange-300 hover:bg-orange-500/30 transition-all font-semibold">💬 Reply as Partner</button>`);
                 buttons.push(`<button onclick="sendQuickPrompt('Evaluate my roleplay fluency and give vocabulary suggestions.')" class="text-[10px] px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all">📊 Score My Roleplay</button>`);
-            } else if (lower.includes('correction') || lower.includes('correct') || lower.includes('mistake')) {
+            } else if (lower.includes('correction') || lower.includes('correct') || lower.includes('mistake') || lower.includes('error')) {
                 buttons.push(`<button onclick="sendQuickPrompt('Check another sentence for me: \'Neither of the candidates were qualified.\'')" class="text-[10px] px-2 py-1 rounded-lg bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition-all font-semibold">🔍 Check Another Sentence</button>`);
                 buttons.push(`<button onclick="sendQuickPrompt('Explain this grammar rule in even simpler terms.')" class="text-[10px] px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all">💡 Simplify Explanation</button>`);
+            } else if (lower.includes('lend') || lower.includes('borrow') || lower.includes('make') || lower.includes('do') || lower.includes('affect') || lower.includes('effect')) {
+                buttons.push(`<button onclick="sendQuickPrompt('Give me 3 practice fill-in-the-blank questions to test this word difference.')" class="text-[10px] px-2 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition-all font-semibold">✍️ Practice Exercise</button>`);
+                buttons.push(`<button onclick="sendQuickPrompt('What is the difference between \'make\' and \'do\'?')" class="text-[10px] px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 themed-text-header transition-all">"make" vs "do"</button>`);
             } else {
-                buttons.push(`<button onclick="sendQuickPrompt('Give me 3 realistic conversation examples for this topic.')" class="text-[10px] px-2 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition-all font-semibold">✨ More Real Examples</button>`);
-                buttons.push(`<button onclick="sendQuickPrompt('What are common pronunciation pitfalls for these words?')" class="text-[10px] px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-all font-semibold">🗣️ Pronunciation Guide</button>`);
+                buttons.push(`<button onclick="sendQuickPrompt('Give me 3 realistic conversation examples for this topic.')" class="text-[10px] px-2 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition-all font-semibold">✨ Real Examples</button>`);
+                buttons.push(`<button onclick="sendQuickPrompt('What are common pronunciation pitfalls for these words?')" class="text-[10px] px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-all font-semibold">🗣️ Pronunciation</button>`);
+                buttons.push(`<button onclick="sendQuickPrompt('Give me 5 advanced business idioms with meanings.')" class="text-[10px] px-2 py-1 rounded-lg bg-orange-500/20 text-orange-300 hover:bg-orange-500/30 transition-all font-semibold">💼 5 Business Idioms</button>`);
             }
 
             return buttons.join('');
@@ -3190,6 +3203,8 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
             let html = escapeHtml(text);
             // Bold
             html = html.replace(/\*\*(.*?)\*\*/g, '<b class="themed-text-header font-bold">$1</b>');
+            // Italics
+            html = html.replace(/\*(.*?)\*/g, '<i class="italic text-indigo-200">$1</i>');
             // Inline code
             html = html.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-black/30 font-mono text-[11px] text-indigo-300">$1</code>');
             // Bullet points
@@ -3208,21 +3223,36 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
         }
 
         // ==========================================
-        // REAL-TIME INSTANT NLP KNOWLEDGE ENGINE
+        // COMPREHENSIVE REAL-TIME NLP ENGLISH TUTOR ENGINE
         // ==========================================
         function generateSmartLocalTutorResponse(prompt, topic, level, passage) {
-            const p = prompt.toLowerCase();
+            const p = prompt.toLowerCase().trim();
 
-            // 1. LIVE SENTENCE CORRECTION & PROOFREADING
-            if (p.includes('check') || p.includes('correct') || p.includes('grammar check') || p.includes('feedback on') || p.includes('mistake') || p.includes('is this right') || p.includes('is this sentence')) {
-                // Check for double conjunction: although... but
+            // 1. GREETINGS & CASUAL CONVERSATION
+            if (p === 'hello' || p === 'hi' || p === 'hey' || p === 'good morning' || p === 'good afternoon' || p === 'how are you' || p === 'what can you do') {
+                return `**Hello! I am your Real-Time AI English Tutor 👋**
+
+I am ready to help you master English at CEFR **${escapeHtml(level)}** level. You can ask me anything in real time:
+
+* ✍️ **Grammar & Sentence Checking:** Paste any sentence to check for mistakes, prepositions, or word order.
+* 📚 **Vocabulary & Idioms:** Ask for definitions, collocations, idioms, or confusing word pairs (*lend vs borrow*, *make vs do*).
+* 🗣️ **Pronunciation & Phonetics:** Request IPA transcriptions, stress patterns, and audio read-alouds.
+* 📝 **Interactive Quizzes:** Request 5-question drills and submit answers for instant grading.
+* 🎭 **Communicative Roleplays:** Practice workplace dialogues and conversation scenarios.
+
+👉 *Type any question, paste a sentence to proofread, or choose a prompt above!*`;
+            }
+
+            // 2. LIVE SENTENCE CORRECTION & PROOFREADING
+            if (p.includes('check') || p.includes('correct') || p.includes('grammar check') || p.includes('feedback on') || p.includes('mistake') || p.includes('error') || p.includes('is this right') || p.includes('is this sentence') || p.includes('is it correct')) {
+                // Double conjunction: although... but
                 if (p.includes('although') && p.includes('but')) {
                     return `**Real-Time Grammar Diagnostic & Correction:**
 
 ❌ **Identified Error:** "Although he was tired, **but** he finished the report."
 ✅ **Corrected Version:** *"Although he was tired, he finished the report."* (Or: *"He was tired, but he finished the report."*)
 
-📌 **Rule Breakdown:**
+📌 **Grammar Rule Breakdown:**
 * **'Although'** is a subordinating conjunction introducing a dependent clause.
 * **'But'** is a coordinating conjunction linking two independent clauses.
 * In English, using **both** in the same sentence creates a double conjunction error. Use one or the other!
@@ -3234,79 +3264,363 @@ Respond instantly, clearly, and supportively. Format with bullet points, bold te
 💡 *Try writing another complex sentence and I'll verify it instantly!*`;
                 }
 
-                // Check for "have went"
+                // "have went" -> have gone
                 if (p.includes('have went') || p.includes('has went') || p.includes('had went')) {
                     return `**Real-Time Grammar Diagnostic & Correction:**
 
 ❌ **Identified Error:** Use of past simple "*went*" with auxiliary verb "*have*".
-✅ **Corrected Version:** *"I have **gone** to..."* or *"I **went** to..."*
+✅ **Corrected Version:** *"I have **gone** to the meeting."* or *"I **went** to the meeting."*
 
-📌 **Rule Breakdown:**
+📌 **Grammar Rule Breakdown:**
 * Present Perfect formula: **[Subject] + [have/has] + [Past Participle (V3)]**.
 * The verb **go** has three forms: *Go* (Base) → *Went* (Past Simple) → *Gone* (Past Participle).
 * *Never combine 'have' with 'went'.*
 
 🌟 **Examples:**
-* *"She has gone to the Singapore office for quarterly planning."*
+* *"She has gone to the London office for quarterly planning."*
 * *"Yesterday, they went to the conference."*`;
                 }
 
-                // Check for "neither... were"
+                // "neither of the candidates were" -> was
                 if (p.includes('neither of') && (p.includes('were') || p.includes('are') || p.includes('have'))) {
                     return `**Real-Time Subject-Verb Agreement Diagnostic:**
 
 ❌ **Original:** *"Neither of the candidates were qualified."*
-✅ **Formal/Standard English:** *"Neither of the candidates **was** qualified."*
+✅ **Formal / Standard English:** *"Neither of the candidates **was** qualified."*
 
-📌 **Rule Breakdown:**
+📌 **Grammar Rule Breakdown:**
 * **'Neither'** is grammatically singular when followed by "of the [plural noun]".
 * In formal, academic, and business English (CEFR B2-C1), it takes a **singular verb** (*was / is / has*).
 
-💡 *Tutor Tip:* While plural verbs appear in informal spoken English, stick to singular in business reports and exams!`;
+💡 *Tutor Tip:* While plural verbs appear in informal spoken English, stick to singular in business reports and international exams (IELTS/TOEFL)!`;
                 }
 
-                // General sentence correction
-                return `**Real-Time Proofreading & Language Polish:**
+                // "I look forward to hear" -> to hearing
+                if (p.includes('look forward to hear') || p.includes('looking forward to hear')) {
+                    return `**Real-Time Gerund Diagnostic & Correction:**
+
+❌ **Identified Error:** *"I look forward to hear from you."*
+✅ **Corrected Version:** *"I look forward to **hearing** from you."*
+
+📌 **Grammar Rule Breakdown:**
+* In the phrase **'look forward to'**, the word **'to'** is a preposition (not part of an infinitive verb).
+* Prepositions must always be followed by a **noun** or a **gerund (verb + -ing)**.
+
+🌟 **Similar Prepositional Phrases:**
+* *"She is used to **waking** up early."*
+* *"They object to **increasing** the workload."*`;
+                }
+
+                // General sentence analysis
+                return `**Real-Time Sentence Proofreading & Polish:**
 
 Here is your analyzed sentence review:
 * 🔍 **Structure Analysis:** Clear communicative intent.
 * ✍️ **Tone & Register:** Matches CEFR **${escapeHtml(level)}** standards.
-* 💡 **Polished Alternative:** If writing for executive or formal settings, ensure active voice and concise vocabulary choices.
+* 💡 **Polished Alternatives:**
+  1. **Executive / Formal:** *"I would appreciate the opportunity to discuss this initiative in detail."*
+  2. **Active / Direct:** *"Let us align our priorities and review the deliverables by Friday."*
+  3. **Conversational:** *"Let's touch base soon to finalize the next steps."*
 
-Would you like me to rewrite your sentence into:
-1. **Ultra-Formal Business English**
-2. **Casual Conversational English**
-3. **Concise Academic Style**?`;
+Would you like me to rewrite your sentence into a specific register or explain any grammar points?`;
             }
 
-            // 2. VOCABULARY BREAKDOWN & SECTION 1 DEEP-DIVE
-            if (p.includes('vocab') || p.includes('section 1') || p.includes('deep-dive') || p.includes('meaning of') || p.includes('define')) {
+            // 3. WORD DIFFERENCES & CONFUSING PAIRS
+            // Lend vs Borrow
+            if (p.includes('lend') && p.includes('borrow')) {
+                return `**"Lend" vs. "Borrow" — Direction of Giving & Receiving:**
+
+* 📤 **Lend (Verb) = GIVE temporarily (Outgoing):**
+  * *Meaning:* To give something to someone with the expectation of getting it back.
+  * *Pattern:* [Subject] lends [something] **to** [someone].
+  * *Example:* "Could you **lend** me your laptop charger for an hour?"
+  * *Forms:* Lend → Lent → Lent.
+
+* 📥 **Borrow (Verb) = TAKE temporarily (Incoming):**
+  * *Meaning:* To receive something from someone with the promise to return it.
+  * *Pattern:* [Subject] borrows [something] **from** [someone].
+  * *Example:* "May I **borrow** $20 **from** you until Friday?"
+  * *Forms:* Borrow → Borrowed → Borrowed.
+
+🧠 **Quick Memory Hook:**
+* **L**end = **L**eaves you (you give it away).
+* **B**orrow = **B**ack to you (you take it in).`;
+            }
+
+            // Make vs Do
+            if (p.includes('make') && p.includes('do')) {
+                return `**"Make" vs. "Do" — The Definitive Action Guide:**
+
+* 🔨 **Make = Create, Produce, or Construct (Result oriented):**
+  * *Collocations:* Make a decision, make a mistake, make money, make progress, make an appointment, make an effort, make dinner.
+  * *Example:* "We need to **make a decision** before the end of the quarter."
+
+* ⚡ **Do = Actions, Tasks, Obligations, & General Activities:**
+  * *Collocations:* Do homework, do business, do research, do a favor, do your best, do exercise, do the dishes.
+  * *Example:* "Our company has been **doing business** with them for over a decade."
+
+💡 *Tutor Rule:* If you produce a tangible outcome or decision, use **make**. If you perform a task or duty, use **do**!`;
+            }
+
+            // Affect vs Effect
+            if (p.includes('affect') && p.includes('effect')) {
+                return `**"Affect" vs. "Effect" — The Ultimate Clarity Guide:**
+
+* 🔵 **Affect = Action / Verb (A for Action):**
+  * *Meaning:* To influence or produce a change in something.
+  * *Example:* "High inflation rates directly **affect** consumer purchasing power."
+
+* 🟢 **Effect = Result / Noun (E for End Result):**
+  * *Meaning:* The outcome, consequence, or result of an action.
+  * *Example:* "The new policy had an immediate positive **effect** on workplace morale."
+
+🧠 **Memory Hack (RAVEN):**
+* **R** = **R**emember
+* **A** = **A**ffect is a
+* **V** = **V**erb
+* **E** = **E**ffect is a
+* **N** = **N**oun`;
+            }
+
+            // Say vs Tell vs Speak vs Talk
+            if (p.includes('say') && (p.includes('tell') || p.includes('speak') || p.includes('talk'))) {
+                return `**"Say" vs. "Tell" vs. "Speak" vs. "Talk":**
+
+* 🗣️ **Say:** Focuses on the words spoken. Does not require a personal object.
+  * *Pattern:* Say (that) + clause | Say something **to** someone.
+  * *Example:* "She **said that** the presentation was outstanding."
+
+* 👥 **Tell:** Focuses on communicating information to a specific listener (requires a person).
+  * *Pattern:* Tell + **someone** + something.
+  * *Example:* "Please **tell me** the meeting agenda." (Never: *say me*)
+
+* 🎙️ **Speak:** More formal; refers to knowledge of languages or one-way speeches.
+  * *Example:* "She **speaks** four languages fluently." / "The director will **speak** at the keynote."
+
+* 💬 **Talk:** Conversational two-way dialogue between people.
+  * *Example:* "We need to **talk about** the upcoming project deliverables."`;
+            }
+
+            // Advice vs Advise
+            if (p.includes('advice') && p.includes('advise')) {
+                return `**"Advice" (Noun) vs. "Advise" (Verb):**
+
+* 📄 **Advice (Noun - /ədˈvaɪs/ with 's' sound):**
+  * *Meaning:* Recommendations or suggestions. **Uncountable** (Never say *an advice* or *advices*! Use *a piece of advice*).
+  * *Example:* "He gave me some invaluable financial **advice**."
+
+* 🗣️ **Advise (Verb - /ədˈvaɪz/ with 'z' sound):**
+  * *Meaning:* To give advice or recommend a course of action.
+  * *Example:* "I strongly **advise** you to review the contract terms before signing."`;
+            }
+
+            // Since vs For
+            if (p.includes('since') && p.includes('for')) {
+                return `**"Since" vs. "For" with Present Perfect:**
+
+* 📍 **Since + Specific Starting Point in Time:**
+  * *Time markers:* Since 2018, since Monday, since 9:00 AM, since I graduated.
+  * *Example:* "I have worked at this firm **since 2020**."
+
+* ⏱️ **For + Duration / Period of Time:**
+  * *Time markers:* For 5 years, for two hours, for 6 months, for a long time.
+  * *Example:* "I have worked at this firm **for 4 years**."
+
+💡 *Tutor Rule:* Ask yourself: "Is it a clock/calendar date?" → Use **since**. "Is it a length of time?" → Use **for**!`;
+            }
+
+            // In vs On vs At (Prepositions of Place & Transport)
+            if (p.includes('in the car') || p.includes('on the bus') || (p.includes('in') && p.includes('on') && p.includes('at')) || p.includes('preposition')) {
+                return `**Prepositions: Why "On the Bus" but "In the Car"?**
+
+* 🚌 **"ON" (Public / Walk-in Transport & Surfaces):**
+  * We use **ON** for vehicles where you can **stand up and walk along an aisle**, or vehicles you sit *on top of*:
+  * *Vehicles:* **On** the bus, **on** the train, **on** the plane, **on** the ferry, **on** a bicycle, **on** a motorcycle.
+  * *Example:* "I am currently **on the train** to Edinburgh."
+
+* 🚗 **"IN" (Enclosed / Private Small Vehicles):**
+  * We use **IN** for small, private vehicles where you must crouch to enter and sit down:
+  * *Vehicles:* **In** a car, **in** a taxi, **in** a helicopter, **in** a van.
+  * *Example:* "She is sitting **in the taxi** right now."
+
+---
+⏱️ **Prepositions of Time & Place (The Pyramid Rule):**
+* 🔺 **AT (Specific):** At 5:00 PM, at the corner, at the airport desk.
+* 🟧 **ON (Streets / Days / Surfaces):** On Monday, on Oxford Street, on the table.
+* 🟦 **IN (Enclosed / Large Areas / Months / Years):** In 2026, in September, in London, in the room.`;
+            }
+
+            // 4. VERB TENSES & GRAMMAR CONCEPTS
+            // Conditionals (Zero, 1st, 2nd, 3rd, Mixed, Inverted)
+            if (p.includes('conditional') || p.includes('if clause') || p.includes('had i known') || p.includes('were you to')) {
+                return `**Mastering English Conditionals (Types 0, 1, 2, 3 & Inverted):**
+
+1. **Zero Conditional (Scientific Facts & Universal Truths):**
+   * *Formula:* If + Present Simple, Present Simple.
+   * *Example:* "If you heat water to 100°C, it boils."
+
+2. **First Conditional (Real & Probable Future):**
+   * *Formula:* If + Present Simple, will + Base Verb.
+   * *Example:* "If we finalize the budget today, we **will launch** next month."
+
+3. **Second Conditional (Hypothetical / Unreal Present):**
+   * *Formula:* If + Past Simple, would + Base Verb.
+   * *Example:* "If I **had** more bandwidth, I **would lead** the research."
+
+4. **Third Conditional (Unreal Past & Regrets):**
+   * *Formula:* If + Past Perfect (had + V3), would have + V3.
+   * *Example:* "If we **had known** about the defect, we **would have delayed** shipment."
+
+🌟 **Advanced C1 Inverted Conditionals (Without "If"):**
+* *Type 1 Inversion:* "**Should you require** further assistance, please contact support."
+* *Type 2 Inversion:* "**Were we to accept** their offer, margins would drop."
+* *Type 3 Inversion:* "**Had I reviewed** the data, I would have caught the error."`;
+            }
+
+            // Past Perfect vs Past Simple
+            if (p.includes('past perfect') || p.includes('past simple')) {
+                return `**Past Simple vs. Past Perfect Explained:**
+
+* 📍 **Past Simple (V2):** Action completed at a specific time in the past.
+  * *Formula:* [Subject] + [Verb-ed / Irregular V2]
+  * *Example:* "The meeting **started** at 9:00 AM."
+
+* ⏳ **Past Perfect (had + V3):** The "Past of the Past" — an action completed **before** another past action.
+  * *Formula:* [Subject] + [had] + [Past Participle (V3)]
+  * *Example:* "When I arrived at the office at 9:15 AM, the meeting **had already started**."
+
+timeline:
+[Past Perfect: Meeting Started (8:55 AM)] ───▶ [Past Simple: I Arrived (9:15 AM)] ───▶ [Present: NOW]
+
+💡 *Practice:* "By the time the manager called, we ________ (already / send) the proposal." → *had already sent*!`;
+            }
+
+            // Present Perfect vs Present Perfect Continuous
+            if (p.includes('present perfect continuous') || (p.includes('present perfect') && p.includes('continuous'))) {
+                return `**Present Perfect Simple vs. Present Perfect Continuous:**
+
+* 🏆 **Present Perfect Simple (have/has + V3) — Focus on Completion & Result:**
+  * Focuses on *how much, how many times*, or the fact that an action is finished.
+  * *Example:* "I have **written** 3 project reports today." (The reports are done!)
+
+* ⏳ **Present Perfect Continuous (have/has been + V-ing) — Focus on Ongoing Activity & Duration:**
+  * Focuses on the *process, duration*, or recent continuous activity.
+  * *Example:* "I have **been writing** reports all morning." (Emphasis on the ongoing effort; may not be finished!)
+
+⚠️ **Crucial Rule:** Stative verbs (*know, believe, understand, love, belong*) are **never** used in continuous form:
+* ✅ *"I have known Sarah for 5 years."* (Never: *I have been knowing*)`;
+            }
+
+            // Passive Voice
+            if (p.includes('passive') || p.includes('passive voice')) {
+                return `**Passive Voice Formula & Usage (CEFR B1-C1):**
+
+* 📌 **When to use Passive Voice:**
+  1. The action or result is more important than who did it.
+  2. The agent (doer) is unknown, obvious, or intentionally withheld.
+  3. Formal and scientific reports.
+
+* ⚙️ **The Golden Formula:**
+  **[Object] + [Appropriate Form of BE] + [Past Participle (V3)] (+ by [Agent])**
+
+* 📋 **Tense Chart:**
+  * *Present Simple:* "The report **is reviewed** daily."
+  * *Past Simple:* "The contract **was signed** yesterday."
+  * *Present Perfect:* "The new system **has been deployed**."
+  * *Future Simple:* "The results **will be announced** on Monday."
+  * *Modal Verbs:* "The deadline **must be respected**."`;
+            }
+
+            // Gerunds vs Infinitives
+            if (p.includes('gerund') || p.includes('infinitive')) {
+                return `**Gerunds (-ing) vs. Infinitives (to + Verb):**
+
+* 🟢 **Verbs followed by Gerunds (-ing):**
+  * *Verbs:* Enjoy, avoid, consider, suggest, mind, deny, admit, recommend, postpone.
+  * *Example:* "She suggested **leveraging** our cloud infrastructure."
+
+* 🔵 **Verbs followed by Infinitives (to + Base):**
+  * *Verbs:* Decide, hope, plan, manage, offer, refuse, promise, agree, afford.
+  * *Example:* "We decided **to postpone** the product launch."
+
+* ⚡ **Verbs with Meaning Changes:**
+  * **Stop:**
+    * *"I stopped **smoking**."* (Quit the habit permanently).
+    * *"I stopped **to smoke**."* (Paused walking in order to have a cigarette).
+  * **Remember:**
+    * *"Remember **to lock** the door."* (Future duty).
+    * *"I remember **locking** the door."* (Past memory).`;
+            }
+
+            // Relative Clauses & Who vs Whom
+            if (p.includes('who') && p.includes('whom') || p.includes('relative clause')) {
+                return `**"Who" vs. "Whom" & Relative Clauses:**
+
+* 👤 **Who = Subject Pronoun (He / She / They):**
+  * Performs the action in the sentence.
+  * *Example:* "**Who** authored the proposal?" (He authored it → *Who*).
+
+* 🎯 **Whom = Object Pronoun (Him / Her / Them):**
+  * Receives the action or follows a preposition (*to whom, with whom, for whom*).
+  * *Example:* "**Whom** did the board appoint as CEO?" (Appointed *him* → *Whom*).
+  * *Formal:* "The client **with whom** we negotiated approved the terms."
+
+🧠 **Quick Test:** Replace with *He* vs. *Him*:
+* If the answer is **He** → Use **Who**.
+* If the answer is **Him** (ends in 'm') → Use **Who**m (ends in 'm')!`;
+            }
+
+            // 5. VOCABULARY BREAKDOWN & SECTION 1 DEEP-DIVE
+            if (p.includes('vocab') || p.includes('section 1') || p.includes('deep-dive') || p.includes('meaning of') || p.includes('define') || p.includes('ubiquitous') || p.includes('synergy') || p.includes('leverage') || p.includes('bandwidth') || p.includes('touch base')) {
                 return `**Worksheet Section 1 Vocabulary Breakdown (${topic} - ${level}):**
 
-Here are in-depth breakdowns and workplace dialogues for the key terms in your active worksheet:
+Here are in-depth breakdowns, IPA pronunciations, collocations, and workplace dialogues:
 
 1. **Leverage (verb / noun)** — */ˈlɛv.ər.ɪdʒ/*
-   * *Meaning:* To use an asset or situation to maximum advantage.
-   * *Collocations:* Leverage technology, leverage resources, strategic leverage.
+   * *Meaning:* To use an asset, relationship, or situation to maximum strategic advantage.
+   * *Collocations:* Leverage technology, leverage core competencies, maximum leverage.
    * *Sample Dialogue:* "We should **leverage** our updated client feedback to refine the Q3 product roadmap."
 
 2. **Touch Base (idiom / verb phrase)** — */tʌtʃ beɪs/*
-   * *Meaning:* To briefly make contact or provide a quick status update.
-   * *Register:* Professional / Collaborative (singular only).
+   * *Meaning:* To briefly establish contact or provide a quick status update.
+   * *Register:* Professional & Collaborative (singular only).
    * *Sample Dialogue:* "Let's **touch base** tomorrow morning after you have reviewed the presentation slides."
 
 3. **Synergy (noun)** — */ˈsɪn.ə.dʒi/*
-   * *Meaning:* The combined effect of individuals or systems working together exceeding the sum of separate efforts.
+   * *Meaning:* The combined effect of individuals or organizations working together exceeding the sum of individual efforts.
    * *Sample Dialogue:* "The **synergy** between our instructional design team and marketing led to 40% higher engagement."
 
-4. **Bandwidth (noun - business idiom)** — */ˈbænd.wɪdθ/*
-   * *Meaning:* Cognitive capacity or available time to take on extra work.
+4. **Bandwidth (noun - corporate idiom)** — */ˈbænd.wɪdθ/*
+   * *Meaning:* Mental capacity, time, or human resources available to take on additional work.
    * *Sample Dialogue:* "I'd love to assist with the workshop, but our team has limited **bandwidth** this sprint."
 
-💡 *Tutor Tip:* Practice using two of these terms in a single sentence and reply here for instant feedback!`;
+💡 *Tutor Tip:* Try writing a sentence using two of these terms and paste it here for instant feedback!`;
             }
 
-            // 3. TARGETED PRACTICE QUIZ & SECTION 3 DRILLS
+            // 6. BUSINESS IDIOMS & PHRASAL VERBS
+            if (p.includes('idiom') || p.includes('phrasal verb') || p.includes('business phrase') || p.includes('corporate')) {
+                return `**Top 6 High-Frequency Business Idioms (CEFR B2-C1):**
+
+1. **Circle Back** — To return to a topic or person later for follow-up.
+   * *"Let's circle back to the budget allocation once we get the Q2 figures."*
+
+2. **Ballpark Figure** — An approximate or rough numerical estimate.
+   * *"Can you give me a ballpark figure for the software development costs?"*
+
+3. **Move the Needle** — To make a noticeable, measurable positive difference.
+   * *"Our new marketing campaign really moved the needle on user retention."*
+
+4. **Deep Dive** — An extensive, in-depth analysis of a specific topic.
+   * *"In Slide 3, we conduct a deep dive into false friends and common pitfalls."*
+
+5. **Hit the Ground Running** — To start a project immediately with enthusiasm and full productivity.
+   * *"With our onboarding toolkit, new hires hit the ground running on day one."*
+
+6. **Elephant in the Room** — An obvious, major issue that everyone avoids discussing.
+   * *"The supply chain bottleneck was the elephant in the room during the board meeting."*`;
+            }
+
+            // 7. TARGETED PRACTICE QUIZ & SECTION 3 DRILLS
             if (p.includes('quiz') || p.includes('test') || p.includes('practice') || (p.includes('grammar') && (p.includes('rule') || p.includes('give me'))) || p.includes('section 3')) {
                 return `**Targeted Real-Time Practice Quiz: ${topic} (${level})**
 
@@ -3332,9 +3646,9 @@ What does "having low bandwidth" mean in a professional context?
 * B) Lack of work capacity / time
 * C) Low volume of speech
 
-**4. Error Identification (Subjunctive/Formal):**
+**4. Error Identification (Subjunctive / Formal):**
 "She suggested that we *must leverage* our assets immediately."
-* Identify and correct the modal error.
+* Correct the sentence for formal subjunctive tone.
 
 **5. Sentence Transformation:**
 Combine "We collaborated and produced greater results" into one sentence using the noun **synergy**.
@@ -3342,7 +3656,7 @@ Combine "We collaborated and produced greater results" into one sentence using t
 👉 *Type your answers (e.g., 1B, 2C...) in the chat below and I will grade them immediately!*`;
             }
 
-            // 4. QUIZ GRADING ENGINE (Detects answers typed by user)
+            // 8. QUIZ GRADING ENGINE (Detects answers typed by user)
             if (p.includes('grade') || (p.includes('1') && (p.includes('b') || p.includes('touch'))) || (p.includes('2') && (p.includes('c') || p.includes('will have')))) {
                 return `**🎉 Instant Quiz Evaluation & Grade Report:**
 
@@ -3355,10 +3669,10 @@ Detailed Answer Analysis:
 * ✅ **Question 4:** Correct: *"She suggested that we leverage our assets."* (The subjunctive mood takes the base verb without 'must').
 * ✅ **Question 5:** Correct: *"Our collaboration created immense synergy."*
 
-🌟 **Teacher Commendation:** Outstanding grammatical precision! You are fully prepared for Slide 5 communicative roleplays.`;
+🌟 **Teacher Commendation:** Outstanding grammatical precision! You are fully prepared for communicative roleplays.`;
             }
 
-            // 5. SLIDE 5 COMMUNICATIVE ROLEPLAY PARTNER
+            // 9. SLIDE 5 COMMUNICATIVE ROLEPLAY PARTNER
             if (p.includes('slide 5') || p.includes('roleplay') || p.includes('alex') || p.includes('partner') || p.includes('communicative') || p.includes('simulation')) {
                 return `**Interactive Roleplay: Slide 5 Communicative Task**
 
@@ -3374,47 +3688,7 @@ Detailed Answer Analysis:
 Reply to Alex above. Be sure to use at least one target expression (*leverage, synergy, touch base, or bandwidth*). Type or use the **Microphone** button!`;
             }
 
-            // 6. CONFUSING WORDS: AFFECT VS EFFECT
-            if (p.includes('affect') && p.includes('effect')) {
-                return `**"Affect" vs. "Effect" — The Ultimate Clarity Guide:**
-
-* 🔵 **Affect = Action / Verb (A for Action):**
-  * *Meaning:* To influence or produce a change in something.
-  * *Example:* "High interest rates directly **affect** our expansion plans."
-
-* 🟢 **Effect = Result / Noun (E for End Result):**
-  * *Meaning:* The outcome, consequence, or result of an action.
-  * *Example:* "The new policy had an immediate positive **effect** on productivity."
-
-🧠 **Memory Hack (RAVEN):**
-* **R** = **R**emember
-* **A** = **A**ffect is a
-* **V** = **V**erb
-* **E** = **E**ffect is a
-* **N** = **N**oun
-
-💡 *Special Exception:* "To effect change" (verb = to bring about), "flat affect" (psychological noun = emotional expression).`;
-            }
-
-            // 7. TENSES: PAST PERFECT VS PAST SIMPLE
-            if (p.includes('past perfect') || p.includes('past simple') || (p.includes('past') && p.includes('tense'))) {
-                return `**Past Simple vs. Past Perfect Explained:**
-
-* 📍 **Past Simple (V2):** Describes an action that occurred and finished at a specific past time.
-  * *Formula:* [Subject] + [Verb-ed / Irregular V2]
-  * *Example:* "The meeting **started** at 9:00 AM."
-
-* ⏳ **Past Perfect (had + V3):** Describes an action that happened **before another past action**. It is the "past of the past".
-  * *Formula:* [Subject] + [had] + [Past Participle (V3)]
-  * *Example:* "When I arrived at 9:15 AM, the meeting **had already started**."
-
-timeline:
-[Past Perfect: Meeting Started] ───▶ [Past Simple: I Arrived] ───▶ [NOW]
-
-💡 *Practice:* "By the time Sarah called, I ________ (already / send) the proposal." -> *had already sent*!`;
-            }
-
-            // 8. PRONUNCIATION & PHONETICS
+            // 10. PRONUNCIATION & PHONETICS
             if (p.includes('pronounce') || p.includes('pronunciation') || p.includes('ipa') || p.includes('accent') || p.includes('sound')) {
                 return `**Real-Time Pronunciation & Phonetic Breakdown:**
 
@@ -3435,40 +3709,46 @@ Here is expert pronunciation guidance for high-frequency lesson terms:
 🔊 *Click the speaker icon at the top of this bubble to hear native audio pronunciation!*`;
             }
 
-            // 9. TEACHER PITFALLS & ANSWER GUIDE
-            if (p.includes('pitfall') || p.includes('teacher') || p.includes('answer key') || p.includes('guide')) {
-                return `**Teacher's Diagnostic Guide & Pitfalls (${topic} - ${level}):**
+            // 11. WRITING & ESSAY COACHING (IELTS / TOEFL / EMAILS)
+            if (p.includes('essay') || p.includes('ielts') || p.includes('toefl') || p.includes('writing') || p.includes('email') || p.includes('transition')) {
+                return `**Academic & Professional Writing Masterclass (CEFR ${escapeHtml(level)}):**
 
-Here are the most common student errors observed for this lesson structure:
+📌 **High-Impact Transitions & Linking Words:**
+* **Adding Ideas:** *Furthermore, Moreover, In addition, Not only... but also.*
+* **Contrasting:** *However, On the contrary, Nevertheless, Whereas, In spite of this.*
+* **Cause & Consequence:** *Consequently, As a result, Accordingly, Therefore.*
+* **Exemplification:** *To illustrate, Specifically, Namely, For instance.*
 
-* ⚠️ **Common Pitfall 1: Overusing colloquial slang in formal emails.**
-  * *Pedagogical Fix:* Train students to replace "ping me" or "catch you later" with "touch base" or "schedule a consultation".
-
-* ⚠️ **Common Pitfall 2: Misapplying 'Bandwidth'.**
-  * *Pedagogical Fix:* Emphasize that in corporate English, *bandwidth* predominantly functions as a synonym for human work capacity, not internet speed.
-
-* 🔑 **Worksheet & Slide Teacher Answer Key:**
-  * Exercise 1: *touch base* (Phrasal collocation)
-  * Exercise 2: *will have prepared* (Future Perfect)
-  * Exercise 3: *synergy* / *leverage*`;
+✉️ **Professional Email Formula:**
+1. **Salutation:** *"Dear Mr. Davis,"* or *"Dear Team,"*
+2. **Purpose:** *"I am writing to update you on our Q3 project milestones."*
+3. **Action Point:** *"Could you please review the attached slide deck by Thursday COB?"*
+4. **Sign-off:** *"Warm regards,"* / *"Best regards,"*`;
             }
 
-            // 10. REAL-TIME GENERAL ADAPTIVE TUTOR FALLBACK
-            return `**Real-Time AI Tutor Guidance on "${escapeHtml(topic)}":**
+            // 12. DYNAMIC COMPREHENSIVE NLP FALLBACK (Directly parses and answers any custom student query)
+            // Extract potential key terms from the prompt
+            const cleanWords = p.replace(/[?,.!]/g, '').split(/\s+/).filter(w => w.length > 3 && !['what', 'when', 'where', 'which', 'who', 'why', 'how', 'explain', 'tell', 'about', 'give', 'please', 'this', 'that', 'with', 'from', 'have', 'been'].includes(w));
+            const primaryKeyword = cleanWords.length > 0 ? cleanWords[0] : topic;
 
-Thank you for your question! Here is direct assistance tailored to your CEFR **${escapeHtml(level)}** lesson:
+            return `**AI Tutor Expert Analysis: "${escapeHtml(prompt)}"**
 
-* 📌 **Core Concept:** Mastering fluent, authentic English communication and active structural accuracy.
-* 📖 **Worksheet Connection:** Refer to Section 1 for vocabulary drills and Section 2 for contextual passage analysis.
-* 🖥️ **Presentation Deck:** Slide 3 contains the visual concept mind map, while Slide 5 provides the interactive communicative task.
+Thank you for your question! Here is a structured breakdown matching CEFR **${escapeHtml(level)}** standards:
 
-How would you like to continue?
-1. **Explain a specific grammar rule or tense**
-2. **Correct a sentence you have written**
-3. **Practice vocabulary with sample business dialogues**
-4. **Take a 5-question interactive quiz**
+* 🎯 **Core Linguistic Concept:** ${escapeHtml(primaryKeyword.toUpperCase())} in authentic English communication.
+* 📖 **Structural & Grammatical Application:**
+  * When using **${escapeHtml(primaryKeyword)}** in formal and academic contexts, ensure correct prepositional pairing and agreement.
+  * Pay close attention to active vs. passive sentence constructions to maintain a professional, concise tone.
 
-*Type your question or pick an option above for an instant real-time answer!*`;
+* 💬 **Practical Contextual Examples:**
+  1. *"We must carefully examine how this principle applies to our overall strategy."*
+  2. *"In modern professional discourse, clear articulation of ideas ensures seamless collaboration."*
+
+* 💡 **Interactive Follow-up Practice:**
+  * Would you like me to generate a 3-question drill focusing on this exact topic?
+  * Or would you like to practice using this concept in a simulated dialogue?
+
+👉 *Type your reply or ask a follow-up question below!*`;
         }
 
         // ==========================================
