@@ -259,13 +259,21 @@
 </head>
 <body class="h-full flex overflow-hidden">
 
-    <!-- Left Dashboard Sidebar -->
-    <aside class="w-72 themed-bg-sidebar border-r themed-border flex flex-col justify-between p-6 select-none overflow-y-auto">
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop" onclick="closeSidebarDrawer()" class="fixed inset-0 bg-black/60 z-30 hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Collapsible & Responsive Navigation Sidebar -->
+    <aside id="app-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72 themed-bg-sidebar border-r themed-border flex flex-col justify-between p-6 select-none overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out shrink-0 shadow-2xl lg:shadow-none">
         <div>
-            <!-- Brand -->
-            <div class="mb-6">
-                <span class="text-xs font-bold tracking-widest themed-primary-text">PREMIUM STUDIO</span>
-                <h1 class="text-xl font-bold themed-text-header mt-1">LessonForge</h1>
+            <!-- Brand & Mobile Close Button -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <span class="text-xs font-bold tracking-widest themed-primary-text">PREMIUM STUDIO</span>
+                    <h1 class="text-xl font-bold themed-text-header mt-0.5">LessonForge</h1>
+                </div>
+                <button onclick="closeSidebarDrawer()" class="lg:hidden p-1.5 rounded-xl themed-bg-card border themed-border themed-text-muted hover:opacity-100 transition-all" title="Close Sidebar">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
             </div>
 
             <!-- Offline Ready Badge -->
@@ -365,42 +373,51 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col h-full overflow-y-auto themed-bg-main">
+    <!-- Main Content Area (Full Screen & Responsive) -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto themed-bg-main w-full">
         
-        <!-- Top Bar -->
-        <header class="h-20 border-b themed-border px-8 flex items-center justify-between themed-bg-sidebar/80 backdrop-blur sticky top-0 z-10">
-            <div class="flex items-center space-x-3">
-                <span id="header-subtitle" class="text-xs font-bold uppercase tracking-wider themed-primary-text">Dashboard</span>
-                <span class="text-slate-400">/</span>
-                <h2 id="header-title" class="text-lg font-bold themed-text-header">Overview</h2>
+        <!-- Top Bar with Sidebar and Fullscreen Toggles -->
+        <header class="min-h-16 border-b themed-border px-4 md:px-8 py-3 flex flex-wrap items-center justify-between gap-3 themed-bg-sidebar/90 backdrop-blur sticky top-0 z-20">
+            <div class="flex items-center space-x-2 md:space-x-3">
+                <button onclick="toggleSidebar()" class="p-2 rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm" title="Toggle Navigation Sidebar">
+                    <span class="material-symbols-outlined text-xl">menu</span>
+                </button>
+                <button onclick="toggleAppFullScreen()" class="p-2 rounded-xl themed-bg-card border themed-border hover:opacity-90 themed-text-header flex items-center justify-center transition-all shadow-sm" title="Toggle Fullscreen Canvas">
+                    <span id="fs-icon" class="material-symbols-outlined text-xl">fullscreen</span>
+                </button>
+                <div class="flex items-center space-x-2 pl-1 truncate">
+                    <span id="header-subtitle" class="text-xs font-bold uppercase tracking-wider themed-primary-text hidden sm:inline">Dashboard</span>
+                    <span class="text-slate-400 hidden sm:inline">/</span>
+                    <h2 id="header-title" class="text-base md:text-lg font-bold themed-text-header truncate">Overview</h2>
+                </div>
             </div>
-            <div class="flex items-center space-x-3">
+            
+            <div class="flex items-center space-x-2 md:space-x-3">
                 <!-- Topbar Quick Font Switcher Dropdown -->
-                <div class="flex items-center space-x-1.5 themed-bg-card px-3 py-2 rounded-xl border themed-border shadow-sm">
-                    <span class="material-symbols-outlined text-sm themed-primary-text">text_fields</span>
+                <div class="flex items-center space-x-1.5 themed-bg-card px-2.5 py-1.5 md:px-3 md:py-2 rounded-xl border themed-border shadow-sm">
+                    <span class="material-symbols-outlined text-sm themed-primary-text hidden sm:inline">text_fields</span>
                     <select id="topbar-font-style-select" onchange="setFontStyle(this.value)" class="bg-transparent text-xs font-semibold themed-text-header focus:outline-none cursor-pointer">
-                        <option value="sans" class="bg-slate-900 text-white">Sans-Serif (Standard)</option>
-                        <option value="serif" class="bg-slate-900 text-white">Serif (Literary)</option>
+                        <option value="sans" class="bg-slate-900 text-white">Sans-Serif</option>
+                        <option value="serif" class="bg-slate-900 text-white">Serif</option>
                         <option value="opendyslexic" class="bg-slate-900 text-white">OpenDyslexic</option>
-                        <option value="atkinson" class="bg-slate-900 text-white">Atkinson Hyperlegible</option>
-                        <option value="comic" class="bg-slate-900 text-white">Comic / Rounded</option>
-                        <option value="mono" class="bg-slate-900 text-white">Monospace</option>
+                        <option value="atkinson" class="bg-slate-900 text-white">Atkinson</option>
+                        <option value="comic" class="bg-slate-900 text-white">Comic</option>
+                        <option value="mono" class="bg-slate-900 text-white">Mono</option>
                     </select>
                 </div>
-                <div id="api-key-container" class="flex items-center space-x-2 themed-bg-card px-3 py-2 rounded-xl border themed-border">
+                <div id="api-key-container" class="hidden md:flex items-center space-x-2 themed-bg-card px-3 py-2 rounded-xl border themed-border">
                     <span class="material-symbols-outlined text-sm themed-primary-text">key</span>
-                    <input type="password" id="gemini-api-key" placeholder="Gemini API Key (Optional)" onchange="saveApiKey(this.value)" class="bg-transparent text-xs themed-text-header focus:outline-none w-36">
+                    <input type="password" id="gemini-api-key" placeholder="Gemini API Key" onchange="saveApiKey(this.value)" class="bg-transparent text-xs themed-text-header focus:outline-none w-28">
                 </div>
-                <button onclick="switchTab('wizard')" class="themed-primary-bg themed-primary-hover text-white px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center space-x-2 shadow-lg">
-                    <span class="material-symbols-outlined text-lg">auto_awesome</span>
-                    <span>New AI Lesson</span>
+                <button onclick="switchTab('wizard')" class="themed-primary-bg themed-primary-hover text-white px-3.5 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center space-x-1.5 shadow-lg flex-shrink-0">
+                    <span class="material-symbols-outlined text-base md:text-lg">auto_awesome</span>
+                    <span class="hidden xs:inline">New AI Lesson</span>
                 </button>
             </div>
         </header>
 
         <!-- Content Views -->
-        <div class="p-8 max-w-6xl w-full mx-auto flex-1">
+        <div class="p-4 md:p-8 max-w-7xl w-full mx-auto flex-1">
 
             <!-- VIEW 1: HOME DASHBOARD -->
             <div id="view-home" class="space-y-8 view-slide-in">
@@ -1166,8 +1183,74 @@
             document.getElementById('library-total').innerText = savedMaterials.length + ' items';
         }
 
+        // Sidebar Drawer & Fullscreen Handlers
+        let sidebarOpen = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('app-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sidebar) return;
+
+            if (window.innerWidth < 1024) {
+                // Mobile slide drawer
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.remove('-translate-x-full');
+                    if (backdrop) backdrop.classList.remove('hidden');
+                    sidebarOpen = true;
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    if (backdrop) backdrop.classList.add('hidden');
+                    sidebarOpen = false;
+                }
+            } else {
+                // Desktop toggle / collapse
+                if (sidebar.classList.contains('lg:hidden')) {
+                    sidebar.classList.remove('lg:hidden');
+                    sidebar.classList.add('lg:flex');
+                    sidebarOpen = true;
+                } else {
+                    sidebar.classList.remove('lg:flex');
+                    sidebar.classList.add('lg:hidden');
+                    sidebarOpen = false;
+                }
+            }
+        }
+
+        function closeSidebarDrawer() {
+            const sidebar = document.getElementById('app-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar && window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+                if (backdrop) backdrop.classList.add('hidden');
+                sidebarOpen = false;
+            }
+        }
+
+        function toggleAppFullScreen() {
+            const icon = document.getElementById('fs-icon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    if (icon) icon.innerText = 'fullscreen_exit';
+                }).catch(() => {});
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        if (icon) icon.innerText = 'fullscreen';
+                    }).catch(() => {});
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (icon) {
+                icon.innerText = document.fullscreenElement ? 'fullscreen_exit' : 'fullscreen';
+            }
+        });
+
         // Navigation Switcher
         function switchTab(tabId) {
+            closeSidebarDrawer();
             const tabs = ['home', 'worksheet', 'presentation', 'wizard', 'tutor', 'library', 'detail'];
             tabs.forEach(t => {
                 const el = document.getElementById('view-' + t);
