@@ -9,6 +9,9 @@
     <!-- Google Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     
+    <!-- PptxGenJS for Real PowerPoint (.pptx) File Export -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    
     <!-- Accessibility & Specialized Typography Fonts (Serif, Sans-Serif, OpenDyslexic, Atkinson Hyperlegible, Comic Neue) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,6 +258,141 @@
             line-height: 1.7 !important;
             letter-spacing: -0.01em;
         }
+
+        /* 3D Interactive Flip Cards */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .flip-card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Dynamic Presentation Slide Color Themes */
+        .slide-canvas {
+            transition: all 0.3s ease;
+        }
+        
+        /* 1. Modern Indigo (Default) */
+        [data-slide-theme="indigo"] .slide-canvas {
+            background: linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%);
+            color: #F8FAFC;
+            border-color: #4338CA;
+        }
+        [data-slide-theme="indigo"] .slide-accent-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818CF8;
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+        [data-slide-theme="indigo"] .slide-card-box {
+            background: rgba(30, 27, 75, 0.6);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        /* 2. Midnight Smartboard (Projector Glow) */
+        [data-slide-theme="midnight"] .slide-canvas {
+            background: #0B0F19;
+            color: #F1F5F9;
+            border-color: #06B6D4;
+        }
+        [data-slide-theme="midnight"] .slide-accent-badge {
+            background: rgba(6, 182, 212, 0.15);
+            color: #22D3EE;
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        [data-slide-theme="midnight"] .slide-card-box {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(6, 182, 212, 0.25);
+        }
+
+        /* 3. Emerald Academy */
+        [data-slide-theme="emerald"] .slide-canvas {
+            background: linear-gradient(135deg, #062419 0%, #02160F 100%);
+            color: #ECFDF5;
+            border-color: #059669;
+        }
+        [data-slide-theme="emerald"] .slide-accent-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6EE7B7;
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        [data-slide-theme="emerald"] .slide-card-box {
+            background: rgba(6, 36, 25, 0.7);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        /* 4. Sunset Terracotta */
+        [data-slide-theme="sunset"] .slide-canvas {
+            background: linear-gradient(135deg, #3C1516 0%, #1F0D0E 100%);
+            color: #FFF1F2;
+            border-color: #E11D48;
+        }
+        [data-slide-theme="sunset"] .slide-accent-badge {
+            background: rgba(244, 63, 94, 0.2);
+            color: #FDA4AF;
+            border-color: rgba(244, 63, 94, 0.4);
+        }
+        [data-slide-theme="sunset"] .slide-card-box {
+            background: rgba(60, 21, 22, 0.7);
+            border-color: rgba(244, 63, 94, 0.3);
+        }
+
+        /* 5. Chalkboard Classic */
+        [data-slide-theme="chalkboard"] .slide-canvas {
+            background: #1C2B22;
+            color: #FEF9C3;
+            border-color: #CA8A04;
+        }
+        [data-slide-theme="chalkboard"] .slide-accent-badge {
+            background: rgba(234, 179, 8, 0.2);
+            color: #FDE047;
+            border-color: rgba(234, 179, 8, 0.4);
+        }
+        [data-slide-theme="chalkboard"] .slide-card-box {
+            background: rgba(28, 43, 34, 0.85);
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+
+        /* 6. Clean Ivory / High-Contrast Editorial */
+        [data-slide-theme="ivory"] .slide-canvas {
+            background: #FAF7F2;
+            color: #0F172A;
+            border-color: #CBD5E1;
+        }
+        [data-slide-theme="ivory"] .slide-accent-badge {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4338CA;
+            border-color: rgba(79, 70, 229, 0.25);
+        }
+        [data-slide-theme="ivory"] .slide-card-box {
+            background: #FFFFFF;
+            border-color: #E2E8F0;
+            color: #1E293B;
+        }
+
+        /* Mind Map Visual Connectors */
+        .mind-map-node {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mind-map-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body class="h-full flex overflow-hidden">
@@ -363,13 +501,16 @@
             </div>
         </div>
 
-        <!-- User Profile Footer -->
-        <div class="themed-bg-card rounded-xl p-3.5 flex items-center space-x-3 border themed-border">
-            <div class="w-9 h-9 rounded-lg themed-primary-bg flex items-center justify-center font-bold text-white text-sm">ET</div>
-            <div>
-                <p class="text-sm font-bold themed-text-header">English Teacher</p>
-                <p class="text-xs themed-text-muted">Pro Workspace</p>
+        <!-- User Profile Footer & Copyright -->
+        <div class="themed-bg-card rounded-xl p-3.5 border themed-border">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg themed-primary-bg flex items-center justify-center font-bold text-white text-sm">ZA</div>
+                <div class="truncate">
+                    <p class="text-sm font-bold themed-text-header truncate">Zaafouri Abdelmalek</p>
+                    <p class="text-xs themed-text-muted">Author & Lead Educator</p>
+                </div>
             </div>
+            <p class="text-[10px] themed-text-muted mt-2.5 pt-2 border-t themed-border">© 2026 Zaafouri Abdelmalek.<br>All rights reserved.</p>
         </div>
     </aside>
 
@@ -600,102 +741,218 @@
             </div>
 
             <!-- VIEW 3: PRESENTATION GENERATOR -->
-            <div id="view-presentation" class="hidden space-y-6">
+            <div id="view-presentation" class="hidden space-y-6" data-slide-theme="indigo">
                 <!-- Illustrated Banner -->
-                <div class="themed-bg-card border themed-border p-6 rounded-2xl flex items-center justify-between shadow-sm">
+                <div class="themed-bg-card border themed-border p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
                     <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 rounded-2xl bg-orange-500/20 text-orange-500 flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-2xl bg-orange-500/20 text-orange-500 flex items-center justify-center flex-shrink-0">
                             <span class="material-symbols-outlined text-3xl">slideshow</span>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold themed-text-header">PowerPoint Presentation Studio</h3>
-                            <p class="text-xs themed-text-muted">Generate structured 6-slide decks complete with warm-ups, vocabulary, and quizzes.</p>
-                        </div>
-                    </div>
-                    <div class="hidden md:flex space-x-2">
-                        <span class="text-[10px] font-bold bg-orange-500/20 text-orange-500 px-3 py-1.5 rounded-full border border-orange-500/30">6 Slides Layout</span>
-                    </div>
-                </div>
-
-                <div class="themed-bg-card border themed-border p-6 rounded-2xl grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold themed-text-muted mb-2 uppercase">Presentation Title</label>
-                        <input type="text" id="ppt-title" value="Mastering Idiomatic English" class="w-full themed-bg-input border themed-border rounded-xl px-4 py-3 text-sm themed-text-header focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold themed-text-muted mb-2 uppercase">CEFR Target Level</label>
-                        <select id="ppt-level" class="w-full themed-bg-input border themed-border rounded-xl px-4 py-3 text-sm themed-text-header focus:outline-none">
-                            <option>B1 Intermediate</option>
-                            <option>B2 Upper-Intermediate</option>
-                            <option selected>C1 Advanced</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="flex flex-wrap items-center justify-end gap-3">
-                    <button onclick="openVideoPlayerModal()" class="bg-red-500/15 hover:bg-red-500/25 text-red-500 border border-red-500/30 px-5 py-3 rounded-xl font-bold text-sm transition-all shadow-sm flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-lg">play_circle</span>
-                        <span>Video Lesson</span>
-                    </button>
-                    <button onclick="showQRCodeForCurrent('presentation')" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-5 py-3 rounded-xl font-bold text-sm transition-all shadow-sm flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-lg text-orange-500">qr_code_2</span>
-                        <span>Classroom QR</span>
-                    </button>
-                    <button onclick="generatePresentation()" class="themed-primary-bg themed-primary-hover text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-lg">refresh</span>
-                        <span>Generate Slides</span>
-                    </button>
-                    <button onclick="saveCurrentMaterial('PRESENTATION')" class="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-lg">save</span>
-                        <span>Save Slide Deck</span>
-                    </button>
-                </div>
-                
-                <!-- Video Walkthrough Companion Banner -->
-                <div class="themed-bg-card border themed-border p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm relative overflow-hidden">
-                    <div class="flex items-center space-x-3.5 z-10">
-                        <div class="w-12 h-12 rounded-xl bg-red-500/15 text-red-500 flex items-center justify-center flex-shrink-0 border border-red-500/20">
-                            <span class="material-symbols-outlined text-2xl">smart_display</span>
-                        </div>
-                        <div>
                             <div class="flex items-center space-x-2">
-                                <p class="text-xs font-bold themed-text-header">Classroom Video Companion & Chapters</p>
-                                <span class="text-[10px] font-bold bg-red-500/20 text-red-500 px-2 py-0.5 rounded-full">Slide Synced</span>
+                                <h3 class="text-lg font-bold themed-text-header">PowerPoint Presentation Studio</h3>
+                                <span class="text-[10px] font-bold bg-orange-500/20 text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-500/30">Pro Edition</span>
                             </div>
-                            <p class="text-[11px] themed-text-muted mt-0.5">Integrate curated video clips, instructional walkthroughs, and timestamped speaking drills.</p>
+                            <p class="text-xs themed-text-muted mt-0.5">Interactive 16:9 classroom slides, visual mind maps, 3D flip cards, dynamic color palettes, and instant .pptx file export.</p>
                         </div>
                     </div>
-                    <button onclick="openVideoPlayerModal()" class="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center space-x-1.5 flex-shrink-0 z-10">
-                        <span class="material-symbols-outlined text-base">play_arrow</span>
-                        <span>Open Video Player</span>
-                    </button>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="exportToPptxFile()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-2">
+                            <span class="material-symbols-outlined text-base">download_for_offline</span>
+                            <span>Export PPTX (.pptx)</span>
+                        </button>
+                        <button onclick="saveCurrentMaterial('PRESENTATION')" class="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
+                            <span class="material-symbols-outlined text-base">save</span>
+                            <span>Save Deck</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Presentation Preview Toolbar & Content -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between px-2">
-                        <div class="flex items-center space-x-2">
-                            <span class="material-symbols-outlined text-sm text-orange-400">slideshow</span>
-                            <span class="text-xs font-bold themed-text-header">Slide Deck Preview (6 Slides)</span>
-                            <span class="text-[10px] bg-orange-500/15 text-orange-400 font-bold px-2 py-0.5 rounded-full">Interactive</span>
+                <!-- Control Bar: Metadata, Slide Themes, Font, & Actions -->
+                <div class="themed-bg-card border themed-border p-5 rounded-2xl space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                        <div class="md:col-span-5">
+                            <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase">Presentation Topic / Title</label>
+                            <input type="text" id="ppt-title" value="Mastering Idiomatic English" onchange="updatePresentationTopic(this.value)" class="w-full themed-bg-input border themed-border rounded-xl px-4 py-2.5 text-sm themed-text-header focus:outline-none focus:border-indigo-500">
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <label for="ppt-font-style-select" class="text-xs font-bold themed-text-muted flex items-center space-x-1">
-                                <span class="material-symbols-outlined text-sm">font_download</span>
-                                <span>Font Style:</span>
+                        <div class="md:col-span-3">
+                            <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase">CEFR Target Level</label>
+                            <select id="ppt-level" onchange="renderCurrentSlide()" class="w-full themed-bg-input border themed-border rounded-xl px-3.5 py-2.5 text-sm themed-text-header focus:outline-none">
+                                <option value="B1 Intermediate">B1 Intermediate</option>
+                                <option value="B2 Upper-Intermediate">B2 Upper-Intermediate</option>
+                                <option value="C1 Advanced" selected>C1 Advanced</option>
+                                <option value="C2 Mastery">C2 Mastery</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-4">
+                            <label class="block text-xs font-bold themed-text-muted mb-1.5 uppercase flex items-center justify-between">
+                                <span>Slide Color Theme</span>
+                                <span class="material-symbols-outlined text-sm themed-primary-text">palette</span>
                             </label>
-                            <select id="ppt-font-style-select" onchange="setFontStyle(this.value)" class="themed-bg-card border themed-border rounded-xl px-3 py-1.5 text-xs font-semibold themed-text-header focus:outline-none cursor-pointer">
-                                <option value="sans">Sans-Serif (Standard)</option>
-                                <option value="serif">Serif (Formal / Literary)</option>
-                                <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
-                                <option value="atkinson">Atkinson Hyperlegible (Low Vision)</option>
-                                <option value="comic">Comic Neue (Friendly / Rounded)</option>
-                                <option value="mono">Monospace (Drills)</option>
+                            <select id="ppt-slide-theme-select" onchange="setSlideColorTheme(this.value)" class="w-full themed-bg-input border themed-border rounded-xl px-3.5 py-2.5 text-sm themed-text-header font-medium focus:outline-none cursor-pointer">
+                                <option value="indigo">Modern Indigo (Royal Blue)</option>
+                                <option value="midnight">Midnight Smartboard (High-Contrast Glow)</option>
+                                <option value="emerald">Emerald Academy (Forest Green)</option>
+                                <option value="sunset">Sunset Terracotta (Warm Amber)</option>
+                                <option value="chalkboard">Chalkboard Classic (Deep Slate)</option>
+                                <option value="ivory">Clean Ivory (Warm Paper & Navy)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="themed-bg-card border themed-border p-8 rounded-2xl shadow-sm">
-                        <pre id="preview-ppt-content" class="text-xs themed-text-muted whitespace-pre-wrap leading-relaxed preview-font-target transition-all"></pre>
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t themed-border">
+                        <!-- Switcher: Visual Carousel vs Raw Script -->
+                        <div class="flex items-center space-x-1.5 bg-black/20 p-1 rounded-xl border themed-border">
+                            <button onclick="setPresentationViewMode('visual')" id="ppt-mode-visual-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all themed-primary-bg text-white shadow-sm flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">view_carousel</span>
+                                <span>Visual Slide Deck</span>
+                            </button>
+                            <button onclick="setPresentationViewMode('script')" id="ppt-mode-script-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">code</span>
+                                <span>Raw Script & Notes</span>
+                            </button>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="openVideoPlayerModal()" class="bg-red-500/15 hover:bg-red-500/25 text-red-500 border border-red-500/30 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-base">play_circle</span>
+                                <span>Video Companion</span>
+                            </button>
+                            <button onclick="showQRCodeForCurrent('presentation')" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-base text-orange-500">qr_code_2</span>
+                                <span>Classroom QR</span>
+                            </button>
+                            <button onclick="generatePresentation()" class="themed-primary-bg themed-primary-hover text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-md flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-base">refresh</span>
+                                <span>Re-generate</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISUAL SLIDE DECK VIEW -->
+                <div id="ppt-visual-container" class="space-y-4">
+                    
+                    <!-- Side-by-Side Slide Cards Carousel Ribbon -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between px-1">
+                            <span class="text-xs font-bold themed-text-muted uppercase tracking-wider flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">view_column</span>
+                                <span>Slide Carousel Navigator (Click to jump)</span>
+                            </span>
+                            <span class="text-xs font-bold themed-primary-text" id="carousel-status-text">Slide 1 of 6</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 select-none" id="slide-carousel-ribbon">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Main Interactive 16:9 Slide Canvas Stage -->
+                    <div class="slide-canvas rounded-3xl border shadow-2xl overflow-hidden p-6 md:p-10 relative min-h-[480px] flex flex-col justify-between preview-font-target" id="main-slide-canvas">
+                        
+                        <!-- Top Slide Header -->
+                        <div class="flex items-center justify-between border-b pb-4 mb-6 border-white/10">
+                            <div class="flex items-center space-x-3">
+                                <span class="slide-accent-badge text-[11px] font-bold px-3 py-1 rounded-full border tracking-wide uppercase" id="slide-badge-category">WARM-UP & HOOK</span>
+                                <h4 class="text-sm md:text-base font-bold tracking-tight text-white/90" id="slide-badge-title">Slide 1: Title & Warm-up</h4>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openFullscreenSlidePresenter()" class="slide-card-box hover:opacity-90 px-3 py-1.5 rounded-xl text-xs font-bold border flex items-center space-x-1.5 transition-all" title="Present full screen on Smartboard">
+                                    <span class="material-symbols-outlined text-sm">slideshow</span>
+                                    <span class="hidden sm:inline">Present Fullscreen</span>
+                                </button>
+                                <span class="text-xs font-mono font-bold opacity-60" id="slide-counter-badge">1 / 6</span>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Slide Content Body -->
+                        <div id="active-slide-body" class="flex-1 flex flex-col justify-center">
+                            <!-- Rendered by renderCurrentSlide() -->
+                        </div>
+
+                        <!-- Bottom Slide Footer / Attribution -->
+                        <div class="flex items-center justify-between pt-4 mt-6 border-t border-white/10 text-[11px] opacity-60">
+                            <span id="slide-footer-topic">Topic: Mastering Idiomatic English (C1)</span>
+                            <span>Created by <b>Zaafouri Abdelmalek</b> • © 2026 Zaafouri Abdelmalek</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide Navigation Controls & Flip Helpers -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 px-2 py-2">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="prevSlide()" class="themed-bg-card border themed-border hover:opacity-90 themed-text-header px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                                <span>Previous</span>
+                            </button>
+                            <button onclick="nextSlide()" class="themed-primary-bg themed-primary-hover text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg flex items-center space-x-1.5">
+                                <span>Next Slide</span>
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center space-x-2" id="slide-extra-actions">
+                            <!-- Contextual actions like Flip All / Reveal All appear here -->
+                        </div>
+
+                        <div class="flex items-center space-x-1.5" id="slide-jump-dots">
+                            <!-- 6 jump indicator dots -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RAW SCRIPT & NOTES VIEW (Alternative) -->
+                <div id="ppt-script-container" class="hidden space-y-3">
+                    <div class="flex items-center justify-between px-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="material-symbols-outlined text-sm text-orange-400">description</span>
+                            <span class="text-xs font-bold themed-text-header">Complete Slide Script & Lesson Notes</span>
+                        </div>
+                        <button onclick="copySlideScript()" class="themed-bg-card border themed-border hover:opacity-90 px-3 py-1.5 rounded-xl text-xs font-bold themed-text-header flex items-center space-x-1.5 shadow-sm">
+                            <span class="material-symbols-outlined text-sm">content_copy</span>
+                            <span>Copy Script</span>
+                        </button>
+                    </div>
+
+                    <div class="themed-bg-card border themed-border p-6 rounded-2xl shadow-sm">
+                        <pre id="preview-ppt-content" class="text-xs themed-text-muted whitespace-pre-wrap leading-relaxed preview-font-target transition-all font-mono"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fullscreen Classroom Slide Presenter Modal -->
+            <div id="fs-slide-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6 md:p-12 select-none">
+                <!-- Presenter Top Bar -->
+                <div class="flex items-center justify-between text-white/80 border-b border-white/10 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-indigo-500/30 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-400/40 uppercase">LIVE CLASSROOM PRESENTER</span>
+                        <h3 class="text-sm font-bold text-white truncate" id="fs-modal-title">Mastering Idiomatic English</h3>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-mono font-bold text-indigo-400" id="fs-modal-counter">1 / 6</span>
+                        <button onclick="closeFullscreenSlidePresenter()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all">
+                            <span class="material-symbols-outlined text-xl">close</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Presenter Slide Canvas -->
+                <div class="flex-1 flex flex-col justify-center max-w-5xl w-full mx-auto my-6" id="fs-modal-slide-body">
+                    <!-- Cloned active slide content -->
+                </div>
+
+                <!-- Presenter Bottom Controls -->
+                <div class="flex items-center justify-between text-white/60 text-xs border-t border-white/10 pt-4">
+                    <span>Use <b>←</b> / <b>→</b> arrow keys to navigate slides. Press <b>Esc</b> to exit.</span>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center space-x-1">
+                            <span class="material-symbols-outlined text-sm">arrow_back</span>
+                            <span>Previous</span>
+                        </button>
+                        <button onclick="nextSlide()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center space-x-1">
+                            <span>Next</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -961,6 +1218,14 @@
             </div>
 
         </div>
+
+        <!-- App Footer & Attribution -->
+        <footer class="border-t themed-border px-4 md:px-8 py-6 text-center text-xs themed-text-muted mt-auto">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p class="font-medium">Created by <span class="font-bold themed-text-header">Zaafouri Abdelmalek</span></p>
+                <p class="text-[11px]">© 2026 <span class="font-semibold themed-text-header">Zaafouri Abdelmalek</span>. All rights reserved.</p>
+            </div>
+        </footer>
     </main>
 
     <!-- Classroom QR Code Sharing Modal -->
@@ -1297,6 +1562,7 @@
             }
 
             if (tabId === 'home') renderHomeRecent();
+            if (tabId === 'presentation') renderCurrentSlide();
             if (tabId === 'library') renderLibrary();
             if (tabId === 'tutor') updateTutorLessonContext();
         }
@@ -1349,52 +1615,987 @@
                         Section 2: 1. Consistent practice & immersive listening. 2. Four skills.<br>
                         Section 3: 1. will have completed / will complete. 2. practiced.
                     </div>
+
+                    <div class="mt-4 pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-400">
+                        <span>Created by <b>Zaafouri Abdelmalek</b></span>
+                        <span>© 2026 Zaafouri Abdelmalek. All rights reserved.</span>
+                    </div>
                 </div>
             `;
             document.getElementById('preview-ws-content').innerHTML = html;
         }
 
-        // Presentation Generator Logic
-        function generatePresentation() {
-            const title = document.getElementById('ppt-title').value;
-            const level = document.getElementById('ppt-level').value;
+        // =========================================================================
+        // POWERPOINT PRESENTATION STUDIO LOGIC (Interactive Carousel, Flip Cards, Mind Maps, Dynamic Themes, PPTX Export)
+        // =========================================================================
+
+        let currentSlideIndex = 0;
+        let currentSlideTheme = 'indigo';
+        let currentPresentationMode = 'visual';
+
+        // Vocabulary flip cards state
+        let vocabFlipCards = [
+            {
+                term: "Cut to the chase",
+                phonetic: "/kʌt tuː ðə tʃeɪs/",
+                pos: "Idiom / Phrase",
+                def: "To leave out the preliminaries and get directly to the essential point.",
+                example: "Let's cut to the chase: we have fifteen minutes to finalize the curriculum.",
+                collocation: "cut straight to the chase • let's cut to the chase"
+            },
+            {
+                term: "Hit the nail on the head",
+                phonetic: "/hɪt ðə neɪl ɒn ðə hɛd/",
+                pos: "Idiom / Expression",
+                def: "To state or describe a situation with exact accuracy and insight.",
+                example: "Sarah hit the nail on the head when she pinpointed student engagement.",
+                collocation: "completely hit the nail on the head"
+            },
+            {
+                term: "Break the ice",
+                phonetic: "/breɪk ðiː aɪs/",
+                pos: "Idiom / Verb phrase",
+                def: "To initiate conversation and make people feel comfortable in social/work settings.",
+                example: "The teacher used a quick trivia warm-up to break the ice on the first day.",
+                collocation: "icebreaker activity • break the ice with a joke"
+            },
+            {
+                term: "Touch base",
+                phonetic: "/tʌtʃ beɪs/",
+                pos: "Idiom / Business English",
+                def: "To briefly make contact or renew communication with someone for an update.",
+                example: "I will touch base with you tomorrow morning regarding the lesson plan.",
+                collocation: "touch base with someone • touch base offline"
+            }
+        ];
+
+        function setSlideColorTheme(themeName) {
+            currentSlideTheme = themeName;
+            const container = document.getElementById('view-presentation');
+            if (container) {
+                container.setAttribute('data-slide-theme', themeName);
+            }
+            renderCurrentSlide();
+        }
+
+        function setPresentationViewMode(mode) {
+            currentPresentationMode = mode;
+            const visualCont = document.getElementById('ppt-visual-container');
+            const scriptCont = document.getElementById('ppt-script-container');
+            const visualBtn = document.getElementById('ppt-mode-visual-btn');
+            const scriptBtn = document.getElementById('ppt-mode-script-btn');
+
+            if (mode === 'visual') {
+                if (visualCont) visualCont.classList.remove('hidden');
+                if (scriptCont) scriptCont.classList.add('hidden');
+                if (visualBtn) visualBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all themed-primary-bg text-white shadow-sm flex items-center space-x-1.5";
+                if (scriptBtn) scriptBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center space-x-1.5";
+            } else {
+                if (visualCont) visualCont.classList.add('hidden');
+                if (scriptCont) scriptCont.classList.remove('hidden');
+                if (visualBtn) visualBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center space-x-1.5";
+                if (scriptBtn) scriptBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all themed-primary-bg text-white shadow-sm flex items-center space-x-1.5";
+                generatePresentationScriptText();
+            }
+        }
+
+        function updatePresentationTopic(val) {
+            renderCurrentSlide();
+            generatePresentationScriptText();
+        }
+
+        function jumpToSlide(index) {
+            if (index >= 0 && index <= 5) {
+                currentSlideIndex = index;
+                renderCurrentSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                renderCurrentSlide();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < 5) {
+                currentSlideIndex++;
+                renderCurrentSlide();
+            }
+        }
+
+        function toggleCardFlip(cardIndex) {
+            const card = document.getElementById('flip-card-' + cardIndex);
+            if (card) {
+                card.classList.toggle('flipped');
+            }
+        }
+
+        function flipAllCards(forceState) {
+            for (let i = 0; i < vocabFlipCards.length; i++) {
+                const card = document.getElementById('flip-card-' + i);
+                if (card) {
+                    if (forceState === true) {
+                        card.classList.add('flipped');
+                    } else if (forceState === false) {
+                        card.classList.remove('flipped');
+                    } else {
+                        card.classList.toggle('flipped');
+                    }
+                }
+            }
+        }
+
+        function revealAnswer(id) {
+            const el = document.getElementById(id);
+            const btn = document.getElementById('btn-' + id);
+            if (el) {
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    if (btn) btn.innerText = "Hide Answer";
+                } else {
+                    el.classList.add('hidden');
+                    if (btn) btn.innerText = "Reveal Answer";
+                }
+            }
+        }
+
+        function playSpeech(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Render Side-by-Side Carousel Navigator Ribbon
+        function renderSlideCarouselRibbon() {
+            const ribbon = document.getElementById('slide-carousel-ribbon');
+            if (!ribbon) return;
+
+            const slideNames = [
+                { num: 1, label: "Warm-Up & Hook", icon: "wb_sunny" },
+                { num: 2, label: "Target Vocab Flip", icon: "style" },
+                { num: 3, label: "Concept Mind Map", icon: "account_tree" },
+                { num: 4, label: "Grammar & Reveal", icon: "quiz" },
+                { num: 5, label: "Pair Roleplay", icon: "forum" },
+                { num: 6, label: "Mastery & Exit", icon: "check_circle" }
+            ];
+
+            let html = '';
+            slideNames.forEach((s, idx) => {
+                const isActive = idx === currentSlideIndex;
+                html += `
+                    <button onclick="jumpToSlide(${idx})" class="p-3 rounded-2xl border text-left transition-all relative overflow-hidden flex flex-col justify-between ${isActive ? 'themed-primary-bg text-white border-white/40 shadow-lg scale-[1.02]' : 'themed-bg-card themed-border text-slate-400 hover:text-white hover:border-slate-500'}">
+                        <div class="flex items-center justify-between w-full mb-2">
+                            <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${isActive ? 'bg-black/20 text-white' : 'bg-slate-700/30 text-slate-300'}">0${s.num}</span>
+                            <span class="material-symbols-outlined text-sm ${isActive ? 'text-white' : 'themed-text-muted'}">${s.icon}</span>
+                        </div>
+                        <p class="text-xs font-bold truncate ${isActive ? 'text-white font-extrabold' : 'themed-text-header'}">${s.label}</p>
+                    </button>
+                `;
+            });
+
+            ribbon.innerHTML = html;
+
+            const statusText = document.getElementById('carousel-status-text');
+            if (statusText) statusText.innerText = `Slide ${currentSlideIndex + 1} of 6: ${slideNames[currentSlideIndex].label}`;
+        }
+
+        // Render Active Slide Stage Canvas
+        function renderCurrentSlide() {
+            const title = document.getElementById('ppt-title') ? document.getElementById('ppt-title').value : 'Mastering Idiomatic English';
+            const level = document.getElementById('ppt-level') ? document.getElementById('ppt-level').value : 'C1 Advanced';
+
+            renderSlideCarouselRibbon();
+
+            const badgeCat = document.getElementById('slide-badge-category');
+            const badgeTitle = document.getElementById('slide-badge-title');
+            const counterBadge = document.getElementById('slide-counter-badge');
+            const footerTopic = document.getElementById('slide-footer-topic');
+            const body = document.getElementById('active-slide-body');
+            const extraActions = document.getElementById('slide-extra-actions');
+            const jumpDots = document.getElementById('slide-jump-dots');
+
+            if (counterBadge) counterBadge.innerText = `${currentSlideIndex + 1} / 6`;
+            if (footerTopic) footerTopic.innerText = `Topic: ${title} (${level})`;
+
+            if (jumpDots) {
+                let dotsHtml = '';
+                for (let i = 0; i < 6; i++) {
+                    const active = i === currentSlideIndex;
+                    dotsHtml += `<button onclick="jumpToSlide(${i})" class="h-2 rounded-full transition-all ${active ? 'w-6 themed-primary-bg' : 'w-2 bg-slate-500/40 hover:bg-slate-400'}" title="Go to Slide ${i + 1}"></button>`;
+                }
+                jumpDots.innerHTML = dotsHtml;
+            }
+
+            let slideHtml = '';
+
+            // SLIDE 1: Title & Warm-up Hook
+            if (currentSlideIndex === 0) {
+                if (badgeCat) badgeCat.innerText = "WARM-UP & HOOK";
+                if (badgeTitle) badgeTitle.innerText = "Slide 1: Topic Introduction";
+                if (extraActions) extraActions.innerHTML = '';
+
+                slideHtml = `
+                    <div class="space-y-6 py-4">
+                        <div class="space-y-2">
+                            <span class="slide-accent-badge text-xs font-bold px-3 py-1 rounded-full border tracking-wide uppercase inline-flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">school</span>
+                                <span>${level} Level • Core Presentation Deck</span>
+                            </span>
+                            <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight mt-2 text-white drop-shadow-sm">${title}</h2>
+                            <p class="text-sm opacity-80 max-w-2xl leading-relaxed">Interactive illustrated lesson guide crafted for high student engagement, collaborative speaking drills, and structural mastery.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Learning Objectives -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="material-symbols-outlined text-base text-indigo-400">target</span>
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Target Learning Objectives</h4>
+                                </div>
+                                <ul class="text-xs space-y-1.5 opacity-90 pl-1">
+                                    <li class="flex items-start space-x-2"><span class="text-emerald-400 font-bold">✓</span><span>Deconstruct real-world idioms & contextual nuances.</span></li>
+                                    <li class="flex items-start space-x-2"><span class="text-emerald-400 font-bold">✓</span><span>Synthesize concepts using visual mind maps.</span></li>
+                                    <li class="flex items-start space-x-2"><span class="text-emerald-400 font-bold">✓</span><span>Execute natural, high-level spoken negotiations.</span></li>
+                                </ul>
+                            </div>
+
+                            <!-- Warm-Up Discussion Question -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="material-symbols-outlined text-base text-amber-400">psychology_alt</span>
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Classroom Warm-Up Hook</h4>
+                                </div>
+                                <p class="text-xs italic opacity-95 leading-relaxed bg-black/20 p-2.5 rounded-xl border border-white/5">
+                                    "When communicating in professional or formal settings, what makes language sound authentic rather than textbook-literal?"
+                                </p>
+                                <p class="text-[11px] opacity-70">Pair & share with your shoulder partner for 90 seconds.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // SLIDE 2: Interactive 3D Flip Cards (Vocabulary)
+            else if (currentSlideIndex === 1) {
+                if (badgeCat) badgeCat.innerText = "VOCABULARY FOCUS";
+                if (badgeTitle) badgeTitle.innerText = "Slide 2: Interactive Vocabulary Flip Cards";
+                if (extraActions) {
+                    extraActions.innerHTML = `
+                        <button onclick="flipAllCards(true)" class="themed-bg-card border themed-border hover:opacity-90 themed-text-header px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1 shadow-sm">
+                            <span class="material-symbols-outlined text-sm text-indigo-400">flip</span>
+                            <span>Flip All</span>
+                        </button>
+                        <button onclick="flipAllCards(false)" class="themed-bg-card border themed-border hover:opacity-90 themed-text-header px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1 shadow-sm">
+                            <span class="material-symbols-outlined text-sm text-slate-400">restart_alt</span>
+                            <span>Reset Cards</span>
+                        </button>
+                    `;
+                }
+
+                slideHtml = `
+                    <div class="space-y-4 py-2">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs opacity-80 flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm text-indigo-400">touch_app</span>
+                                <span>Click any card to flip & reveal definitions, examples, and audio pronunciation.</span>
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 perspective-1000">
+                            ${vocabFlipCards.map((card, i) => `
+                                <div id="flip-card-${i}" onclick="toggleCardFlip(${i})" class="flip-card h-60 w-full select-none">
+                                    <!-- FRONT -->
+                                    <div class="flip-card-front slide-card-box p-4 border flex flex-col justify-between shadow-md">
+                                        <div>
+                                            <span class="slide-accent-badge text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wider">${card.pos}</span>
+                                            <h3 class="text-base font-bold text-white mt-3 leading-snug">${card.term}</h3>
+                                            <p class="text-[11px] font-mono opacity-70 mt-1">${card.phonetic}</p>
+                                        </div>
+                                        <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] opacity-75">
+                                            <span>Click to Reveal</span>
+                                            <span class="material-symbols-outlined text-sm text-indigo-400">sync_alt</span>
+                                        </div>
+                                    </div>
+                                    <!-- BACK -->
+                                    <div class="flip-card-back slide-card-box p-4 border flex flex-col justify-between shadow-xl bg-slate-900/95">
+                                        <div class="space-y-2 overflow-y-auto pr-1">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-[10px] font-bold text-indigo-300 uppercase">Definition</span>
+                                                <button onclick="event.stopPropagation(); playSpeech('${card.term}. ${card.def}');" class="p-1 rounded bg-white/10 hover:bg-white/20 text-indigo-300" title="Listen to pronunciation">
+                                                    <span class="material-symbols-outlined text-sm">volume_up</span>
+                                                </button>
+                                            </div>
+                                            <p class="text-xs text-white leading-relaxed">${card.def}</p>
+                                            <div class="pt-1.5 border-t border-white/10">
+                                                <span class="text-[10px] font-bold text-amber-300 uppercase">Example</span>
+                                                <p class="text-[11px] italic opacity-90 mt-0.5 leading-snug">"${card.example}"</p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] opacity-60">
+                                            <span class="truncate">Collocation: ${card.collocation.split('•')[0]}</span>
+                                            <span class="material-symbols-outlined text-xs">flip</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // SLIDE 3: Visual Concept Mind Map & Structure Diagram
+            else if (currentSlideIndex === 2) {
+                if (badgeCat) badgeCat.innerText = "CONCEPT BLUEPRINT";
+                if (badgeTitle) badgeTitle.innerText = "Slide 3: Visual Concept Mind Map & Architecture";
+                if (extraActions) extraActions.innerHTML = '';
+
+                slideHtml = `
+                    <div class="space-y-4 py-2">
+                        <p class="text-xs opacity-80 flex items-center space-x-1.5">
+                            <span class="material-symbols-outlined text-sm text-emerald-400">account_tree</span>
+                            <span>Interactive topic branching framework. Click any node to explore key structural pillars.</span>
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+                            
+                            <!-- Left Branches (2) -->
+                            <div class="md:col-span-4 space-y-3">
+                                <div class="mind-map-node slide-card-box p-3.5 rounded-2xl border space-y-1 shadow-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">01</div>
+                                        <h4 class="text-xs font-bold text-white">Syntax & Verb Blueprint</h4>
+                                    </div>
+                                    <p class="text-[11px] opacity-80 pl-8">Fixed prepositional particles & grammatical tenses.</p>
+                                </div>
+                                <div class="mind-map-node slide-card-box p-3.5 rounded-2xl border space-y-1 shadow-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs">02</div>
+                                        <h4 class="text-xs font-bold text-white">Context & Register</h4>
+                                    </div>
+                                    <p class="text-[11px] opacity-80 pl-8">Executive boardroom vs. Informal conversational tone.</p>
+                                </div>
+                            </div>
+
+                            <!-- Center Root Node -->
+                            <div class="md:col-span-4 flex flex-col items-center justify-center p-5 rounded-3xl bg-gradient-to-br from-indigo-600/40 via-purple-600/30 to-pink-600/30 border border-indigo-400/50 shadow-2xl text-center space-y-2 relative">
+                                <div class="w-10 h-10 rounded-2xl bg-white text-slate-900 flex items-center justify-center shadow-md">
+                                    <span class="material-symbols-outlined text-xl text-indigo-600">hub</span>
+                                </div>
+                                <span class="text-[10px] font-bold tracking-widest text-indigo-300 uppercase">CORE CONCEPT HUB</span>
+                                <h3 class="text-sm md:text-base font-extrabold text-white leading-tight">${title}</h3>
+                                <p class="text-[10px] opacity-85">${level} Target Mastery Blueprint</p>
+                            </div>
+
+                            <!-- Right Branches (2) -->
+                            <div class="md:col-span-4 space-y-3">
+                                <div class="mind-map-node slide-card-box p-3.5 rounded-2xl border space-y-1 shadow-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs">03</div>
+                                        <h4 class="text-xs font-bold text-white">High-Frequency Collocations</h4>
+                                    </div>
+                                    <p class="text-[11px] opacity-80 pl-8">Natural pairings that elevate fluency and precision.</p>
+                                </div>
+                                <div class="mind-map-node slide-card-box p-3.5 rounded-2xl border space-y-1 shadow-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-xs">04</div>
+                                        <h4 class="text-xs font-bold text-white">Pitfalls & False Friends</h4>
+                                    </div>
+                                    <p class="text-[11px] opacity-80 pl-8">Avoid literal translations and mismatched registers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // SLIDE 4: Grammar Structure & Interactive Reveal Drills
+            else if (currentSlideIndex === 3) {
+                if (badgeCat) badgeCat.innerText = "GUIDED PRACTICE";
+                if (badgeTitle) badgeTitle.innerText = "Slide 4: Grammar Rules & Interactive Reveal Drill";
+                if (extraActions) extraActions.innerHTML = '';
+
+                slideHtml = `
+                    <div class="space-y-4 py-2">
+                        <!-- Rule Formula Box -->
+                        <div class="slide-card-box p-4 rounded-2xl border flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="material-symbols-outlined text-2xl text-indigo-400">menu_book</span>
+                                <div>
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Structural Grammar Rule</h4>
+                                    <p class="text-xs opacity-90 mt-0.5 font-mono">[Subject] + [Modal/Auxiliary] + [Base Verb / Idiomatic Verb Particle] + [Contextual Complement]</p>
+                                </div>
+                            </div>
+                            <span class="slide-accent-badge text-[10px] font-bold px-2.5 py-1 rounded-full border">Rule 4.1</span>
+                        </div>
+
+                        <!-- 3 Interactive Reveal Exercises -->
+                        <div class="space-y-2.5">
+                            <div class="slide-card-box p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] font-bold text-indigo-300 uppercase">Drill 1 • Gap Fill</span>
+                                    <p class="text-xs text-white">"During the quarterly briefing, the CEO decided to ____________ (get straight to the point)."</p>
+                                    <p id="drill-ans-1" class="hidden text-xs font-bold text-emerald-400 mt-1">✓ Answer: "cut to the chase"</p>
+                                </div>
+                                <button onclick="revealAnswer('drill-ans-1')" id="btn-drill-ans-1" class="self-start sm:self-center px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all flex-shrink-0">
+                                    Reveal Answer
+                                </button>
+                            </div>
+
+                            <div class="slide-card-box p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] font-bold text-amber-300 uppercase">Drill 2 • Error Correction</span>
+                                    <p class="text-xs text-white">"Spot the error: 'I will touch bases with the department head tomorrow morning.'"</p>
+                                    <p id="drill-ans-2" class="hidden text-xs font-bold text-emerald-400 mt-1">✓ Answer: 'touch base' (singular, never pluralized 'bases')</p>
+                                </div>
+                                <button onclick="revealAnswer('drill-ans-2')" id="btn-drill-ans-2" class="self-start sm:self-center px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all flex-shrink-0">
+                                    Reveal Answer
+                                </button>
+                            </div>
+
+                            <div class="slide-card-box p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
+                                <div class="space-y-0.5">
+                                    <span class="text-[10px] font-bold text-emerald-300 uppercase">Drill 3 • Sentence Synthesis</span>
+                                    <p class="text-xs text-white">"Synthesize a sentence using <b>hit the nail on the head</b> in a team meeting scenario."</p>
+                                    <p id="drill-ans-3" class="hidden text-xs font-bold text-emerald-400 mt-1">✓ Model Example: "Alex hit the nail on the head when analyzing our bottleneck."</p>
+                                </div>
+                                <button onclick="revealAnswer('drill-ans-3')" id="btn-drill-ans-3" class="self-start sm:self-center px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all flex-shrink-0">
+                                    Reveal Answer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // SLIDE 5: Real-World Communicative Task & Roleplay
+            else if (currentSlideIndex === 4) {
+                if (badgeCat) badgeCat.innerText = "COMMUNICATIVE TASK";
+                if (badgeTitle) badgeTitle.innerText = "Slide 5: Real-World Negotiation Roleplay";
+                if (extraActions) extraActions.innerHTML = '';
+
+                slideHtml = `
+                    <div class="space-y-4 py-2">
+                        <div class="slide-card-box p-3.5 rounded-2xl border flex items-center space-x-3">
+                            <span class="material-symbols-outlined text-2xl text-purple-400">group_work</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase tracking-wide">Pairwork Simulation: Project Deadline Negotiation</h4>
+                                <p class="text-xs opacity-80 mt-0.5">Time: 4 minutes active dialogue • Goal: Use at least 2 target idioms naturally.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Student A Card -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-2 border-indigo-400/40">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-extrabold text-indigo-300 uppercase flex items-center space-x-1.5">
+                                        <span class="w-5 h-5 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px]">A</span>
+                                        <span>Student A: Project Lead</span>
+                                    </span>
+                                    <span class="text-[10px] opacity-70">Prompt Card</span>
+                                </div>
+                                <ul class="text-xs space-y-1.5 opacity-90 pl-1">
+                                    <li>• You need an urgent progress update on the software deployment.</li>
+                                    <li>• Break the ice smoothly, then cut to the chase regarding potential delays.</li>
+                                    <li>• Schedule a follow-up to touch base later this afternoon.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Student B Card -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-2 border-emerald-400/40">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-extrabold text-emerald-300 uppercase flex items-center space-x-1.5">
+                                        <span class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">B</span>
+                                        <span>Student B: Technical Specialist</span>
+                                    </span>
+                                    <span class="text-[10px] opacity-70">Prompt Card</span>
+                                </div>
+                                <ul class="text-xs space-y-1.5 opacity-90 pl-1">
+                                    <li>• Agree with Student A's diagnosis ("You hit the nail on the head...").</li>
+                                    <li>• Explain the technical bottleneck calmly and concisely.</li>
+                                    <li>• Propose an actionable mitigation plan and confirm next steps.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // SLIDE 6: Lesson Mastery Review & Homework
+            else if (currentSlideIndex === 5) {
+                if (badgeCat) badgeCat.innerText = "WRAP-UP & MASTERY";
+                if (badgeTitle) badgeTitle.innerText = "Slide 6: Formative Exit Ticket & Homework";
+                if (extraActions) extraActions.innerHTML = '';
+
+                slideHtml = `
+                    <div class="space-y-4 py-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            
+                            <!-- Formative Exit Ticket Quiz -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-amber-300 uppercase flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-sm">fact_check</span>
+                                        <span>Quick Exit Ticket (Formative)</span>
+                                    </h4>
+                                    <span class="text-[10px] opacity-70">2 Questions</span>
+                                </div>
+
+                                <div class="space-y-2 text-xs">
+                                    <div class="p-2.5 rounded-xl bg-black/20 border border-white/5 space-y-1">
+                                        <p class="font-medium">1. Which idiom means to get straight to the essential point?</p>
+                                        <p class="text-[11px] text-emerald-400 font-bold">✓ Cut to the chase</p>
+                                    </div>
+                                    <div class="p-2.5 rounded-xl bg-black/20 border border-white/5 space-y-1">
+                                        <p class="font-medium">2. Is "touch base" used in singular or plural form?</p>
+                                        <p class="text-[11px] text-emerald-400 font-bold">✓ Singular ("touch base")</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Homework & Next Steps -->
+                            <div class="slide-card-box p-4 rounded-2xl border space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-indigo-300 uppercase flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-sm">assignment</span>
+                                        <span>Homework Assignment</span>
+                                    </h4>
+                                    <span class="text-[10px] opacity-70">Due Next Session</span>
+                                </div>
+
+                                <ul class="text-xs space-y-2 opacity-90 pl-1">
+                                    <li class="flex items-start space-x-2">
+                                        <span class="text-indigo-400 font-bold">1.</span>
+                                        <span>Write a 150-word professional email utilizing at least 3 target expressions.</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <span class="text-indigo-400 font-bold">2.</span>
+                                        <span>Complete the companion A4 worksheet drill sheet.</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <span class="text-indigo-400 font-bold">3.</span>
+                                        <span>Practice interactive speaking with the AI English Tutor tab.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (body) {
+                body.innerHTML = slideHtml;
+            }
+
+            // Sync Fullscreen modal body if active
+            const fsModalBody = document.getElementById('fs-modal-slide-body');
+            const fsModalCounter = document.getElementById('fs-modal-counter');
+            const fsModalTitle = document.getElementById('fs-modal-title');
+            if (fsModalBody) fsModalBody.innerHTML = slideHtml;
+            if (fsModalCounter) fsModalCounter.innerText = `${currentSlideIndex + 1} / 6`;
+            if (fsModalTitle) fsModalTitle.innerText = `${title} (${level})`;
+        }
+
+        // Fullscreen Presenter Mode
+        function openFullscreenSlidePresenter() {
+            const modal = document.getElementById('fs-slide-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                renderCurrentSlide();
+            }
+        }
+
+        function closeFullscreenSlidePresenter() {
+            const modal = document.getElementById('fs-slide-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Keyboard navigation for presentation slides
+        document.addEventListener('keydown', (e) => {
+            const fsModal = document.getElementById('fs-slide-modal');
+            const isPptTabActive = !document.getElementById('view-presentation').classList.contains('hidden');
+            if (isPptTabActive || (fsModal && !fsModal.classList.contains('hidden'))) {
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    closeFullscreenSlidePresenter();
+                }
+            }
+        });
+
+        // Generate Raw Slide Script for Notes & Copying
+        function generatePresentationScriptText() {
+            const title = document.getElementById('ppt-title') ? document.getElementById('ppt-title').value : 'Mastering Idiomatic English';
+            const level = document.getElementById('ppt-level') ? document.getElementById('ppt-level').value : 'C1 Advanced';
 
             const text = `==================================================
 PRESENTATION DECK: ${title} (${level})
 Illustrated 6-Slide Structure (Optimized for Classrooms)
+Created by Zaafouri Abdelmalek • All rights reserved
 ==================================================
 
 --- SLIDE 1: TITLE & WARM-UP ---
-• Slide Banner: Engaging visual hook for ${title}
-• Warm-up Question: What is your initial perspective on this topic?
-• Learning Objective: Master professional vocabulary and structures.
+• Topic: ${title}
+• Target CEFR Level: ${level}
+• Warm-up Question: "When communicating in formal settings, what makes language authentic?"
+• Objectives: Master key expressions, deconstruct structure via visual mind map, and conduct roleplay negotiations.
 
---- SLIDE 2: VOCABULARY FOCUS ---
-• Term 1: Definition & Pronunciation Guide
-• Term 2: Example Sentence in Professional Context
-• Interactive Mini-Quiz: Spot correct usage.
+--- SLIDE 2: TARGET VOCABULARY (FLIP CARDS) ---
+• 1. Cut to the chase: Get directly to the point.
+• 2. Hit the nail on the head: Describe a situation with exact accuracy.
+• 3. Break the ice: Initiate comfortable conversation.
+• 4. Touch base: Briefly make contact for a status update.
 
---- SLIDE 3: GRAMMAR / STRUCTURE ---
-• Core grammatical rule with visual breakdown
-• Positive, Negative, and Interrogative examples
-• Common student pitfalls to avoid
+--- SLIDE 3: CONCEPT MIND MAP & STRUCTURE ---
+• Central Hub: ${title}
+• Branch 01 (Syntax): Verb particles and grammatical tenses.
+• Branch 02 (Register): Professional vs. casual communication.
+• Branch 03 (Collocations): Natural high-frequency word pairings.
+• Branch 04 (Pitfalls): Literal translation errors & false friends.
 
---- SLIDE 4: GUIDED PRACTICE ---
-• Collaborative Activity: Pair-share sentence building
-• Teacher-led walkthrough of sample exercises
-• Immediate formative feedback loop
+--- SLIDE 4: GRAMMAR RULES & REVEAL DRILLS ---
+• Formula: [Subject] + [Modal] + [Idiomatic Verb Particle] + [Complement]
+• Drill 1: "CEO decided to cut to the chase."
+• Drill 2: "Touch base (singular only)."
+• Drill 3: "Sarah hit the nail on the head."
 
---- SLIDE 5: COMMUNICATIVE TASK ---
-• Roleplay Scenario: Professional debate or interview
-• Student A & Student B prompt cards
-• Peer evaluation checklist
+--- SLIDE 5: COMMUNICATIVE ROLEPLAY ---
+• Scenario: Software Deployment Deadline Negotiation
+• Student A (Project Lead): Probe for updates, break ice, touch base later.
+• Student B (Technical Lead): Acknowledge bottleneck, propose mitigation plan.
 
---- SLIDE 6: WRAP-UP & HOMEWORK ---
-• Lesson Summary & Q&A session
-• Homework Assignment: Write a 150-word reflection
-• Next class preview`;
+--- SLIDE 6: FORMATIVE EXIT TICKET & HOMEWORK ---
+• Exit Question 1: Cut to the chase definition.
+• Exit Question 2: Singular "touch base".
+• Homework Assignment: Write a 150-word reflection email applying 3 expressions.
 
-            document.getElementById('preview-ppt-content').innerText = text;
+==================================================
+© 2026 Zaafouri Abdelmalek. All rights reserved.
+==================================================`;
+
+            const previewEl = document.getElementById('preview-ppt-content');
+            if (previewEl) previewEl.innerText = text;
+            return text;
+        }
+
+        function generatePresentation() {
+            renderCurrentSlide();
+            generatePresentationScriptText();
+        }
+
+        function copySlideScript() {
+            const text = generatePresentationScriptText();
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Complete PowerPoint Slide Script copied to clipboard!");
+            }).catch(() => {
+                alert("Slide script generated and ready.");
+            });
+        }
+
+        // =========================================================================
+        // REAL PPTX FILE EXPORT (Using PptxGenJS)
+        // =========================================================================
+        function exportToPptxFile() {
+            if (typeof PptxGenJS === 'undefined') {
+                alert("PowerPoint export engine is loading. Please try again in a moment.");
+                return;
+            }
+
+            const title = document.getElementById('ppt-title') ? document.getElementById('ppt-title').value : 'Mastering Idiomatic English';
+            const level = document.getElementById('ppt-level') ? document.getElementById('ppt-level').value : 'C1 Advanced';
+
+            try {
+                const pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9';
+                pptx.author = 'Zaafouri Abdelmalek';
+                pptx.company = 'LessonForge Studio';
+                pptx.title = title;
+                pptx.subject = `English Lesson Deck: ${title} (${level})`;
+
+                // Palette definitions based on current slide theme
+                let bgHex = "0F172A";
+                let cardHex = "1E293B";
+                let primaryHex = "6366F1";
+                let textHex = "F8FAFC";
+                let accentHex = "38BDF8";
+
+                if (currentSlideTheme === 'midnight') {
+                    bgHex = "0B0F19"; cardHex = "151D2A"; primaryHex = "06B6D4"; textHex = "F1F5F9"; accentHex = "22D3EE";
+                } else if (currentSlideTheme === 'emerald') {
+                    bgHex = "062419"; cardHex = "0F382C"; primaryHex = "10B981"; textHex = "ECFDF5"; accentHex = "6EE7B7";
+                } else if (currentSlideTheme === 'sunset') {
+                    bgHex = "3C1516"; cardHex = "5A1E20"; primaryHex = "E11D48"; textHex = "FFF1F2"; accentHex = "FDA4AF";
+                } else if (currentSlideTheme === 'chalkboard') {
+                    bgHex = "1C2B22"; cardHex = "283D31"; primaryHex = "EAB308"; textHex = "FEF9C3"; accentHex = "FDE047";
+                } else if (currentSlideTheme === 'ivory') {
+                    bgHex = "FAF7F2"; cardHex = "FFFFFF"; primaryHex = "4F46E5"; textHex = "0F172A"; accentHex = "0284C7";
+                }
+
+                const addFooter = (slide, slideNum) => {
+                    slide.addText(`Topic: ${title} (${level}) • Created by Zaafouri Abdelmalek • © 2026 All rights reserved`, {
+                        x: 0.6, y: 7.0, w: 10.0, h: 0.3,
+                        fontSize: 9, color: "94A3B8", italic: true
+                    });
+                    slide.addText(`Slide ${slideNum} / 6`, {
+                        x: 11.5, y: 7.0, w: 1.2, h: 0.3,
+                        fontSize: 9, color: "94A3B8", align: "right"
+                    });
+                };
+
+                // SLIDE 1: Title & Objectives
+                const s1 = pptx.addSlide();
+                s1.background = { color: bgHex };
+                s1.addText(title.toUpperCase(), {
+                    x: 0.8, y: 1.2, w: 11.5, h: 1.2,
+                    fontSize: 32, bold: true, color: textHex
+                });
+                s1.addText(`CEFR Level: ${level} • Interactive Lesson Deck`, {
+                    x: 0.8, y: 2.3, w: 11.5, h: 0.5,
+                    fontSize: 14, color: primaryHex, bold: true
+                });
+
+                // Objectives Box
+                s1.addShape(pptx.ShapeType.rect, {
+                    x: 0.8, y: 3.2, w: 5.5, h: 3.2,
+                    fill: { color: cardHex }, line: { color: primaryHex, width: 1.5 }
+                });
+                s1.addText("TARGET LEARNING OBJECTIVES", {
+                    x: 1.0, y: 3.4, w: 5.1, h: 0.4,
+                    fontSize: 12, bold: true, color: primaryHex
+                });
+                s1.addText([
+                    { text: "• Deconstruct idioms and contextual nuance\n", options: { fontSize: 11, color: textHex } },
+                    { text: "• Synthesize concepts using visual mind map\n", options: { fontSize: 11, color: textHex } },
+                    { text: "• Conduct collaborative spoken roleplays\n", options: { fontSize: 11, color: textHex } }
+                ], { x: 1.0, y: 3.9, w: 5.1, h: 2.3 });
+
+                // Warm-up Box
+                s1.addShape(pptx.ShapeType.rect, {
+                    x: 6.8, y: 3.2, w: 5.5, h: 3.2,
+                    fill: { color: cardHex }, line: { color: accentHex, width: 1.5 }
+                });
+                s1.addText("WARM-UP DISCUSSION HOOK", {
+                    x: 7.0, y: 3.4, w: 5.1, h: 0.4,
+                    fontSize: 12, bold: true, color: accentHex
+                });
+                s1.addText(`"When communicating in professional or academic contexts, what makes language authentic rather than textbook-literal?"\n\nPair and discuss with your partner for 90 seconds.`, {
+                    x: 7.0, y: 4.0, w: 5.1, h: 2.2,
+                    fontSize: 11, color: textHex, italic: true
+                });
+                addFooter(s1, 1);
+
+                // SLIDE 2: Vocabulary Focus
+                const s2 = pptx.addSlide();
+                s2.background = { color: bgHex };
+                s2.addText("TARGET VOCABULARY & IDIOMS", {
+                    x: 0.8, y: 0.6, w: 11.5, h: 0.6,
+                    fontSize: 22, bold: true, color: textHex
+                });
+
+                vocabFlipCards.forEach((c, idx) => {
+                    const col = idx % 2;
+                    const row = Math.floor(idx / 2);
+                    const posX = 0.8 + col * 5.8;
+                    const posY = 1.4 + row * 2.7;
+
+                    s2.addShape(pptx.ShapeType.rect, {
+                        x: posX, y: posY, w: 5.5, h: 2.4,
+                        fill: { color: cardHex }, line: { color: primaryHex, width: 1 }
+                    });
+                    s2.addText(`${c.term} (${c.pos})`, {
+                        x: posX + 0.2, y: posY + 0.2, w: 5.1, h: 0.4,
+                        fontSize: 13, bold: true, color: primaryHex
+                    });
+                    s2.addText(`Definition: ${c.def}`, {
+                        x: posX + 0.2, y: posY + 0.65, w: 5.1, h: 0.7,
+                        fontSize: 10, color: textHex
+                    });
+                    s2.addText(`Example: "${c.example}"`, {
+                        x: posX + 0.2, y: posY + 1.4, w: 5.1, h: 0.8,
+                        fontSize: 9.5, italic: true, color: accentHex
+                    });
+                });
+                addFooter(s2, 2);
+
+                // SLIDE 3: Mind Map & Concept Architecture
+                const s3 = pptx.addSlide();
+                s3.background = { color: bgHex };
+                s3.addText("CONCEPT BLUEPRINT & MIND MAP", {
+                    x: 0.8, y: 0.6, w: 11.5, h: 0.6,
+                    fontSize: 22, bold: true, color: textHex
+                });
+
+                // Center Hub
+                s3.addShape(pptx.ShapeType.roundRect, {
+                    x: 4.8, y: 2.7, w: 3.5, h: 2.0,
+                    fill: { color: primaryHex }, line: { color: textHex, width: 2 }
+                });
+                s3.addText(`CORE HUB\n${title}`, {
+                    x: 4.9, y: 3.0, w: 3.3, h: 1.4,
+                    fontSize: 13, bold: true, color: "FFFFFF", align: "center"
+                });
+
+                // 4 Branches
+                const branches = [
+                    { title: "01. Syntax & Verb Blueprint", desc: "Fixed particles and preposition rules", x: 0.8, y: 1.8 },
+                    { title: "02. Context & Formality", desc: "Executive vs. conversational register", x: 0.8, y: 4.2 },
+                    { title: "03. High-Freq Collocations", desc: "Commonly paired expressions", x: 8.8, y: 1.8 },
+                    { title: "04. Pitfalls & False Friends", desc: "Avoid literal translation mistakes", x: 8.8, y: 4.2 }
+                ];
+                branches.forEach(b => {
+                    s3.addShape(pptx.ShapeType.rect, {
+                        x: b.x, y: b.y, w: 3.6, h: 1.8,
+                        fill: { color: cardHex }, line: { color: accentHex, width: 1.5 }
+                    });
+                    s3.addText(b.title, {
+                        x: b.x + 0.15, y: b.y + 0.2, w: 3.3, h: 0.4,
+                        fontSize: 11, bold: true, color: accentHex
+                    });
+                    s3.addText(b.desc, {
+                        x: b.x + 0.15, y: b.y + 0.65, w: 3.3, h: 0.9,
+                        fontSize: 10, color: textHex
+                    });
+                });
+                addFooter(s3, 3);
+
+                // SLIDE 4: Grammar & Guided Practice
+                const s4 = pptx.addSlide();
+                s4.background = { color: bgHex };
+                s4.addText("GRAMMAR STRUCTURE & GUIDED DRILLS", {
+                    x: 0.8, y: 0.6, w: 11.5, h: 0.6,
+                    fontSize: 22, bold: true, color: textHex
+                });
+
+                s4.addShape(pptx.ShapeType.rect, {
+                    x: 0.8, y: 1.4, w: 11.5, h: 1.1,
+                    fill: { color: cardHex }, line: { color: primaryHex, width: 1.5 }
+                });
+                s4.addText("Grammar Rule: [Subject] + [Modal/Auxiliary] + [Base Verb / Particle] + [Complement]", {
+                    x: 1.0, y: 1.7, w: 11.1, h: 0.5,
+                    fontSize: 13, bold: true, color: primaryHex
+                });
+
+                const drills = [
+                    "Drill 1: In the board meeting, the manager chose to ______________ (cut to the chase).",
+                    "Drill 2: Error spot -> 'We need to touch bases with the client tomorrow.' (Correction: touch base)",
+                    "Drill 3: Synthesize -> Formulate a response using 'hit the nail on the head'."
+                ];
+                s4.addShape(pptx.ShapeType.rect, {
+                    x: 0.8, y: 2.8, w: 11.5, h: 3.8,
+                    fill: { color: cardHex }, line: { color: accentHex, width: 1 }
+                });
+                s4.addText("INTERACTIVE CLASSROOM DRILLS", {
+                    x: 1.0, y: 3.0, w: 11.0, h: 0.4,
+                    fontSize: 12, bold: true, color: accentHex
+                });
+                drills.forEach((d, i) => {
+                    s4.addText(d, {
+                        x: 1.0, y: 3.5 + i * 1.0, w: 11.0, h: 0.7,
+                        fontSize: 11, color: textHex
+                    });
+                });
+                addFooter(s4, 4);
+
+                // SLIDE 5: Communicative Roleplay
+                const s5 = pptx.addSlide();
+                s5.background = { color: bgHex };
+                s5.addText("COMMUNICATIVE PAIRWORK ROLEPLAY", {
+                    x: 0.8, y: 0.6, w: 11.5, h: 0.6,
+                    fontSize: 22, bold: true, color: textHex
+                });
+
+                // Student A
+                s5.addShape(pptx.ShapeType.rect, {
+                    x: 0.8, y: 1.5, w: 5.5, h: 4.8,
+                    fill: { color: cardHex }, line: { color: primaryHex, width: 1.5 }
+                });
+                s5.addText("STUDENT A: PROJECT LEAD", {
+                    x: 1.0, y: 1.8, w: 5.1, h: 0.4,
+                    fontSize: 13, bold: true, color: primaryHex
+                });
+                s5.addText([
+                    { text: "Role: You require an urgent status report on software deliverables.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 1: Break the ice smoothly with Student B.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 2: Cut to the chase regarding pending milestones.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 3: Confirm next follow-up to touch base later.\n", options: { fontSize: 11, color: textHex } }
+                ], { x: 1.0, y: 2.3, w: 5.1, h: 3.8 });
+
+                // Student B
+                s5.addShape(pptx.ShapeType.rect, {
+                    x: 6.8, y: 1.5, w: 5.5, h: 4.8,
+                    fill: { color: cardHex }, line: { color: accentHex, width: 1.5 }
+                });
+                s5.addText("STUDENT B: TECHNICAL LEAD", {
+                    x: 7.0, y: 1.8, w: 5.1, h: 0.4,
+                    fontSize: 13, bold: true, color: accentHex
+                });
+                s5.addText([
+                    { text: "Role: You are managing technical hurdles in the pipeline.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 1: Acknowledge Student A's points ('Hit the nail on the head').\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 2: Outline solution blueprint clearly.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Task 3: Commit to the afternoon milestone schedule.\n", options: { fontSize: 11, color: textHex } }
+                ], { x: 7.0, y: 2.3, w: 5.1, h: 3.8 });
+                addFooter(s5, 5);
+
+                // SLIDE 6: Exit Ticket & Homework
+                const s6 = pptx.addSlide();
+                s6.background = { color: bgHex };
+                s6.addText("FORMATIVE EXIT TICKET & HOMEWORK", {
+                    x: 0.8, y: 0.6, w: 11.5, h: 0.6,
+                    fontSize: 22, bold: true, color: textHex
+                });
+
+                // Exit Ticket
+                s6.addShape(pptx.ShapeType.rect, {
+                    x: 0.8, y: 1.5, w: 5.5, h: 4.8,
+                    fill: { color: cardHex }, line: { color: "EAB308", width: 1.5 }
+                });
+                s6.addText("QUICK EXIT TICKET", {
+                    x: 1.0, y: 1.8, w: 5.1, h: 0.4,
+                    fontSize: 13, bold: true, color: "EAB308"
+                });
+                s6.addText([
+                    { text: "Q1: What expression means getting straight to the point?\n-> Answer: Cut to the chase\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Q2: Which form is correct: 'touch base' or 'touch bases'?\n-> Answer: Touch base (always singular)\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Q3: Provide one scenario where 'break the ice' is essential.", options: { fontSize: 11, color: textHex } }
+                ], { x: 1.0, y: 2.3, w: 5.1, h: 3.8 });
+
+                // Homework
+                s6.addShape(pptx.ShapeType.rect, {
+                    x: 6.8, y: 1.5, w: 5.5, h: 4.8,
+                    fill: { color: cardHex }, line: { color: primaryHex, width: 1.5 }
+                });
+                s6.addText("HOMEWORK ASSIGNMENT", {
+                    x: 7.0, y: 1.8, w: 5.1, h: 0.4,
+                    fontSize: 13, bold: true, color: primaryHex
+                });
+                s6.addText([
+                    { text: "1. Write a 150-word professional email utilizing at least 3 target idioms from today's lesson.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "2. Complete the corresponding sections on the A4 Worksheet.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "3. Practice spoken roleplays with the AI English Tutor in LessonForge.\n\n", options: { fontSize: 11, color: textHex } },
+                    { text: "Due: Next class session.", options: { fontSize: 11, color: accentHex, bold: true } }
+                ], { x: 7.0, y: 2.3, w: 5.1, h: 3.8 });
+                addFooter(s6, 6);
+
+                // Save presentation file
+                const safeFileName = title.replace(/[^a-zA-Z0-9]/g, '_') + '_LessonDeck.pptx';
+                pptx.writeFile({ fileName: safeFileName });
+            } catch (err) {
+                console.error("PPTX Export Error:", err);
+                alert("An error occurred during PPTX export. Generating script backup instead.");
+                copySlideScript();
+            }
         }
 
         // Multi-Step AI Wizard Logic
