@@ -1,0 +1,6 @@
+{
+  "name": "LessonForge",
+  "description": "Specialized tool for English teachers to generate A4 worksheets and PowerPoint lesson presentations",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
