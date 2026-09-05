@@ -104,6 +104,91 @@
             --badge-bg: rgba(16, 185, 129, 0.15);
         }
 
+        [data-theme="sunset"] {
+            --bg-main: #180E0A;
+            --bg-sidebar: #24140F;
+            --bg-header: rgba(36, 20, 15, 0.85);
+            --bg-card: #281610;
+            --bg-card-hover: #331D15;
+            --bg-input: #180E0A;
+            --border-color: #4A271B;
+            --text-main: #FFF7ED;
+            --text-muted: #FB923C;
+            --text-header: #FFFFFF;
+            --primary: #F97316;
+            --primary-hover: #EA580C;
+            --primary-glow: rgba(249, 115, 22, 0.25);
+            --badge-bg: rgba(249, 115, 22, 0.15);
+        }
+
+        [data-theme="violet"] {
+            --bg-main: #0D0914;
+            --bg-sidebar: #171024;
+            --bg-header: rgba(23, 16, 36, 0.85);
+            --bg-card: #1D142D;
+            --bg-card-hover: #261A3B;
+            --bg-input: #0D0914;
+            --border-color: #3B265B;
+            --text-main: #F5F3FF;
+            --text-muted: #C084FC;
+            --text-header: #FFFFFF;
+            --primary: #A855F7;
+            --primary-hover: #9333EA;
+            --primary-glow: rgba(168, 85, 247, 0.25);
+            --badge-bg: rgba(168, 85, 247, 0.15);
+        }
+
+        [data-theme="nordic"] {
+            --bg-main: #0F172A;
+            --bg-sidebar: #1E293B;
+            --bg-header: rgba(30, 41, 59, 0.85);
+            --bg-card: #1E293B;
+            --bg-card-hover: #334155;
+            --bg-input: #0F172A;
+            --border-color: #334155;
+            --text-main: #F1F5F9;
+            --text-muted: #2DD4BF;
+            --text-header: #FFFFFF;
+            --primary: #14B8A6;
+            --primary-hover: #0D9488;
+            --primary-glow: rgba(20, 184, 166, 0.25);
+            --badge-bg: rgba(20, 184, 166, 0.15);
+        }
+
+        [data-theme="rose"] {
+            --bg-main: #1A0D13;
+            --bg-sidebar: #26141D;
+            --bg-header: rgba(38, 20, 29, 0.85);
+            --bg-card: #2B1721;
+            --bg-card-hover: #381E2C;
+            --bg-input: #1A0D13;
+            --border-color: #52273D;
+            --text-main: #FFF1F2;
+            --text-muted: #FB7185;
+            --text-header: #FFFFFF;
+            --primary: #F43F5E;
+            --primary-hover: #E11D48;
+            --primary-glow: rgba(244, 63, 94, 0.25);
+            --badge-bg: rgba(244, 63, 94, 0.15);
+        }
+
+        [data-theme="chalkboard"] {
+            --bg-main: #12191B;
+            --bg-sidebar: #1A2427;
+            --bg-header: rgba(26, 36, 39, 0.85);
+            --bg-card: #1E2B2E;
+            --bg-card-hover: #26363A;
+            --bg-input: #12191B;
+            --border-color: #2F4348;
+            --text-main: #FEF08A;
+            --text-muted: #FACC15;
+            --text-header: #FFFFFF;
+            --primary: #EAB308;
+            --primary-hover: #CA8A04;
+            --primary-glow: rgba(234, 179, 8, 0.25);
+            --badge-bg: rgba(234, 179, 8, 0.15);
+        }
+
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
@@ -151,6 +236,31 @@
             border: 1px solid rgba(16, 185, 129, 0.2);
             box-shadow: 0 8px 32px 0 rgba(5, 26, 20, 0.5);
         }
+        [data-theme="sunset"] .glass-panel {
+            background: rgba(40, 22, 16, 0.7);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(24, 14, 10, 0.5);
+        }
+        [data-theme="violet"] .glass-panel {
+            background: rgba(29, 20, 45, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(13, 9, 20, 0.5);
+        }
+        [data-theme="nordic"] .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.5);
+        }
+        [data-theme="rose"] .glass-panel {
+            background: rgba(43, 23, 33, 0.7);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(26, 13, 19, 0.5);
+        }
+        [data-theme="chalkboard"] .glass-panel {
+            background: rgba(30, 43, 46, 0.7);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(18, 25, 27, 0.5);
+        }
 
         .glass-bubble-bot {
             background: rgba(129, 140, 248, 0.12);
@@ -172,6 +282,26 @@
         [data-theme="emerald"] .glass-bubble-bot {
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+        [data-theme="sunset"] .glass-bubble-bot {
+            background: rgba(249, 115, 22, 0.12);
+            border: 1px solid rgba(249, 115, 22, 0.25);
+        }
+        [data-theme="violet"] .glass-bubble-bot {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+        [data-theme="nordic"] .glass-bubble-bot {
+            background: rgba(20, 184, 166, 0.12);
+            border: 1px solid rgba(20, 184, 166, 0.25);
+        }
+        [data-theme="rose"] .glass-bubble-bot {
+            background: rgba(244, 63, 94, 0.12);
+            border: 1px solid rgba(244, 63, 94, 0.25);
+        }
+        [data-theme="chalkboard"] .glass-bubble-bot {
+            background: rgba(234, 179, 8, 0.12);
+            border: 1px solid rgba(234, 179, 8, 0.25);
         }
 
         .glass-pill-btn {
@@ -841,8 +971,23 @@
                     <button onclick="setTheme('icewhite')" id="theme-icewhite-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#F0F4F8] text-sky-800">
                         <span>❄️</span><span>Ice White</span>
                     </button>
-                    <button onclick="setTheme('emerald')" id="theme-emerald-btn" class="theme-btn col-span-2 flex items-center justify-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#062419] text-emerald-300">
-                        <span>🍃</span><span>Emerald Green</span>
+                    <button onclick="setTheme('emerald')" id="theme-emerald-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#062419] text-emerald-300">
+                        <span>🍃</span><span>Emerald</span>
+                    </button>
+                    <button onclick="setTheme('sunset')" id="theme-sunset-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#281610] text-orange-400">
+                        <span>🌅</span><span>Sunset</span>
+                    </button>
+                    <button onclick="setTheme('violet')" id="theme-violet-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#1D142D] text-purple-300">
+                        <span>🔮</span><span>Violet</span>
+                    </button>
+                    <button onclick="setTheme('nordic')" id="theme-nordic-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#1E293B] text-teal-300">
+                        <span>🌲</span><span>Nordic</span>
+                    </button>
+                    <button onclick="setTheme('rose')" id="theme-rose-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#2B1721] text-rose-300">
+                        <span>🌹</span><span>Rose</span>
+                    </button>
+                    <button onclick="setTheme('chalkboard')" id="theme-chalkboard-btn" class="theme-btn flex items-center space-x-1.5 px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-[#1E2B2E] text-yellow-300">
+                        <span>📜</span><span>Chalkboard</span>
                     </button>
                 </div>
             </div>
@@ -2397,7 +2542,7 @@
             localStorage.setItem('lessonforge_theme', themeName);
 
             // Update active states on sidebar buttons
-            const themes = ['dark', 'light', 'sapphire', 'icewhite', 'emerald'];
+            const themes = ['dark', 'light', 'sapphire', 'icewhite', 'emerald', 'sunset', 'violet', 'nordic', 'rose', 'chalkboard'];
             themes.forEach(t => {
                 const btn = document.getElementById('theme-' + t + '-btn');
                 if (btn) {
