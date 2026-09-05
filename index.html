@@ -443,6 +443,10 @@
                     <span class="material-symbols-outlined text-xl">psychology</span>
                     <span>AI English Tutor</span>
                 </button>
+                <button onclick="switchTab('plan')" id="nav-plan" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
+                    <span class="material-symbols-outlined text-xl">assignment</span>
+                    <span>Lesson Plan Guide</span>
+                </button>
                 <button onclick="switchTab('library')" id="nav-library" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all themed-text-muted hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/5">
                     <span class="material-symbols-outlined text-xl">folder_open</span>
                     <span>Vocab Bank (<span id="library-count">0</span>)</span>
@@ -591,7 +595,7 @@
                 </div>
 
                 <!-- Quick Action Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <div onclick="switchTab('worksheet')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl themed-primary-badge flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -611,6 +615,16 @@
                         </div>
                         <h3 class="text-base font-bold themed-text-header">PowerPoint Deck</h3>
                         <p class="text-xs themed-text-muted mt-1">Warmups, vocab, and quizzes.</p>
+                    </div>
+                    <div onclick="switchTab('plan')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-purple-500/30">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined text-xl">assignment</span>
+                            </div>
+                            <span class="text-[10px] font-bold bg-purple-500/20 text-purple-400 px-2.5 py-0.5 rounded-full">45/60 Min</span>
+                        </div>
+                        <h3 class="text-base font-bold themed-text-header">Lesson Plan Guide</h3>
+                        <p class="text-xs themed-text-muted mt-1">Pedagogical roadmap & timing.</p>
                     </div>
                     <div onclick="switchTab('tutor')" class="themed-bg-card hover:scale-[1.01] border themed-border p-5 rounded-2xl cursor-pointer transition-all group shadow-sm border-indigo-500/30 relative overflow-hidden">
                         <div class="flex items-center justify-between mb-3">
@@ -1214,6 +1228,322 @@
                 </div>
             </div>
 
+            <!-- VIEW 5: LESSON PLAN & TEACHER GUIDE BUILDER (45/60/90 MIN) -->
+            <div id="view-plan" class="hidden space-y-6">
+                <!-- Top Header & Mode Configurator Card -->
+                <div class="themed-bg-card p-6 rounded-3xl border themed-border shadow-xl relative overflow-hidden">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-bold tracking-widest text-purple-400 uppercase">CELTA & TESOL Structured Framework</span>
+                                <span class="bg-purple-500/15 text-purple-400 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-purple-500/25">Teacher Guide</span>
+                            </div>
+                            <h2 class="text-2xl font-bold themed-text-header mt-1">45 / 60 / 90-Min Lesson Plan & Pedagogical Roadmap</h2>
+                            <p class="text-xs themed-text-muted mt-1">Time-budgeted stage procedures, Concept Checking Questions (CCQs), board-work layout, and live classroom countdown timer.</p>
+                        </div>
+
+                        <!-- Duration Selector & Action Controls -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <!-- Duration Pills -->
+                            <div class="flex items-center bg-black/20 dark:bg-white/5 p-1 rounded-2xl border themed-border">
+                                <button onclick="setPlanDuration(45)" id="plan-btn-45" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+                                    45 Min
+                                </button>
+                                <button onclick="setPlanDuration(60)" id="plan-btn-60" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md">
+                                    60 Min
+                                </button>
+                                <button onclick="setPlanDuration(90)" id="plan-btn-90" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+                                    90 Min Block
+                                </button>
+                            </div>
+
+                            <button onclick="generatePlanFromCurrentWorksheet()" class="themed-primary-bg themed-primary-hover text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">sync</span>
+                                <span>Sync from Worksheet</span>
+                            </button>
+                            <button onclick="copyLessonPlanMarkdown()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm" id="plan-copy-icon">content_copy</span>
+                                <span id="plan-copy-text">Copy Markdown</span>
+                            </button>
+                            <button onclick="printLessonPlan()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm">print</span>
+                                <span>Print Guide</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preset Topic Quick Tabs -->
+                    <div class="mt-4 pt-4 border-t themed-border flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[11px] font-bold themed-text-muted uppercase">Curated Masterclass Blueprints:</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="loadPlanTemplate('business')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                                💼 Business Idioms & Negotiations
+                            </button>
+                            <button onclick="loadPlanTemplate('narrative')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                                🕵️ Narrative Tenses & Crime Mystery
+                            </button>
+                            <button onclick="loadPlanTemplate('interview')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                                🎯 Job Interview & STAR Technique
+                            </button>
+                            <button onclick="loadPlanTemplate('debate')" class="px-3 py-1 rounded-xl text-xs font-semibold themed-bg-input border themed-border hover:border-purple-500 text-slate-300 hover:text-white transition-all">
+                                ⚖️ Oxford Debate & Persuasive Skills
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE CLASSROOM TIMER & STAGE TRACKER (HUD) -->
+                <div class="themed-bg-card p-4 md:p-5 rounded-2xl border themed-border shadow-lg bg-gradient-to-r from-purple-900/20 to-indigo-900/20 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                            <span class="material-symbols-outlined text-2xl" id="timer-icon">timer</span>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-purple-400">Live Classroom Timing Assistant</span>
+                                <span id="timer-status-badge" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Ready</span>
+                            </div>
+                            <div class="flex items-center space-x-3 mt-0.5">
+                                <span id="plan-timer-display" class="font-mono text-2xl md:text-3xl font-black themed-text-header tracking-tight">00:00</span>
+                                <span class="text-xs themed-text-muted">/ <span id="plan-total-time-label">60:00</span></span>
+                                <span class="text-slate-500">|</span>
+                                <span id="current-stage-title" class="text-xs font-bold themed-primary-text truncate max-w-xs">Stage 1: Lead-In & Warmer (8 min)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timer Controls -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="togglePlanTimer()" id="btn-timer-toggle" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-md">
+                            <span class="material-symbols-outlined text-sm" id="btn-timer-icon">play_arrow</span>
+                            <span id="btn-timer-label">Start Lesson</span>
+                        </button>
+                        <button onclick="nextPlanStage()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-header px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1">
+                            <span class="material-symbols-outlined text-sm">skip_next</span>
+                            <span>Next Stage</span>
+                        </button>
+                        <button onclick="resetPlanTimer()" class="themed-bg-input border themed-border hover:opacity-90 themed-text-muted hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all" title="Reset Timer">
+                            <span class="material-symbols-outlined text-sm">restart_alt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN LESSON PLAN CONTENT CONTAINER (Printable & Exportable) -->
+                <div id="lesson-plan-printable" class="space-y-6">
+                    <!-- Lesson Plan Overview & Objectives Card -->
+                    <div class="themed-bg-card p-6 rounded-3xl border themed-border shadow-md space-y-6">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-5 border-b themed-border">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span id="plan-display-level" class="text-[10px] font-bold px-3 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 uppercase">CEFR B2 Upper-Intermediate</span>
+                                    <span id="plan-display-duration" class="text-[10px] font-bold px-3 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">60 Minutes</span>
+                                    <span class="text-[10px] font-bold px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Communicative Task (TBL)</span>
+                                </div>
+                                <h3 id="plan-display-title" class="text-xl md:text-2xl font-black themed-text-header mt-2">Mastering High-Stakes Business Idioms & Cross-Functional Negotiations</h3>
+                                <p id="plan-display-topic" class="text-xs themed-text-muted mt-1">Focus Topic: Business Strategy & Executive Communication</p>
+                            </div>
+
+                            <!-- Interaction Ratio Gauge -->
+                            <div class="themed-bg-input border themed-border p-3 rounded-2xl flex flex-col justify-center min-w-[200px]">
+                                <div class="flex items-center justify-between text-[11px] font-bold mb-1.5">
+                                    <span class="text-purple-400">TTT: 25%</span>
+                                    <span class="text-emerald-400">STT: 75%</span>
+                                </div>
+                                <div class="w-full bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+                                    <div class="bg-purple-500 h-full w-1/4" title="Teacher Talk Time (25%)"></div>
+                                    <div class="bg-emerald-500 h-full w-3/4" title="Student Talk Time (75%)"></div>
+                                </div>
+                                <p class="text-[9px] themed-text-muted mt-1 text-center">Student-Centered Communicative Model</p>
+                            </div>
+                        </div>
+
+                        <!-- 3-Column Aims & Profile Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <!-- Column 1: Primary Communicative Aim -->
+                            <div class="themed-bg-input border themed-border p-4 rounded-2xl space-y-2">
+                                <div class="flex items-center space-x-1.5 text-purple-400 font-bold">
+                                    <span class="material-symbols-outlined text-base">flag</span>
+                                    <span>Primary Communicative Aim</span>
+                                </div>
+                                <p id="plan-aim-primary" class="themed-text-header leading-relaxed">
+                                    By the end of the lesson, learners will be able to actively deploy 4 target business idioms (leverage, synergy, bandwidth, touch base) to propose, debate, and finalize a cross-departmental project resource agreement.
+                                </p>
+                            </div>
+
+                            <!-- Column 2: Secondary Language Exponents -->
+                            <div class="themed-bg-input border themed-border p-4 rounded-2xl space-y-2">
+                                <div class="flex items-center space-x-1.5 text-blue-400 font-bold">
+                                    <span class="material-symbols-outlined text-base">menu_book</span>
+                                    <span>Target Language & Exponents</span>
+                                </div>
+                                <ul id="plan-exponents-list" class="themed-text-header space-y-1 list-disc list-inside">
+                                    <li><strong class="text-purple-400">Lexis:</strong> leverage, synergy, bandwidth, touch base</li>
+                                    <li><strong class="text-blue-400">Grammar:</strong> Conditional structures & modal hedging (Could we... / Were we to...)</li>
+                                    <li><strong class="text-emerald-400">Phonology:</strong> Sentence stress & connected speech (/tʌtʃ beɪs/)</li>
+                                </ul>
+                            </div>
+
+                            <!-- Column 3: Materials & Equipment -->
+                            <div class="themed-bg-input border themed-border p-4 rounded-2xl space-y-2">
+                                <div class="flex items-center space-x-1.5 text-emerald-400 font-bold">
+                                    <span class="material-symbols-outlined text-base">inventory_2</span>
+                                    <span>Materials & Tech Checklist</span>
+                                </div>
+                                <ul id="plan-materials-list" class="themed-text-header space-y-1">
+                                    <li class="flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-xs text-emerald-400">check_circle</span>
+                                        <span>Printable A4 Worksheet (Sections 1–4)</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-xs text-emerald-400">check_circle</span>
+                                        <span>6-Slide LessonForge PowerPoint Deck</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-xs text-emerald-400">check_circle</span>
+                                        <span>Whiteboard & Colored Markers</span>
+                                    </li>
+                                    <li class="flex items-center space-x-1.5">
+                                        <span class="material-symbols-outlined text-xs text-emerald-400">check_circle</span>
+                                        <span>Classroom QR Code / Student Handouts</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Anticipated Problems & Solutions Table -->
+                        <div class="pt-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider themed-text-muted mb-2.5 flex items-center space-x-1.5">
+                                <span class="material-symbols-outlined text-sm text-amber-400">warning</span>
+                                <span>Anticipated Learner Difficulties & Pedagogical Solutions</span>
+                            </h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs border themed-border rounded-xl overflow-hidden">
+                                    <thead class="bg-black/20 dark:bg-white/5 border-b themed-border text-slate-400 font-bold">
+                                        <tr>
+                                            <th class="p-3 w-1/2">Anticipated Linguistic / Classroom Difficulty</th>
+                                            <th class="p-3 w-1/2">Teacher Intervention & Solution (CCQ / Drill)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="plan-difficulties-body" class="divide-y themed-border">
+                                        <tr>
+                                            <td class="p-3 themed-text-header font-medium">1. Students might confuse <em>"bandwidth"</em> (technical internet capacity) with human cognitive/work capacity.</td>
+                                            <td class="p-3 themed-text-muted">Use CCQ: <em>"If I say I don't have the bandwidth for this project, am I talking about my computer or my schedule/energy?"</em> (Schedule/energy).</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 themed-text-header font-medium">2. Pronunciation stumbling block on <em>"synergy"</em> with hard 'g' instead of soft /dʒ/.</td>
+                                            <td class="p-3 themed-text-muted">Choral drill: Model /ˈsɪnədʒi/, isolate the soft /dʒ/ like <em>gem</em> or <em>magic</em>, mark syllable stress on the first syllable.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 themed-text-header font-medium">3. Students slipping back into native L1 during free group negotiation stage.</td>
+                                            <td class="p-3 themed-text-muted">Provide structured sentence frames on whiteboard and assign a student "Language Chairperson" to keep groups in English.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STAGE-BY-STAGE PEDAGOGICAL ROADMAP TIMELINE -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold themed-text-header flex items-center space-x-2">
+                                <span class="material-symbols-outlined text-purple-400">alt_route</span>
+                                <span>Stage-by-Stage Lesson Execution Timeline</span>
+                            </h3>
+                            <span class="text-xs themed-text-muted font-semibold">Total Stages: <span id="plan-stages-count">6</span> Stages</span>
+                        </div>
+
+                        <!-- Stage Cards Container (Dynamically rendered by JS) -->
+                        <div id="plan-stages-container" class="space-y-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE WHITEBOARD & SMARTBOARD LAYOUT GUIDE -->
+                    <div class="themed-bg-card p-6 rounded-3xl border themed-border shadow-md space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-base font-bold themed-text-header flex items-center space-x-2">
+                                    <span class="material-symbols-outlined text-blue-400">space_dashboard</span>
+                                    <span>Recommended Classroom Board-Work Plan (Whiteboard / Smartboard)</span>
+                                </h3>
+                                <p class="text-xs themed-text-muted mt-0.5">Maintain clear visual organization during class delivery to maximize student retention.</p>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl bg-blue-500/15 text-blue-400 border border-blue-500/25">Board Plan</span>
+                        </div>
+
+                        <!-- 3-Column Chalkboard / Whiteboard Graphic -->
+                        <div class="bg-slate-900 border-2 border-slate-700 rounded-2xl p-4 text-slate-100 font-sans shadow-inner">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Board Left: Vocab & Pronunciation -->
+                                <div class="border-r md:border-r border-slate-700 pr-3 space-y-2">
+                                    <div class="border-b border-slate-700 pb-1 flex items-center justify-between">
+                                        <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider">Left: Vocabulary & IPA</span>
+                                        <span class="text-[9px] text-slate-400">(Lexical Focus)</span>
+                                    </div>
+                                    <div id="board-vocab-content" class="text-xs space-y-1.5 text-slate-200 font-mono">
+                                        <p>• <strong>leverage</strong> /ˈlɛv.ər.ɪdʒ/ (v)<br><span class="text-slate-400 text-[10px]">= use to maximum advantage</span></p>
+                                        <p>• <strong>synergy</strong> /ˈsɪn.ə.dʒi/ (n)<br><span class="text-slate-400 text-[10px]">= combined working power (1+1=3)</span></p>
+                                        <p>• <strong>bandwidth</strong> /ˈbænd.wɪdθ/ (n)<br><span class="text-slate-400 text-[10px]">= capacity/time to handle work</span></p>
+                                        <p>• <strong>touch base</strong> /tʌtʃ beɪs/ (idiom)<br><span class="text-slate-400 text-[10px]">= briefly talk / reconnect</span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Board Center: Grammar Rules & Timelines -->
+                                <div class="border-r md:border-r border-slate-700 pr-3 space-y-2">
+                                    <div class="border-b border-slate-700 pb-1 flex items-center justify-between">
+                                        <span class="text-[11px] font-bold text-sky-300 uppercase tracking-wider">Center: Grammar & Concept Timelines</span>
+                                        <span class="text-[9px] text-slate-400">(Form & Meaning)</span>
+                                    </div>
+                                    <div id="board-grammar-content" class="text-xs space-y-2 text-slate-200">
+                                        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700 font-mono text-[11px]">
+                                            <p class="text-emerald-400 font-bold">Negotiation Framing:</p>
+                                            <p><em>"Could we [verb]..."</em> (Polite proposal)</p>
+                                            <p><em>"Were we to [verb]..., we would..."</em> (Formal)</p>
+                                        </div>
+                                        <div class="text-[11px] text-slate-300 font-mono">
+                                            <p class="text-amber-400">CCQ Core Question:</p>
+                                            <p>"Are we talking about computers or human capacity?" ➔ Human capacity!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Board Right: Task Instructions & Homework -->
+                                <div class="space-y-2">
+                                    <div class="border-b border-slate-700 pb-1 flex items-center justify-between">
+                                        <span class="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">Right: Instructions & Homework</span>
+                                        <span class="text-[9px] text-slate-400">(Action Items)</span>
+                                    </div>
+                                    <div id="board-tasks-content" class="text-xs space-y-1.5 text-slate-200">
+                                        <div class="bg-emerald-950/40 p-2 rounded-lg border border-emerald-800/40 text-[11px]">
+                                            <p class="font-bold text-emerald-300">Pair Negotiation Task (15 min):</p>
+                                            <p>1. Form pairs (Marketing vs. Dev)</p>
+                                            <p>2. Agree on budget using at least 3 target idioms</p>
+                                            <p>3. Present 1-min summary to class</p>
+                                        </div>
+                                        <p class="text-[10px] text-slate-400 font-mono mt-2"><strong>Homework:</strong> Complete Worksheet Section 4 essay prompt by next session.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TEACHER REFLECTION & POST-LESSON NOTES -->
+                    <div class="themed-bg-card p-6 rounded-3xl border themed-border shadow-md space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-sm font-bold themed-text-header flex items-center space-x-2">
+                                <span class="material-symbols-outlined text-purple-400">edit_note</span>
+                                <span>Teacher Post-Lesson Reflection & Observation Log</span>
+                            </h4>
+                            <span class="text-[10px] themed-text-muted">Auto-saves locally</span>
+                        </div>
+                        <textarea id="plan-teacher-notes" placeholder="Jot down notes during or after class (e.g., 'Class struggled with syllable stress on synergy; revisit in warm-up next week. Free production roleplay was energetic and well-timed.')" class="w-full h-24 themed-bg-input border themed-border rounded-2xl p-4 text-xs themed-text-header focus:outline-none focus:border-purple-500 transition-colors leading-relaxed"></textarea>
+                    </div>
+                </div>
+            </div>
+
             <!-- VIEW 6: MATERIAL DETAIL & EXPORT -->
             <div id="view-detail" class="hidden space-y-6 max-w-3xl mx-auto">
                 <div class="flex items-center justify-between themed-bg-card p-6 rounded-2xl border themed-border shadow-sm">
@@ -1541,7 +1871,7 @@
         // Navigation Switcher
         function switchTab(tabId) {
             closeSidebarDrawer();
-            const tabs = ['home', 'worksheet', 'presentation', 'wizard', 'tutor', 'library', 'detail'];
+            const tabs = ['home', 'worksheet', 'presentation', 'wizard', 'tutor', 'plan', 'library', 'detail'];
             tabs.forEach(t => {
                 const el = document.getElementById('view-' + t);
                 const nav = document.getElementById('nav-' + t);
@@ -1572,6 +1902,7 @@
                 presentation: ['PowerPoint Slide Deck', 'Presentation Studio'],
                 wizard: ['AI Lesson Wizard (Gemini)', 'Generative AI Suite'],
                 tutor: ['AI English Tutor (Glassmorphism)', 'Live Interactive Tutor'],
+                plan: ['45/60/90-Min Lesson Plan Guide', 'Pedagogical Timing & Roadmaps'],
                 library: ['Vocab Bank & Saved Materials', 'Library'],
                 detail: ['Material Detail & Export', 'Export Studio']
             };
@@ -1588,6 +1919,7 @@
 
             if (tabId === 'home') renderHomeRecent();
             if (tabId === 'presentation') renderCurrentSlide();
+            if (tabId === 'plan') renderLessonPlan();
             if (tabId === 'library') renderLibrary();
             if (tabId === 'tutor') updateTutorLessonContext();
         }
@@ -4024,10 +4356,711 @@ Thank you for your question! Here is a structured breakdown matching CEFR **${es
             }
         }
 
+        // ==========================================
+        // 45 / 60 / 90-MIN LESSON PLAN & TEACHER GUIDE ENGINE
+        // ==========================================
+        let currentPlanDuration = 60;
+        let planTimerInterval = null;
+        let planTimerSeconds = 0;
+        let isPlanTimerRunning = false;
+        let currentPlanStageIndex = 0;
+
+        // Structured Lesson Plan Blueprint Model
+        let currentActivePlan = {
+            title: "Mastering High-Stakes Business Idioms & Cross-Functional Negotiations",
+            topic: "Business Strategy & Executive Communication",
+            level: "B2 Upper-Intermediate",
+            duration: 60,
+            aim: "By the end of the lesson, learners will be able to actively deploy 4 target business idioms (leverage, synergy, bandwidth, touch base) to propose, debate, and finalize a cross-departmental project resource agreement.",
+            exponents: [
+                { type: "Lexis", text: "leverage, synergy, bandwidth, touch base" },
+                { type: "Grammar", text: "Conditional structures & modal hedging (Could we... / Were we to...)" },
+                { type: "Phonology", text: "Sentence stress & connected speech (/tʌtʃ beɪs/)" }
+            ],
+            difficulties: [
+                {
+                    problem: "1. Students might confuse 'bandwidth' (technical internet capacity) with human cognitive/work capacity.",
+                    solution: "Use CCQ: 'If I say I don't have the bandwidth for this project, am I talking about my computer or my schedule/energy?' (Schedule/energy)."
+                },
+                {
+                    problem: "2. Pronunciation stumbling block on 'synergy' with hard 'g' instead of soft /dʒ/.",
+                    solution: "Choral drill: Model /ˈsɪnədʒi/, isolate the soft /dʒ/ like gem or magic, mark syllable stress on the first syllable."
+                },
+                {
+                    problem: "3. Students slipping back into native L1 during free group negotiation stage.",
+                    solution: "Provide structured sentence frames on whiteboard and assign a student 'Language Chairperson' to keep groups in English."
+                }
+            ],
+            boardWork: {
+                vocab: [
+                    { word: "leverage", ipa: "/ˈlɛv.ər.ɪdʒ/ (v)", def: "use to maximum advantage" },
+                    { word: "synergy", ipa: "/ˈsɪn.ə.dʒi/ (n)", def: "combined working power (1+1=3)" },
+                    { word: "bandwidth", ipa: "/ˈbænd.wɪdθ/ (n)", def: "capacity/time to handle work" },
+                    { word: "touch base", ipa: "/tʌtʃ beɪs/ (idiom)", def: "briefly talk / reconnect" }
+                ],
+                grammar: {
+                    heading: "Negotiation Framing & Hedging:",
+                    rules: [
+                        "\"Could we [verb]...\" (Polite proposal)",
+                        "\"Were we to [verb]..., we would...\" (Formal conditional)"
+                    ],
+                    ccq: "CCQ: Are we talking about computers or human capacity? ➔ Human capacity!"
+                },
+                tasks: {
+                    heading: "Pair Negotiation Task (15 min):",
+                    steps: [
+                        "1. Form pairs (Marketing vs. Dev)",
+                        "2. Agree on budget using at least 3 target idioms",
+                        "3. Present 1-min summary to class"
+                    ],
+                    hw: "Complete Worksheet Section 4 essay prompt by next session."
+                }
+            },
+            stages: [
+                {
+                    name: "Lead-In & Schema Activation (Warmer)",
+                    durationMin: 8,
+                    pattern: "T-Ss ➔ S-S in Pairs",
+                    aim: "Engage learner interest, activate background schema, and introduce business collaboration context.",
+                    procedure: "1. Project Slide 1 with provocative question: 'Have you ever had a project fail because departments didn't collaborate?'<br>2. Give pairs 2 minutes to share a real or hypothetical workplace experience.<br>3. Elicit 2 brief anecdotes in open class. Highlight communicative challenges without correcting language yet.",
+                    output: "Students discuss in pairs, recalling professional collaboration experiences.",
+                    ccq: "Are we talking about general chat or workplace collaboration? (Workplace collaboration)."
+                },
+                {
+                    name: "Target Language Presentation & Clarification (MFP)",
+                    durationMin: 15,
+                    pattern: "T-Ss (Guided Discovery)",
+                    aim: "Clarify Meaning, Form, and Pronunciation (MFP) for 4 target idioms and conditional hedging structures.",
+                    procedure: "1. Display Slide 2 with target idioms in authentic context sentences.<br>2. Elicit meanings using Concept Checking Questions (CCQs) rather than lecturing.<br>3. Highlight parts of speech and collocations (e.g., 'leverage our existing assets').<br>4. Conduct choral and individual pronunciation drills focusing on stress and connected speech.",
+                    output: "Students identify definitions, repeat pronunciation with correct word stress, and take down notes.",
+                    ccq: "If two companies create 'synergy', is the result bigger or smaller than working alone? (Bigger: 1+1=3!)."
+                },
+                {
+                    name: "Controlled & Guided Practice Drills",
+                    durationMin: 12,
+                    pattern: "Individual ➔ Peer Check (S-S)",
+                    aim: "Reinforce accurate lexical and grammatical usage through structured worksheet exercises.",
+                    procedure: "1. Instruct learners to complete Worksheet Section 1 (Vocabulary Matching) and Section 3 (Sentence Completion) individually (5 mins).<br>2. Teacher actively monitors, noting common errors.<br>3. Pair check: Students compare answers with their shoulder partner for 2 mins.<br>4. Open-class confirmation: Call on different students to read full sentences aloud.",
+                    output: "Students complete 8 gap-fill and multiple-choice items with 90%+ accuracy.",
+                    ccq: "Do we complete the sentences alone first or together? (Alone first, then compare!)."
+                },
+                {
+                    name: "Free Communicative Production / Negotiation Task",
+                    durationMin: 15,
+                    pattern: "S-S in Small Groups (3-4)",
+                    aim: "Provide fluent, authentic speaking practice deploying target language in a simulated departmental meeting.",
+                    procedure: "1. Divide class into teams: Team A (Product Innovation) and Team B (Finance/Marketing).<br>2. Set the scenario from Slide 5: Both teams need $50,000 budget and engineering resources for Q4.<br>3. Students negotiate an agreement. Rule: Each team must naturally use at least 3 target idioms.<br>4. Teacher monitors unobtrusively with a clipboard, taking notes on good language and errors.",
+                    output: "Students conduct an authentic 10-minute negotiation, reaching a signed resource agreement.",
+                    ccq: "Is your goal to win everything or reach a collaborative compromise? (Reach a compromise)."
+                },
+                {
+                    name: "Delayed Error Correction & Whiteboard Clinic",
+                    durationMin: 6,
+                    pattern: "T-Ss (Open Class)",
+                    aim: "Provide developmental linguistic feedback on student performance observed during the communicative task.",
+                    procedure: "1. Write 3 examples of excellent student utterances on the whiteboard and praise the usage.<br>2. Write 3 anonymous error sentences collected during monitoring.<br>3. Elicit corrections from the whole class: 'How could we make sentence #2 more natural/idiomatic?'<br>4. Drill corrected versions.",
+                    output: "Students identify and self-correct grammatical, collocation, and pronunciation slips.",
+                    ccq: "Whose errors are these? (General classroom patterns for everyone to learn from!)."
+                },
+                {
+                    name: "Cool-Down, Exit Ticket & Homework Assignment",
+                    durationMin: 4,
+                    pattern: "Individual ➔ T-Ss",
+                    aim: "Consolidate learning, evaluate lesson takeaway, and assign reflective homework.",
+                    procedure: "1. Exit Ticket: Ask each student to give one sentence using their favorite new phrase before leaving.<br>2. Project Slide 6: Assign Worksheet Section 4 (200-word written proposal) for next class.<br>3. Thank learners for their active participation.",
+                    output: "Each student produces a spontaneous, accurate sentence as an exit passport.",
+                    ccq: "When is the written proposal due? (Next lesson!)."
+                }
+            ]
+        };
+
+        // Templates for Different Curricula
+        const planTemplates = {
+            business: {
+                title: "Mastering High-Stakes Business Idioms & Cross-Functional Negotiations",
+                topic: "Business Strategy & Executive Communication",
+                level: "B2 Upper-Intermediate",
+                aim: "By the end of the lesson, learners will be able to actively deploy 4 target business idioms (leverage, synergy, bandwidth, touch base) to propose, debate, and finalize a cross-departmental project resource agreement.",
+                vocab: [
+                    { word: "leverage", ipa: "/ˈlɛv.ər.ɪdʒ/ (v)", def: "use to maximum advantage" },
+                    { word: "synergy", ipa: "/ˈsɪn.ə.dʒi/ (n)", def: "combined working power (1+1=3)" },
+                    { word: "bandwidth", ipa: "/ˈbænd.wɪdθ/ (n)", def: "capacity/time to handle work" },
+                    { word: "touch base", ipa: "/tʌtʃ beɪs/ (idiom)", def: "briefly talk / reconnect" }
+                ],
+                grammarHeading: "Negotiation Framing & Hedging:",
+                grammarRules: [
+                    "\"Could we [verb]...\" (Polite proposal)",
+                    "\"Were we to [verb]..., we would...\" (Formal conditional)"
+                ],
+                taskTitle: "Pair Negotiation Task (15 min):",
+                taskSteps: ["1. Form pairs (Marketing vs. Dev)", "2. Agree on budget using at least 3 target idioms", "3. Present 1-min summary to class"]
+            },
+            narrative: {
+                title: "Investigative Mystery: Narrative Tenses & Sequence of Events",
+                topic: "Crime Investigation & Storytelling",
+                level: "B1 Intermediate",
+                aim: "By the end of the lesson, learners will be able to accurately combine Past Simple, Past Continuous, and Past Perfect to reconstruct and report a chronological timeline of a mystery.",
+                vocab: [
+                    { word: "alibi", ipa: "/ˈæl.ɪ.baɪ/ (n)", def: "evidence of being elsewhere" },
+                    { word: "eyewitness", ipa: "/ˈaɪˌwɪt.nəs/ (n)", def: "person who saw the event" },
+                    { word: "motive", ipa: "/ˈmoʊ.tɪv/ (n)", def: "reason for doing something" },
+                    { word: "suspect", ipa: "/ˈsʌs.pɛkt/ (n)", def: "person believed to be guilty" }
+                ],
+                grammarHeading: "Narrative Tenses Integration:",
+                grammarRules: [
+                    "Past Continuous: background action (\"It was raining...\")",
+                    "Past Simple: main event (\"the bell rang\")",
+                    "Past Perfect: earlier event (\"someone had stolen the keys\")"
+                ],
+                taskTitle: "Detective Interrogation Simulation (15 min):",
+                taskSteps: ["1. Student A is Detective; Student B is Suspect", "2. Cross-examine alibis using 3 narrative tenses", "3. Decide if suspect is guilty or innocent"]
+            },
+            interview: {
+                title: "Executive Job Interview Mastery: The STAR Competency Method",
+                topic: "Career Development & Professional Speaking",
+                level: "C1 Advanced",
+                aim: "By the end of the lesson, learners will be able to structure concise, persuasive answers to behavioral interview questions using the STAR framework (Situation, Task, Action, Result).",
+                vocab: [
+                    { word: "spearhead", ipa: "/ˈspɪr.hɛd/ (v)", def: "lead an attack or initiative" },
+                    { word: "streamline", ipa: "/ˈstriːm.laɪn/ (v)", def: "make more efficient/simple" },
+                    { word: "benchmark", ipa: "/ˈbɛntʃ.mɑːrk/ (n)", def: "standard of excellence" },
+                    { word: "deliverables", ipa: "/dɪˈlɪv.ər.ə.bəlz/ (n)", def: "tangible project outputs" }
+                ],
+                grammarHeading: "Action-Oriented Achievement Verbs:",
+                grammarRules: [
+                    "\"I spearheaded the initiative, which resulted in...\"",
+                    "\"Having identified the bottleneck, I implemented...\""
+                ],
+                taskTitle: "Mock Boardroom Interview Panel (15 min):",
+                taskSteps: ["1. Interviewer asks: 'Tell me about a time you resolved a crisis'", "2. Candidate answers in 90 seconds using STAR", "3. Peer rubric evaluation & feedback"]
+            },
+            debate: {
+                title: "Oxford-Style Formal Debate & Persuasive Rhetoric",
+                topic: "Current Affairs & Argumentation",
+                level: "B2 Upper-Intermediate",
+                aim: "By the end of the lesson, learners will be able to construct reasoned arguments, deploy formal counter-rebuttals, and signpost speech in a timed parliamentary debate.",
+                vocab: [
+                    { word: "unprecedented", ipa: "/ʌnˈprɛs.ɪ.dɛn.tɪd/ (adj)", def: "never done or known before" },
+                    { word: "counterpart", ipa: "/ˈkaʊn.tər.pɑːrt/ (n)", def: "person holding equivalent role" },
+                    { word: "refute", ipa: "/rɪˈfjuːt/ (v)", def: "prove a statement to be wrong" },
+                    { word: "consensus", ipa: "/kənˈsɛn.səs/ (n)", def: "general agreement" }
+                ],
+                grammarHeading: "Signposting & Concession Markers:",
+                grammarRules: [
+                    "\"While it is undeniable that [X], we must contend that [Y]...\"",
+                    "\"The evidence overwhelmingly indicates that...\""
+                ],
+                taskTitle: "Timed 3v3 Debate Tournament (15 min):",
+                taskSteps: ["1. Motion: 'AI will create more opportunities than it eliminates'", "2. 2-min opening speeches, 1-min rebuttals", "3. Audience votes based on rhetorical strength"]
+            }
+        };
+
+        function setPlanDuration(mins) {
+            currentPlanDuration = mins;
+            currentActivePlan.duration = mins;
+
+            // Update UI buttons
+            [45, 60, 90].forEach(m => {
+                const btn = document.getElementById('plan-btn-' + m);
+                if (btn) {
+                    if (m === mins) {
+                        btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white";
+                    }
+                }
+            });
+
+            // Adjust stage durations proportionally
+            recalculateStageDurations();
+            renderLessonPlan();
+            resetPlanTimer();
+        }
+
+        function recalculateStageDurations() {
+            if (currentPlanDuration === 45) {
+                currentActivePlan.stages[0].durationMin = 5;
+                currentActivePlan.stages[1].durationMin = 10;
+                currentActivePlan.stages[2].durationMin = 10;
+                currentActivePlan.stages[3].durationMin = 12;
+                currentActivePlan.stages[4].durationMin = 5;
+                currentActivePlan.stages[5].durationMin = 3;
+            } else if (currentPlanDuration === 60) {
+                currentActivePlan.stages[0].durationMin = 8;
+                currentActivePlan.stages[1].durationMin = 15;
+                currentActivePlan.stages[2].durationMin = 12;
+                currentActivePlan.stages[3].durationMin = 15;
+                currentActivePlan.stages[4].durationMin = 6;
+                currentActivePlan.stages[5].durationMin = 4;
+            } else if (currentPlanDuration === 90) {
+                currentActivePlan.stages[0].durationMin = 10;
+                currentActivePlan.stages[1].durationMin = 20;
+                currentActivePlan.stages[2].durationMin = 15;
+                currentActivePlan.stages[3].durationMin = 25;
+                currentActivePlan.stages[4].durationMin = 12;
+                currentActivePlan.stages[5].durationMin = 8;
+            }
+        }
+
+        function loadPlanTemplate(type) {
+            const tmpl = planTemplates[type];
+            if (!tmpl) return;
+
+            currentActivePlan.title = tmpl.title;
+            currentActivePlan.topic = tmpl.topic;
+            currentActivePlan.level = tmpl.level;
+            currentActivePlan.aim = tmpl.aim;
+            currentActivePlan.boardWork.vocab = tmpl.vocab;
+            currentActivePlan.boardWork.grammar.heading = tmpl.grammarHeading;
+            currentActivePlan.boardWork.grammar.rules = tmpl.grammarRules;
+            currentActivePlan.boardWork.tasks.heading = tmpl.taskTitle;
+            currentActivePlan.boardWork.tasks.steps = tmpl.taskSteps;
+
+            // Update exponents
+            currentActivePlan.exponents[0].text = tmpl.vocab.map(v => v.word).join(', ');
+
+            renderLessonPlan();
+        }
+
+        function generatePlanFromCurrentWorksheet() {
+            const title = document.getElementById('ws-title') ? document.getElementById('ws-title').value : 'Custom Lesson';
+            const topic = document.getElementById('ws-topic') ? document.getElementById('ws-topic').value : 'General English';
+            const level = document.getElementById('ws-level') ? document.getElementById('ws-level').value : 'B2';
+
+            const v1 = document.getElementById('ws-vocab-1') ? document.getElementById('ws-vocab-1').value : 'leverage';
+            const v2 = document.getElementById('ws-vocab-2') ? document.getElementById('ws-vocab-2').value : 'synergy';
+            const v3 = document.getElementById('ws-vocab-3') ? document.getElementById('ws-vocab-3').value : 'bandwidth';
+            const v4 = document.getElementById('ws-vocab-4') ? document.getElementById('ws-vocab-4').value : 'touch base';
+
+            currentActivePlan.title = `${title} (Teacher's Guide)`;
+            currentActivePlan.topic = topic;
+            currentActivePlan.level = level;
+            currentActivePlan.aim = `By the end of the ${currentPlanDuration}-minute lesson, learners will be able to accurately define, pronounce, and deploy target lexis (${v1}, ${v2}, ${v3}, ${v4}) and associated grammatical structures in an authentic speaking simulation centered on ${topic}.`;
+
+            currentActivePlan.exponents[0].text = `${v1}, ${v2}, ${v3}, ${v4}`;
+            currentActivePlan.boardWork.vocab = [
+                { word: v1, ipa: `/${v1}/`, def: `Key term related to ${topic}` },
+                { word: v2, ipa: `/${v2}/`, def: `Collocation for ${topic}` },
+                { word: v3, ipa: `/${v3}/`, def: `Core expression for fluency` },
+                { word: v4, ipa: `/${v4}/`, def: `Idiomatic expression` }
+            ];
+
+            renderLessonPlan();
+            alert(`Lesson Plan synchronized with Worksheet: "${title}"!`);
+        }
+
+        function renderLessonPlan() {
+            // Update Overview Meta
+            const levelEl = document.getElementById('plan-display-level');
+            const durEl = document.getElementById('plan-display-duration');
+            const titleEl = document.getElementById('plan-display-title');
+            const topicEl = document.getElementById('plan-display-topic');
+            const aimEl = document.getElementById('plan-aim-primary');
+            const totalLabelEl = document.getElementById('plan-total-time-label');
+
+            if (levelEl) levelEl.innerText = `CEFR ${currentActivePlan.level}`;
+            if (durEl) durEl.innerText = `${currentPlanDuration} Minutes`;
+            if (titleEl) titleEl.innerText = currentActivePlan.title;
+            if (topicEl) topicEl.innerText = `Focus Topic: ${currentActivePlan.topic}`;
+            if (aimEl) aimEl.innerText = currentActivePlan.aim;
+            if (totalLabelEl) totalLabelEl.innerText = `${currentPlanDuration}:00`;
+
+            // Exponents list
+            const exponentsList = document.getElementById('plan-exponents-list');
+            if (exponentsList) {
+                exponentsList.innerHTML = currentActivePlan.exponents.map(e => `
+                    <li><strong class="text-purple-400">${escapeHtml(e.type)}:</strong> ${escapeHtml(e.text)}</li>
+                `).join('');
+            }
+
+            // Difficulties table
+            const diffBody = document.getElementById('plan-difficulties-body');
+            if (diffBody) {
+                diffBody.innerHTML = currentActivePlan.difficulties.map(d => `
+                    <tr>
+                        <td class="p-3 themed-text-header font-medium">${escapeHtml(d.problem)}</td>
+                        <td class="p-3 themed-text-muted">${escapeHtml(d.solution)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // Render Stage Cards Timeline
+            const stagesContainer = document.getElementById('plan-stages-container');
+            const stagesCountEl = document.getElementById('plan-stages-count');
+            if (stagesCountEl) stagesCountEl.innerText = currentActivePlan.stages.length;
+
+            if (stagesContainer) {
+                let accumulatedMinutes = 0;
+                stagesContainer.innerHTML = currentActivePlan.stages.map((stage, idx) => {
+                    const startMin = accumulatedMinutes;
+                    const endMin = accumulatedMinutes + stage.durationMin;
+                    accumulatedMinutes = endMin;
+
+                    const startTimeStr = String(startMin).padStart(2, '0') + ':00';
+                    const endTimeStr = String(endMin).padStart(2, '0') + ':00';
+
+                    const isCurrentStage = (idx === currentPlanStageIndex);
+
+                    return `
+                        <div id="plan-stage-card-${idx}" class="themed-bg-card p-5 md:p-6 rounded-3xl border ${isCurrentStage ? 'border-purple-500 shadow-xl ring-2 ring-purple-500/20' : 'themed-border'} transition-all relative overflow-hidden">
+                            ${isCurrentStage ? '<div class="absolute top-0 right-0 bg-purple-500 text-white text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl tracking-wider">Active Stage</div>' : ''}
+                            
+                            <!-- Header Row: Stage Name, Time, Pattern -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b themed-border">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-xl ${isCurrentStage ? 'bg-purple-600 text-white font-black' : 'themed-bg-input border themed-border themed-text-header'} flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                        ${idx + 1}
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm md:text-base font-bold themed-text-header">${escapeHtml(stage.name)}</h4>
+                                        <p class="text-[11px] themed-text-muted">${escapeHtml(stage.aim)}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 shrink-0">
+                                    <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-400 border border-purple-500/25">
+                                        ⏱️ ${startTimeStr} - ${endTimeStr} (${stage.durationMin}m)
+                                    </span>
+                                    <span class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-blue-500/15 text-blue-400 border border-blue-500/25">
+                                        👥 ${escapeHtml(stage.pattern)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Procedure Grid: Teacher vs Student -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-xs">
+                                <div class="themed-bg-input border themed-border p-3.5 rounded-2xl space-y-1.5">
+                                    <div class="flex items-center space-x-1.5 text-purple-400 font-bold text-[11px] uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-sm">record_voice_over</span>
+                                        <span>Teacher Procedure & Script</span>
+                                    </div>
+                                    <div class="themed-text-header leading-relaxed text-xs">
+                                        ${stage.procedure}
+                                    </div>
+                                </div>
+
+                                <div class="themed-bg-input border themed-border p-3.5 rounded-2xl space-y-1.5">
+                                    <div class="flex items-center space-x-1.5 text-emerald-400 font-bold text-[11px] uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-sm">groups</span>
+                                        <span>Student Activity & Output</span>
+                                    </div>
+                                    <p class="themed-text-header leading-relaxed text-xs">
+                                        ${escapeHtml(stage.output)}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Concept Checking Question (CCQ) Callout -->
+                            ${stage.ccq ? `
+                                <div class="mt-3 bg-amber-500/10 border border-amber-500/25 p-3 rounded-2xl flex items-start space-x-2.5 text-xs">
+                                    <span class="material-symbols-outlined text-amber-400 text-base mt-0.5 flex-shrink-0">psychology_alt</span>
+                                    <div class="text-[11px] leading-relaxed">
+                                        <strong class="text-amber-400 uppercase tracking-wider">Concept Checking Question (CCQ):</strong>
+                                        <span class="themed-text-header ml-1">${escapeHtml(stage.ccq)}</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Render Board Work Plan
+            const boardVocab = document.getElementById('board-vocab-content');
+            const boardGrammar = document.getElementById('board-grammar-content');
+            const boardTasks = document.getElementById('board-tasks-content');
+
+            if (boardVocab && currentActivePlan.boardWork.vocab) {
+                boardVocab.innerHTML = currentActivePlan.boardWork.vocab.map(v => `
+                    <p>• <strong>${escapeHtml(v.word)}</strong> <span class="text-amber-300 font-mono text-[10px]">${escapeHtml(v.ipa)}</span><br><span class="text-slate-400 text-[10px]">= ${escapeHtml(v.def)}</span></p>
+                `).join('');
+            }
+
+            if (boardGrammar && currentActivePlan.boardWork.grammar) {
+                boardGrammar.innerHTML = `
+                    <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700 font-mono text-[11px]">
+                        <p class="text-emerald-400 font-bold">${escapeHtml(currentActivePlan.boardWork.grammar.heading)}</p>
+                        ${currentActivePlan.boardWork.grammar.rules.map(r => `<p>${escapeHtml(r)}</p>`).join('')}
+                    </div>
+                    <div class="text-[11px] text-slate-300 font-mono">
+                        <p class="text-amber-400">CCQ Core Question:</p>
+                        <p>${escapeHtml(currentActivePlan.boardWork.grammar.ccq)}</p>
+                    </div>
+                `;
+            }
+
+            if (boardTasks && currentActivePlan.boardWork.tasks) {
+                boardTasks.innerHTML = `
+                    <div class="bg-emerald-950/40 p-2 rounded-lg border border-emerald-800/40 text-[11px]">
+                        <p class="font-bold text-emerald-300">${escapeHtml(currentActivePlan.boardWork.tasks.heading)}</p>
+                        ${currentActivePlan.boardWork.tasks.steps.map(s => `<p>${escapeHtml(s)}</p>`).join('')}
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-mono mt-2"><strong>Homework:</strong> ${escapeHtml(currentActivePlan.boardWork.tasks.hw)}</p>
+                `;
+            }
+
+            updateStageTitleHUD();
+        }
+
+        function updateStageTitleHUD() {
+            const titleEl = document.getElementById('current-stage-title');
+            if (titleEl && currentActivePlan.stages[currentPlanStageIndex]) {
+                const s = currentActivePlan.stages[currentPlanStageIndex];
+                titleEl.innerText = `Stage ${currentPlanStageIndex + 1}: ${s.name} (${s.durationMin}m)`;
+            }
+        }
+
+        // ==========================================
+        // CLASSROOM LIVE TIMER CONTROLLER
+        // ==========================================
+        function togglePlanTimer() {
+            if (isPlanTimerRunning) {
+                pausePlanTimer();
+            } else {
+                startPlanTimer();
+            }
+        }
+
+        function startPlanTimer() {
+            isPlanTimerRunning = true;
+            const btnIcon = document.getElementById('btn-timer-icon');
+            const btnLabel = document.getElementById('btn-timer-label');
+            const badge = document.getElementById('timer-status-badge');
+
+            if (btnIcon) btnIcon.innerText = 'pause';
+            if (btnLabel) btnLabel.innerText = 'Pause Timer';
+            if (badge) {
+                badge.innerText = 'Running';
+                badge.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse";
+            }
+
+            if (planTimerInterval) clearInterval(planTimerInterval);
+
+            planTimerInterval = setInterval(() => {
+                planTimerSeconds++;
+                updatePlanTimerDisplay();
+                checkPlanStageAutoAdvance();
+            }, 1000);
+        }
+
+        function pausePlanTimer() {
+            isPlanTimerRunning = false;
+            clearInterval(planTimerInterval);
+
+            const btnIcon = document.getElementById('btn-timer-icon');
+            const btnLabel = document.getElementById('btn-timer-label');
+            const badge = document.getElementById('timer-status-badge');
+
+            if (btnIcon) btnIcon.innerText = 'play_arrow';
+            if (btnLabel) btnLabel.innerText = 'Resume Timer';
+            if (badge) {
+                badge.innerText = 'Paused';
+                badge.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            }
+        }
+
+        function resetPlanTimer() {
+            pausePlanTimer();
+            planTimerSeconds = 0;
+            currentPlanStageIndex = 0;
+            updatePlanTimerDisplay();
+            renderLessonPlan();
+
+            const badge = document.getElementById('timer-status-badge');
+            const btnLabel = document.getElementById('btn-timer-label');
+            if (badge) {
+                badge.innerText = 'Ready';
+                badge.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
+            }
+            if (btnLabel) btnLabel.innerText = 'Start Lesson';
+        }
+
+        function nextPlanStage() {
+            if (currentPlanStageIndex < currentActivePlan.stages.length - 1) {
+                currentPlanStageIndex++;
+                playPlanChime();
+                renderLessonPlan();
+            } else {
+                alert('Lesson Complete! Great job conducting this lesson.');
+                resetPlanTimer();
+            }
+        }
+
+        function updatePlanTimerDisplay() {
+            const display = document.getElementById('plan-timer-display');
+            if (!display) return;
+            const mins = Math.floor(planTimerSeconds / 60);
+            const secs = planTimerSeconds % 60;
+            display.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function checkPlanStageAutoAdvance() {
+            let accumulatedSecs = 0;
+            for (let i = 0; i < currentActivePlan.stages.length; i++) {
+                accumulatedSecs += currentActivePlan.stages[i].durationMin * 60;
+                if (planTimerSeconds < accumulatedSecs) {
+                    if (currentPlanStageIndex !== i) {
+                        currentPlanStageIndex = i;
+                        playPlanChime();
+                        renderLessonPlan();
+                    }
+                    break;
+                }
+            }
+        }
+
+        function playPlanChime() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            } catch (e) {}
+        }
+
+        function copyLessonPlanMarkdown() {
+            let md = `# LESSON PLAN & TEACHER GUIDE: ${currentActivePlan.title.toUpperCase()}\n`;
+            md += `**Level:** CEFR ${currentActivePlan.level} | **Duration:** ${currentPlanDuration} Minutes | **Focus:** ${currentActivePlan.topic}\n\n`;
+            md += `## 🎯 PRIMARY COMMUNICATIVE AIM\n${currentActivePlan.aim}\n\n`;
+            md += `## 📋 TARGET LANGUAGE EXPONENTS\n`;
+            currentActivePlan.exponents.forEach(e => {
+                md += `- **${e.type}:** ${e.text}\n`;
+            });
+            md += `\n## ⚠️ ANTICIPATED DIFFICULTIES & SOLUTIONS\n`;
+            currentActivePlan.difficulties.forEach(d => {
+                md += `- Problem: ${d.problem}\n  Solution: ${d.solution}\n`;
+            });
+            md += `\n## ⏱️ STAGE-BY-STAGE LESSON EXECUTION TIMELINE\n`;
+            let accMin = 0;
+            currentActivePlan.stages.forEach((s, idx) => {
+                const start = accMin;
+                const end = accMin + s.durationMin;
+                accMin = end;
+                md += `### Stage ${idx + 1}: ${s.name} [${start}:00 - ${end}:00 | ${s.durationMin} mins] (Interaction: ${s.pattern})\n`;
+                md += `- **Stage Aim:** ${s.aim}\n`;
+                md += `- **Teacher Procedure:** ${s.procedure.replace(/<br>/g, ' ')}\n`;
+                md += `- **Student Output:** ${s.output}\n`;
+                if (s.ccq) md += `- **CCQ:** ${s.ccq}\n`;
+                md += `\n`;
+            });
+            md += `## 🏫 BOARD-WORK LAYOUT PLAN\n`;
+            md += `### [LEFT: Vocabulary & IPA]\n`;
+            currentActivePlan.boardWork.vocab.forEach(v => {
+                md += `- ${v.word} ${v.ipa} = ${v.def}\n`;
+            });
+            md += `\n### [CENTER: Grammar & Timelines]\n`;
+            md += `${currentActivePlan.boardWork.grammar.heading}\n`;
+            currentActivePlan.boardWork.grammar.rules.forEach(r => md += `- ${r}\n`);
+            md += `\n### [RIGHT: Tasks & Homework]\n`;
+            md += `${currentActivePlan.boardWork.tasks.heading}\n`;
+            currentActivePlan.boardWork.tasks.steps.forEach(st => md += `- ${st}\n`);
+            md += `Homework: ${currentActivePlan.boardWork.tasks.hw}\n\n`;
+            md += `Author & Lead Educator: Zaafouri Abdelmalek. All rights reserved.\n`;
+
+            navigator.clipboard.writeText(md).then(() => {
+                const copyText = document.getElementById('plan-copy-text');
+                const copyIcon = document.getElementById('plan-copy-icon');
+                if (copyText) copyText.innerText = 'Copied Markdown!';
+                if (copyIcon) copyIcon.innerText = 'check';
+                setTimeout(() => {
+                    if (copyText) copyText.innerText = 'Copy Markdown';
+                    if (copyIcon) copyIcon.innerText = 'content_copy';
+                }, 2000);
+            }).catch(() => {
+                alert('Lesson Plan copied to clipboard!');
+            });
+        }
+
+        function printLessonPlan() {
+            const printContent = document.getElementById('lesson-plan-printable');
+            if (!printContent) return;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Lesson Plan - ${escapeHtml(currentActivePlan.title)}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Inter', system-ui, sans-serif; color: #0F172A; background: #FFF; padding: 25px; line-height: 1.5; font-size: 11pt; }
+                        h1 { font-size: 18pt; margin-bottom: 4px; font-weight: 800; color: #1E1B4B; }
+                        h2 { font-size: 14pt; margin-top: 16px; border-bottom: 2px solid #E2E8F0; padding-bottom: 4px; color: #4338CA; }
+                        h3 { font-size: 12pt; margin-top: 12px; margin-bottom: 4px; }
+                        .meta-bar { display: flex; gap: 15px; margin-bottom: 15px; font-size: 10pt; color: #475569; font-weight: 600; }
+                        .badge { background: #EEF2FF; color: #4F46E5; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 9pt; }
+                        .stage-box { border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; margin-bottom: 12px; page-break-inside: avoid; }
+                        .stage-header { display: flex; justify-content: space-between; font-weight: 700; border-bottom: 1px solid #E2E8F0; padding-bottom: 6px; margin-bottom: 6px; }
+                        .board-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; border: 1px solid #334155; background: #0F172A; color: #F8FAFC; padding: 12px; border-radius: 8px; font-size: 9pt; }
+                        .footer { margin-top: 25px; font-size: 9pt; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px; text-align: center; }
+                        @media print { body { padding: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="meta-bar">
+                        <span class="badge">CEFR ${escapeHtml(currentActivePlan.level)}</span>
+                        <span class="badge">${currentPlanDuration} MINUTES</span>
+                        <span>TOPIC: ${escapeHtml(currentActivePlan.topic)}</span>
+                    </div>
+                    <h1>${escapeHtml(currentActivePlan.title)}</h1>
+                    <p style="margin-top: 4px; font-size: 10pt; color: #334155;"><strong>Primary Communicative Aim:</strong> ${escapeHtml(currentActivePlan.aim)}</p>
+
+                    <h2>Stage-by-Stage Pedagogical Timeline</h2>
+                    ${currentActivePlan.stages.map((s, idx) => `
+                        <div class="stage-box">
+                            <div class="stage-header">
+                                <span>Stage ${idx + 1}: ${escapeHtml(s.name)}</span>
+                                <span>${s.durationMin} mins | Interaction: ${escapeHtml(s.pattern)}</span>
+                            </div>
+                            <p style="margin: 4px 0;"><strong>Procedure:</strong> ${s.procedure.replace(/<br>/g, ' ')}</p>
+                            <p style="margin: 4px 0;"><strong>Student Action:</strong> ${escapeHtml(s.output)}</p>
+                            ${s.ccq ? `<p style="margin: 4px 0; color: #B45309;"><strong>CCQ:</strong> ${escapeHtml(s.ccq)}</p>` : ''}
+                        </div>
+                    `).join('')}
+
+                    <h2>Classroom Board-Work Plan (Whiteboard Layout)</h2>
+                    <div class="board-grid">
+                        <div>
+                            <strong style="color: #FCD34D;">[LEFT: Lexis & IPA]</strong><br>
+                            ${currentActivePlan.boardWork.vocab.map(v => `• ${escapeHtml(v.word)} ${escapeHtml(v.ipa)}<br><span style="color: #94A3B8;">= ${escapeHtml(v.def)}</span><br>`).join('')}
+                        </div>
+                        <div>
+                            <strong style="color: #38BDF8;">[CENTER: Grammar & Timelines]</strong><br>
+                            ${escapeHtml(currentActivePlan.boardWork.grammar.heading)}<br>
+                            ${currentActivePlan.boardWork.grammar.rules.map(r => `• ${escapeHtml(r)}<br>`).join('')}
+                        </div>
+                        <div>
+                            <strong style="color: #4ADE80;">[RIGHT: Tasks & Homework]</strong><br>
+                            ${escapeHtml(currentActivePlan.boardWork.tasks.heading)}<br>
+                            ${currentActivePlan.boardWork.tasks.steps.map(st => `• ${escapeHtml(st)}<br>`).join('')}
+                            <br><strong>Homework:</strong> ${escapeHtml(currentActivePlan.boardWork.tasks.hw)}
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        Designed & Authored by Zaafouri Abdelmalek. All rights reserved. © 2026 LessonForge Studio.
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+            }, 300);
+        }
+
         // Initialize
         setFontStyle(currentFontStyle);
         generateWorksheet();
         generatePresentation();
+        renderLessonPlan();
         updateLibraryCount();
         updateTutorLessonContext();
     </script>
