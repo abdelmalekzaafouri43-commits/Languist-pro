@@ -1,15 +1,14 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,10 +24,11 @@ fun PresentationGeneratorScreen(
     var title by remember { mutableStateOf("Interactive Lesson Deck") }
     var topic by remember { mutableStateOf("Advanced Idioms & Phrasal Verbs") }
     var cefrLevel by remember { mutableStateOf("C1 Advanced") }
+    var slideTheme by remember { mutableStateOf("Oxford Navy") }
     
     var generatedSlides by remember {
         mutableStateOf(
-            viewModel.generatePresentationContent(topic, cefrLevel)
+            viewModel.generatePresentationContent(topic, cefrLevel, slideTheme)
         )
     }
 
@@ -51,7 +51,7 @@ fun PresentationGeneratorScreen(
                                 cefrLevel = cefrLevel,
                                 topic = topic,
                                 contentJson = generatedSlides,
-                                teacherNotes = "Generated via LessonForge PowerPoint Studio"
+                                teacherNotes = "Generated with $slideTheme palette"
                             ) { newId ->
                                 viewModel.navigateTo(Screen.Detail(newId))
                             }
@@ -118,9 +118,51 @@ fun PresentationGeneratorScreen(
             }
 
             item {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = "DECK COLOR THEME",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf("Oxford Navy", "Cambridge Emerald", "Nordic Obsidian").forEach { themeName ->
+                            val isSelected = slideTheme == themeName
+                            Surface(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable {
+                                        slideTheme = themeName
+                                        generatedSlides = viewModel.generatePresentationContent(topic, cefrLevel, themeName)
+                                    },
+                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                            ) {
+                                Box(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = themeName,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            item {
                 Button(
                     onClick = {
-                        generatedSlides = viewModel.generatePresentationContent(topic, cefrLevel)
+                        generatedSlides = viewModel.generatePresentationContent(topic, cefrLevel, slideTheme)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),

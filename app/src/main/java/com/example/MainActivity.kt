@@ -31,12 +31,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApplicationTheme {
+            val viewModel: LessonViewModel = viewModel()
+            val currentTheme by viewModel.currentTheme.collectAsStateWithLifecycle()
+
+            MyApplicationTheme(appTheme = currentTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LessonApp()
+                    LessonApp(viewModel = viewModel)
                 }
             }
         }
@@ -44,10 +47,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LessonApp(viewModel: LessonViewModel = viewModel()) {
+fun LessonApp(viewModel: LessonViewModel) {
     val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
     val savedLessons by viewModel.savedLessons.collectAsStateWithLifecycle()
-    var selectedLevel by remember { mutableStateOf("B2") }
+    val currentTheme by viewModel.currentTheme.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier
@@ -55,10 +58,10 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
             .background(MaterialTheme.colorScheme.background)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        // Modern Left Dashboard Console (No peripheral icons, clean typography & controls)
+        // Modern Left Dashboard Console (Streamlined, clean typography & theme selector)
         Surface(
             modifier = Modifier
-                .width(230.dp)
+                .width(220.dp)
                 .fillMaxHeight(),
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 1.dp
@@ -66,31 +69,12 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 18.dp),
+                    .padding(horizontal = 16.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    // Studio Header & Status Light
+                    // Studio Brand Header
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(8.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.tertiary)
-                            )
-                            Text(
-                                text = "STUDIO ONLINE",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 1.5.sp
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "LessonForge",
                             style = MaterialTheme.typography.titleLarge,
@@ -99,7 +83,7 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
                             letterSpacing = (-0.5).sp
                         )
                         Text(
-                            text = "Executive ELT Command",
+                            text = "Teacher Studio",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -107,20 +91,20 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
 
                     Spacer(modifier = Modifier.height(18.dp))
 
-                    // Quick Create Action Button (Clean text button, no side icons)
+                    // Quick Action Button
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(10.dp))
                             .clickable { viewModel.navigateTo(Screen.AiWizard) },
                         color = MaterialTheme.colorScheme.primary
                     ) {
                         Box(
-                            modifier = Modifier.padding(vertical = 11.dp),
+                            modifier = Modifier.padding(vertical = 10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "+ Fast Create Material",
+                                text = "+ Create Material",
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimary
@@ -128,11 +112,11 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(22.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                    // Studio Switcher (Dashboard Sections without side icons)
+                    // Navigation Links (Clean text, no clutter)
                     Text(
-                        text = "WORKSTATIONS",
+                        text = "WORKSPACES",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         fontWeight = FontWeight.Bold,
@@ -141,8 +125,8 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     DashboardMenuItem(
-                        label = "Overview & Hub",
-                        badge = "LIVE",
+                        label = "Overview",
+                        badge = "HUB",
                         selected = currentScreen is Screen.Home,
                         onClick = { viewModel.navigateTo(Screen.Home) }
                     )
@@ -165,25 +149,25 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
                     Spacer(modifier = Modifier.height(6.dp))
 
                     DashboardMenuItem(
-                        label = "AI Lesson Wizard",
-                        badge = "AI",
+                        label = "AI Wizard",
+                        badge = "GEMINI",
                         selected = currentScreen is Screen.AiWizard,
                         onClick = { viewModel.navigateTo(Screen.AiWizard) }
                     )
                     Spacer(modifier = Modifier.height(6.dp))
 
                     DashboardMenuItem(
-                        label = "Saved Vault",
+                        label = "Curriculum Vault",
                         badge = "${savedLessons.size}",
                         selected = currentScreen is Screen.SavedMaterials,
                         onClick = { viewModel.navigateTo(Screen.SavedMaterials) }
                     )
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                    // Integrated CEFR Target Selector right on Left Dashboard
+                    // Theme Selector
                     Text(
-                        text = "CEFR PRESET",
+                        text = "STUDIO THEME",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         fontWeight = FontWeight.Bold,
@@ -191,77 +175,60 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Row(
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        listOf("A1", "A2", "B1", "B2", "C1", "C2").forEach { lvl ->
-                            val isSelected = selectedLevel == lvl
+                        com.example.ui.theme.AppTheme.values().forEach { themeOption ->
+                            val isSelected = currentTheme == themeOption
                             Surface(
                                 modifier = Modifier
-                                    .weight(1f)
+                                    .fillMaxWidth()
                                     .clip(RoundedCornerShape(8.dp))
-                                    .clickable { selectedLevel = lvl },
-                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                    .clickable { viewModel.setTheme(themeOption) },
+                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
                             ) {
-                                Box(
-                                    modifier = Modifier.padding(vertical = 6.dp),
-                                    contentAlignment = Alignment.Center
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = lvl,
+                                        text = themeOption.displayName,
                                         style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Normal,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                         color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                     )
+                                    if (isSelected) {
+                                        Text(
+                                            text = "Active",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontSize = 9.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
-                // Left Dashboard Bottom Stats Panel
+                // Clean Bottom Status
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                    shape = RoundedCornerShape(10.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    Box(
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "Vault Cache",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "${savedLessons.size} Lessons",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "Output Format",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "A4 PDF + PPTX",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                        Text(
+                            text = "${savedLessons.size} units in vault",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }

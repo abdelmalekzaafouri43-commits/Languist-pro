@@ -46,6 +46,13 @@ class LessonViewModel(application: Application) : AndroidViewModel(application) 
     private val _currentScreen = kotlinx.coroutines.flow.MutableStateFlow<Screen>(Screen.Home)
     val currentScreen: StateFlow<Screen> = _currentScreen
 
+    private val _currentTheme = kotlinx.coroutines.flow.MutableStateFlow(com.example.ui.theme.AppTheme.OXFORD_NAVY)
+    val currentTheme: StateFlow<com.example.ui.theme.AppTheme> = _currentTheme
+
+    fun setTheme(theme: com.example.ui.theme.AppTheme) {
+        _currentTheme.value = theme
+    }
+
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
     }
@@ -226,10 +233,12 @@ class LessonViewModel(application: Application) : AndroidViewModel(application) 
     // Helper generator for PowerPoint Presentation Decks (6 slides)
     fun generatePresentationContent(
         topic: String,
-        cefrLevel: String
+        cefrLevel: String,
+        slideTheme: String = "Oxford Navy"
     ): String {
         return buildString {
-            append("LESSON SLIDE DECK: $topic ($cefrLevel)\n\n")
+            append("LESSON SLIDE DECK: $topic ($cefrLevel)\n")
+            append("PALETTE & THEME: $slideTheme (Classroom Presentation Standard)\n\n")
             append("--- SLIDE 1: TITLE & WARM-UP ---\n")
             append("• Title: Exploring $topic\n")
             append("• Warm-up Question: What comes to your mind when you think of $topic?\n")
