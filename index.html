@@ -1080,7 +1080,7 @@
                     <div class="flex-1 w-full min-w-0 space-y-6">
 
                 <!-- SUB-VIEW A: COMMAND CENTER WORKSPACE (Default) -->
-                <div id="dash-view-command" class="space-y-6">
+                <div id="view-command" class="space-y-6">
 
                     <!-- Rapid AI Prompt & Dispatch Console -->
                     <div class="themed-bg-card rounded-3xl p-6 md:p-7 border themed-border shadow-xl relative overflow-hidden space-y-4">
@@ -1396,7 +1396,7 @@
                 </div>
 
                 <!-- SUB-VIEW B: CEFR SYLLABUS ROADMAP (Curriculum View) -->
-                <div id="dash-view-roadmap" class="hidden space-y-5">
+                <div id="view-roadmap" class="hidden space-y-5">
                     <div class="themed-bg-card rounded-3xl p-6 border themed-border shadow-lg">
                         <div class="flex items-center justify-between pb-3 border-b themed-border mb-4">
                             <div>
@@ -1495,7 +1495,7 @@
                 </div>
 
                 <!-- SUB-VIEW C: ANALYTICS & STUDIO METRICS -->
-                <div id="dash-view-metrics" class="hidden space-y-6">
+                <div id="view-metrics" class="hidden space-y-6">
                     <!-- Stat Cards Strip -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                         <div class="stat-card-glass rounded-2xl p-4 flex items-center space-x-3.5 border themed-border">
@@ -2961,9 +2961,9 @@
                 }
                 if (tabBtn) {
                     if (m === mode) {
-                        tabBtn.className = "btn-animated px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all themed-primary-badge shadow-sm flex items-center space-x-1.5 shrink-0";
+                        tabBtn.className = "btn-animated px-4 py-3 rounded-xl text-xs font-bold transition-all themed-primary-badge shadow-sm flex items-center space-x-3 w-full text-left";
                     } else {
-                        tabBtn.className = "btn-animated px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all themed-text-muted hover:opacity-100 hover:bg-white/5 flex items-center space-x-1.5 shrink-0";
+                        tabBtn.className = "btn-animated px-4 py-3 rounded-xl text-xs font-semibold transition-all themed-text-muted hover:opacity-100 hover:bg-white/5 flex items-center space-x-3 w-full text-left";
                     }
                 }
             });
@@ -3122,7 +3122,7 @@
         // Navigation Switcher
         function switchTab(tabId) {
             closeSidebarDrawer();
-            const tabs = ['home', 'worksheet', 'presentation', 'wizard', 'tutor', 'plan', 'library', 'detail'];
+            const tabs = ['command', 'roadmap', 'metrics', 'worksheet', 'presentation', 'wizard', 'tutor', 'plan', 'library', 'detail'];
             tabs.forEach(t => {
                 const el = document.getElementById('view-' + t);
                 const nav = document.getElementById('nav-' + t);
