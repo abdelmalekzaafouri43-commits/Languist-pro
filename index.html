@@ -892,14 +892,28 @@
             <nav id="menu-nav-links" class="space-y-4">
                 <div>
                     <p class="text-[10px] font-bold tracking-wider themed-text-muted mb-2 px-2 uppercase flex items-center justify-between">
-                        <span>Core Creation Studios</span>
-                        <span class="text-[9px] text-slate-500 font-mono">Alt + [1-4]</span>
+                        <span>Dashboard</span>
                     </p>
                     <div class="space-y-1">
-                        <button onclick="switchTab('home')" id="nav-home" data-nav-name="dashboard overview home" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-primary-badge font-bold">
-                            <span>Dashboard Overview</span>
+                        <button onclick="switchTab('command')" id="nav-command" data-nav-name="command center dashboard" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-primary-badge font-bold active">
+                            <span>Command Center</span>
                             <span class="text-[9px] font-mono opacity-60">Alt+1</span>
                         </button>
+                        <button onclick="switchTab('roadmap')" id="nav-roadmap" data-nav-name="cefr roadmap" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <span>CEFR Roadmap</span>
+                        </button>
+                        <button onclick="switchTab('metrics')" id="nav-metrics" data-nav-name="analytics metrics" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
+                            <span>Analytics & KPIs</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-[10px] font-bold tracking-wider themed-text-muted mb-2 px-2 uppercase flex items-center justify-between">
+                        <span>Core Creation Studios</span>
+                        <span class="text-[9px] text-slate-500 font-mono">Alt + [2-5]</span>
+                    </p>
+                    <div class="space-y-1">
                         <button onclick="switchTab('worksheet')" id="nav-worksheet" data-nav-name="a4 worksheet generator grammar drill" class="menu-nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition-all themed-text-muted hover:opacity-100 hover:bg-white/5">
                             <span>A4 Worksheet Studio</span>
                             <span class="text-[9px] font-mono opacity-60">Alt+2</span>
@@ -1032,55 +1046,10 @@
         </header>
 
         <!-- Content Views -->
-        <div class="p-4 md:p-8 max-w-7xl w-full mx-auto flex-1">
+        <div class="p-4 md:p-8 max-w-7xl w-full mx-0 flex-1">
 
-            <!-- VIEW 1: HOME DASHBOARD (Educator Command Center & Studio Workspace) -->
-            <div id="view-home" class="space-y-6 view-slide-in">
-                
-                <!-- Dashboard Title Header -->
-                <div class="flex items-center justify-between pb-4 border-b themed-border">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl themed-primary-badge flex items-center justify-center shadow-inner">
-                            <span class="material-symbols-outlined text-xl">space_dashboard</span>
-                        </div>
-                        <div>
-                            <div class="flex items-center space-x-2">
-                                <h2 class="text-xl font-extrabold themed-text-header tracking-tight">Dashboard Overview</h2>
-                                <span class="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-full flex items-center space-x-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    <span>AI Engine Active</span>
-                                </span>
-                            </div>
-                            <p class="text-xs themed-text-muted mt-0.5">Direct control station for worksheets, presentations, timelines & speech coaching</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Layout: Sidebar & Content -->
-                <div class="flex flex-col lg:flex-row gap-6 items-start">
-                    
-                    <!-- Dashboard Sidebar (Left Navigation) -->
-                    <div class="w-full lg:w-64 shrink-0 flex flex-col space-y-2 p-2.5 rounded-2xl themed-bg-input border themed-border shadow-inner">
-                        <p class="text-[9px] font-bold tracking-wider themed-text-muted uppercase px-2 py-1">Dashboard Views</p>
-                        <button id="dash-tab-command" onclick="switchDashboardMode('command')" class="btn-animated px-4 py-3 rounded-xl text-xs font-bold transition-all themed-primary-badge shadow-sm flex items-center space-x-3 w-full text-left">
-                            <span class="material-symbols-outlined text-base">terminal</span>
-                            <span>Command Center</span>
-                        </button>
-                        <button id="dash-tab-roadmap" onclick="switchDashboardMode('roadmap')" class="btn-animated px-4 py-3 rounded-xl text-xs font-semibold transition-all themed-text-muted hover:opacity-100 hover:bg-white/5 flex items-center space-x-3 w-full text-left">
-                            <span class="material-symbols-outlined text-base">map</span>
-                            <span>CEFR Roadmap</span>
-                        </button>
-                        <button id="dash-tab-metrics" onclick="switchDashboardMode('metrics')" class="btn-animated px-4 py-3 rounded-xl text-xs font-semibold transition-all themed-text-muted hover:opacity-100 hover:bg-white/5 flex items-center space-x-3 w-full text-left">
-                            <span class="material-symbols-outlined text-base">monitoring</span>
-                            <span>Analytics & KPIs</span>
-                        </button>
-                    </div>
-
-                    <!-- Dashboard Content Area (Right Side) -->
-                    <div class="flex-1 w-full min-w-0 space-y-6">
-
-                <!-- SUB-VIEW A: COMMAND CENTER WORKSPACE (Default) -->
-                <div id="view-command" class="space-y-6">
+            <!-- SUB-VIEW A: COMMAND CENTER WORKSPACE (Default) -->
+            <div id="view-command" class="space-y-6 view-slide-in">
 
                     <!-- Rapid AI Prompt & Dispatch Console -->
                     <div class="themed-bg-card rounded-3xl p-6 md:p-7 border themed-border shadow-xl relative overflow-hidden space-y-4">
@@ -1595,10 +1564,6 @@
                         </div>
                     </div>
                 </div>
-                    </div>
-                </div>
-
-            </div>
 
             <!-- VIEW 2: WORKSHEET GENERATOR (Studio Stage Dual-Pane Layout) -->
             <div id="view-worksheet" class="hidden space-y-6">
@@ -2947,28 +2912,6 @@
             greetingEl.innerText = `${period} ✨`;
         }
 
-        function switchDashboardMode(mode) {
-            const modes = ['command', 'roadmap', 'metrics'];
-            modes.forEach(m => {
-                const viewEl = document.getElementById(`dash-view-${m}`);
-                const tabBtn = document.getElementById(`dash-tab-${m}`);
-                if (viewEl) {
-                    if (m === mode) {
-                        viewEl.classList.remove('hidden');
-                    } else {
-                        viewEl.classList.add('hidden');
-                    }
-                }
-                if (tabBtn) {
-                    if (m === mode) {
-                        tabBtn.className = "btn-animated px-4 py-3 rounded-xl text-xs font-bold transition-all themed-primary-badge shadow-sm flex items-center space-x-3 w-full text-left";
-                    } else {
-                        tabBtn.className = "btn-animated px-4 py-3 rounded-xl text-xs font-semibold transition-all themed-text-muted hover:opacity-100 hover:bg-white/5 flex items-center space-x-3 w-full text-left";
-                    }
-                }
-            });
-        }
-
         function quickLaunchStarter(title, topic, level) {
             const wsTitle = document.getElementById('ws-title');
             const wsTopic = document.getElementById('ws-topic');
@@ -3102,7 +3045,7 @@
                     e.preventDefault();
                     toggleSidebar();
                 } else if (e.key === '1') {
-                    e.preventDefault(); switchTab('home');
+                    e.preventDefault(); switchTab('command');
                 } else if (e.key === '2') {
                     e.preventDefault(); switchTab('worksheet');
                 } else if (e.key === '3') {
