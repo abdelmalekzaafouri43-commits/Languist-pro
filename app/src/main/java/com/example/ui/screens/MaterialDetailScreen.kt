@@ -39,37 +39,39 @@ fun MaterialDetailScreen(
             TopAppBar(
                 title = { Text(lesson?.title ?: "Material Detail", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { viewModel.navigateTo(Screen.Home) }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    TextButton(onClick = { viewModel.navigateTo(Screen.Home) }) {
+                        Text("← Back", color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
                     }
                 },
                 actions = {
                     lesson?.let { l ->
-                        IconButton(onClick = {
-                            val sendIntent = Intent().apply {
-                                action = Intent.ACTION_SEND
-                                putExtra(Intent.EXTRA_SUBJECT, l.title)
-                                putExtra(Intent.EXTRA_TEXT, "${l.title}\nLevel: ${l.cefrLevel}\nTopic: ${l.topic}\n\n${l.contentJson}")
-                                type = "text/plain"
-                            }
-                            val shareIntent = Intent.createChooser(sendIntent, "Export via")
-                            context.startActivity(shareIntent)
-                        }) {
-                            Icon(Icons.Default.Share, contentDescription = "Share / Export")
+                        Button(
+                            onClick = {
+                                val sendIntent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_SUBJECT, l.title)
+                                    putExtra(Intent.EXTRA_TEXT, "${l.title}\nLevel: ${l.cefrLevel}\nTopic: ${l.topic}\n\n${l.contentJson}")
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, "Export via")
+                                context.startActivity(shareIntent)
+                            },
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Text("Export", fontWeight = FontWeight.Bold)
                         }
-                        IconButton(onClick = {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        TextButton(onClick = {
                             viewModel.deleteLesson(l)
                             viewModel.navigateTo(Screen.Home)
                         }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
+                            Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                         }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },

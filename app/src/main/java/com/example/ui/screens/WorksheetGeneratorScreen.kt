@@ -38,34 +38,36 @@ fun WorksheetGeneratorScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("A4 Worksheet Generator", fontWeight = FontWeight.Bold) },
+                title = { Text("A4 Worksheet Studio", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { viewModel.navigateTo(Screen.Home) }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    TextButton(onClick = { viewModel.navigateTo(Screen.Home) }) {
+                        Text("← Back", color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        viewModel.saveLesson(
-                            title = title,
-                            type = "WORKSHEET",
-                            subType = subType,
-                            cefrLevel = cefrLevel,
-                            topic = topic,
-                            contentJson = generatedPreview,
-                            teacherNotes = "Generated via LessonForge A4 Studio"
-                        ) { newId ->
-                            viewModel.navigateTo(Screen.Detail(newId))
-                        }
-                    }) {
-                        Icon(Icons.Default.Save, contentDescription = "Save")
+                    Button(
+                        onClick = {
+                            viewModel.saveLesson(
+                                title = title,
+                                type = "WORKSHEET",
+                                subType = subType,
+                                cefrLevel = cefrLevel,
+                                topic = topic,
+                                contentJson = generatedPreview,
+                                teacherNotes = "Generated via LessonForge A4 Studio"
+                            ) { newId ->
+                                viewModel.navigateTo(Screen.Detail(newId))
+                            }
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text("Save to Vault", fontWeight = FontWeight.Bold)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
@@ -139,9 +141,7 @@ fun WorksheetGeneratorScreen(
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.Default.AutoAwesome, contentDescription = "Generate")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Regenerate Structure")
+                    Text("Regenerate Worksheet Structure", fontWeight = FontWeight.Bold)
                 }
             }
 

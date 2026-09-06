@@ -5,16 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.Slideshow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -52,6 +47,7 @@ class MainActivity : ComponentActivity() {
 fun LessonApp(viewModel: LessonViewModel = viewModel()) {
     val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
     val savedLessons by viewModel.savedLessons.collectAsStateWithLifecycle()
+    var selectedLevel by remember { mutableStateOf("B2") }
 
     Row(
         modifier = Modifier
@@ -59,157 +55,211 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
             .background(MaterialTheme.colorScheme.background)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        // Left Dashboard Sidebar (Dashboard on the Left)
+        // Modern Left Dashboard Console (No peripheral icons, clean typography & controls)
         Surface(
             modifier = Modifier
-                .width(260.dp)
+                .width(230.dp)
                 .fillMaxHeight(),
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 2.dp
+            tonalElevation = 1.dp
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp),
+                    .padding(horizontal = 16.dp, vertical = 18.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
-                    // Header / Brand
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "PREMIUM STUDIO",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 2.sp
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "Linguist Pro",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Offline Status Badge
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    // Studio Header & Status Light
+                    Column(modifier = Modifier.fillMaxWidth()) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Box(
                                 modifier = Modifier
                                     .size(8.dp)
-                                    .clip(RoundedCornerShape(4.dp))
+                                    .clip(CircleShape)
                                     .background(MaterialTheme.colorScheme.tertiary)
                             )
                             Text(
-                                text = "READY OFFLINE • A4 & PPT",
+                                text = "STUDIO ONLINE",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.tertiary,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.5.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "LessonForge",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            letterSpacing = (-0.5).sp
+                        )
+                        Text(
+                            text = "Executive ELT Command",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    // Quick Create Action Button (Clean text button, no side icons)
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable { viewModel.navigateTo(Screen.AiWizard) },
+                        color = MaterialTheme.colorScheme.primary
+                    ) {
+                        Box(
+                            modifier = Modifier.padding(vertical = 11.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "+ Fast Create Material",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(22.dp))
 
+                    // Studio Switcher (Dashboard Sections without side icons)
                     Text(
-                        text = "NAVIGATION",
+                        text = "WORKSTATIONS",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.5.sp
+                        letterSpacing = 1.2.sp
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                    // Navigation items
-                    NavSidebarItem(
-                        icon = Icons.Default.Home,
-                        label = "Dashboard Home",
+                    DashboardMenuItem(
+                        label = "Overview & Hub",
+                        badge = "LIVE",
                         selected = currentScreen is Screen.Home,
                         onClick = { viewModel.navigateTo(Screen.Home) }
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    NavSidebarItem(
-                        icon = Icons.Default.Description,
-                        label = "A4 Worksheet Generator",
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    DashboardMenuItem(
+                        label = "Worksheet Studio",
+                        badge = "A4",
                         selected = currentScreen is Screen.WorksheetGenerator,
                         onClick = { viewModel.navigateTo(Screen.WorksheetGenerator) }
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    NavSidebarItem(
-                        icon = Icons.Default.Slideshow,
-                        label = "PowerPoint Deck",
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    DashboardMenuItem(
+                        label = "Slide Deck Studio",
+                        badge = "PPT",
                         selected = currentScreen is Screen.PresentationGenerator,
                         onClick = { viewModel.navigateTo(Screen.PresentationGenerator) }
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    NavSidebarItem(
-                        icon = Icons.Default.AutoAwesome,
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    DashboardMenuItem(
                         label = "AI Lesson Wizard",
+                        badge = "AI",
                         selected = currentScreen is Screen.AiWizard,
                         onClick = { viewModel.navigateTo(Screen.AiWizard) }
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    NavSidebarItem(
-                        icon = Icons.Default.FolderOpen,
-                        label = "Saved Library (${savedLessons.size})",
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    DashboardMenuItem(
+                        label = "Saved Vault",
+                        badge = "${savedLessons.size}",
                         selected = currentScreen is Screen.SavedMaterials,
                         onClick = { viewModel.navigateTo(Screen.SavedMaterials) }
                     )
-                }
 
-                // Footer user badge
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Integrated CEFR Target Selector right on Left Dashboard
+                    Text(
+                        text = "CEFR PRESET",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.2.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Row(
-                        modifier = Modifier.padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(36.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    text = "ET",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    fontWeight = FontWeight.Bold
-                                )
+                        listOf("A1", "A2", "B1", "B2", "C1", "C2").forEach { lvl ->
+                            val isSelected = selectedLevel == lvl
+                            Surface(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable { selectedLevel = lvl },
+                                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            ) {
+                                Box(
+                                    modifier = Modifier.padding(vertical = 6.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = lvl,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Normal,
+                                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
-                        Column {
+                    }
+                }
+
+                // Left Dashboard Bottom Stats Panel
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
-                                text = "English Teacher",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
+                                text = "Vault Cache",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                text = "Pro Workspace",
-                                style = MaterialTheme.typography.bodySmall,
+                                text = "${savedLessons.size} Lessons",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Output Format",
+                                style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "A4 PDF + PPTX",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -217,7 +267,7 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
             }
         }
 
-        // Right Content Area
+        // Right Content Area (Full screen workspace)
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -237,39 +287,47 @@ fun LessonApp(viewModel: LessonViewModel = viewModel()) {
 }
 
 @Composable
-fun NavSidebarItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+fun DashboardMenuItem(
     label: String,
+    badge: String,
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
-    val contentColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+    val backgroundColor = if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f) else Color.Transparent
+    val textColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(10.dp))
             .clickable(onClick = onClick),
         color = backgroundColor
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                tint = contentColor,
-                modifier = Modifier.size(20.dp)
-            )
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                color = contentColor
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                color = textColor
             )
+            Surface(
+                shape = RoundedCornerShape(6.dp),
+                color = if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    text = badge,
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
+

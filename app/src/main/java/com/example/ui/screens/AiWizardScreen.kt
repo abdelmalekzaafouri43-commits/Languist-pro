@@ -45,20 +45,19 @@ fun AiWizardScreen(
             TopAppBar(
                 title = { Text("AI Lesson Wizard (Gemini)", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = {
+                    TextButton(onClick = {
                         if (currentStep > 1 && currentStep < 4) {
                             currentStep--
                         } else {
                             viewModel.navigateTo(Screen.Home)
                         }
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Text("← Back", color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         },
@@ -228,9 +227,7 @@ fun AiWizardScreen(
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                             ) {
-                                Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp))
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text("Generate via Gemini")
+                                Text("Generate via Gemini", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -310,9 +307,7 @@ fun AiWizardScreen(
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                             ) {
-                                Icon(Icons.Default.Save, contentDescription = null)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text("Save Material to Library")
+                                Text("Save Material to Vault", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
